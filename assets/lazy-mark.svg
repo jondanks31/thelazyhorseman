@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The Lazy Horseman — the "lazy" mark.
+  Drawn as stroked paths, so it needs no font and never reflows while
+  a webfont loads. Stroke is currentColor: set `color` on the parent,
+  or swap for #7ED957 when the file is used standalone.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 18 262 145" role="img" aria-label="lazy">
+  <title>lazy</title>
+  <g fill="none" stroke="#7ED957" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="rotate(-2 52 68)">
+      <path d="M 40,28 C 48,24 52,30 52,44 L 52,92 C 52,106 60,112 70,108"/>
+    </g>
+    <g transform="rotate(1.5 98 82)">
+      <path d="M 118,62 C 104,52 80,56 74,76 C 68,96 84,110 102,104 C 114,100 121,86 118,70"/>
+      <path d="M 121,58 C 123,76 121,96 123,103 C 125,111 131,113 139,109"/>
+    </g>
+    <g transform="rotate(-1.5 185 85)">
+      <path d="M 155,70 C 170,60 190,60 204,64 C 208,65 208,69 204,73 L 165,102 C 162,105 164,108 169,107 C 184,104 200,102 214,106"/>
+    </g>
+    <g transform="rotate(2 254 100)">
+      <path d="M 234,66 C 234,82 238,98 248,104 C 256,108 264,102 268,90 C 271,80 273,70 273,64"/>
+      <path d="M 273,64 C 273,88 272,122 264,140 C 257,155 244,156 236,148"/>
+    </g>
+  </g>
+</svg>

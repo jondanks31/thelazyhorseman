@@ -1,0 +1,15 @@
+# Local tooling and deployment state
+.vercel/
+.playwright-cli/
+output/
+
+# Dependencies and environment secrets
+node_modules/
+.env
+.env.*
+!.env.example
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
