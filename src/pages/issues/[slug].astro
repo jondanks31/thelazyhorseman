@@ -1,0 +1,54 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Highlight from '../../components/Highlight.astro';
+import ArticleFigure from '../../components/issue/ArticleFigure.astro';
+import SignupForm from '../../components/SignupForm.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+export async function getStaticPaths() {
+  const issues = await getCollection('issues');
+  return issues.map((issue) => ({ params: { slug: issue.data.slug }, props: { issue } }));
+}
+
+interface Props {
+  issue: CollectionEntry<'issues'>;
+}
+
+const { issue } = Astro.props;
+const { Content } = await render(issue);
+const { title, description, issueNumber, publishedAt, readMinutes, topic, highlightWord } = issue.data;
+const [titleBefore, titleAfter = ''] = title.split(highlightWord);
+const displayDate = new Intl.DateTimeFormat('en-GB', {
+  weekday: 'long',
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+}).format(publishedAt).toUpperCase();
+---
+
+<SiteLayout title={`${title} — The Lazy Horseman`} description={description} hasLocalSignup>
+  <article class="band article">
+    <div class="wrap article-head">
+      <p class="dateline">ISSUE #{issueNumber} · {displayDate} · {readMinutes} MIN · {topic}</p>
+      <h1>{titleBefore}<Highlight>{highlightWord}</Highlight>{titleAfter}</h1>
+      <p class="standfirst">{description}</p>
+    </div>
+    <div class="wrap">
+      <ArticleFigure lineOne={issue.data.figureLineOne} lineTwo={issue.data.figureLineTwo} />
+    </div>
+    <div class="wrap">
+      <div class="article-body"><Content /></div>
+    </div>
+  </article>
+
+  <section class="band strip-dark" id="signup">
+    <div class="wrap strip">
+      <div>
+        <h2>Get the next one Thursday.</h2>
+        <p class="fineprint">Free, and one click to leave.</p>
+      </div>
+      <div><SignupForm id="email-issue" variant="strip" /></div>
+    </div>
+  </section>
+</SiteLayout>

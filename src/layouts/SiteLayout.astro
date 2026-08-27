@@ -1,0 +1,194 @@
+---
+import '../styles/global.css';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import WeatherBar from '../components/WeatherBar.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  hasLocalSignup?: boolean;
+}
+
+const { title, description, hasLocalSignup = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="The Lazy Horseman" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#3C2E22" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%233C2E22'/%3E%3Cg fill='none' stroke='%237ED957' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16 L22 42 C22 47 26 49 30 47'/%3E%3Cpath d='M44 20 C44 30 43 42 39 48 C36 53 30 53 27 49'/%3E%3Cpath d='M33 26 C33 33 35 39 39 42'/%3E%3C/g%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <WeatherBar />
+    <Header pathname={Astro.url.pathname} hasLocalSignup={hasLocalSignup} />
+    <div data-page-content>
+      <main id="main"><slot /></main>
+      <Footer />
+    </div>
+
+    <script>
+      const legacyRoutes: Record<string, string> = {
+        '#/letter': '/',
+        '#/tools': '/tools',
+        '#/about': '/about',
+        '#/suggest': '/suggest',
+        '#/sponsor': '/sponsor',
+        '#/issue': '/issues/the-hell-is-a-frog-anyway',
+      };
+
+      function redirectLegacyHash() {
+        if (location.pathname !== '/') return;
+        const destination = legacyRoutes[location.hash];
+        if (destination) location.replace(destination);
+      }
+
+      redirectLegacyHash();
+      window.addEventListener('hashchange', redirectLegacyHash);
+
+      const masthead = document.querySelector<HTMLElement>('.masthead');
+      const burger = document.querySelector<HTMLButtonElement>('#burger');
+      const panel = document.querySelector<HTMLElement>('#mobile-nav');
+      const pageContent = document.querySelector<HTMLElement>('[data-page-content]');
+      const backgroundElements = [
+        document.querySelector<HTMLElement>('.skip'),
+        document.querySelector<HTMLElement>('.wx'),
+        document.querySelector<HTMLElement>('.masthead .logo'),
+        document.querySelector<HTMLElement>('.mast-nav'),
+        pageContent,
+      ].filter((element): element is HTMLElement => Boolean(element));
+
+      function setMastHeight() {
+        if (!masthead) return;
+        const bottom = Math.max(0, masthead.getBoundingClientRect().bottom);
+        document.documentElement.style.setProperty('--mast-h', `${bottom}px`);
+      }
+
+      function navOpen() {
+        return burger?.getAttribute('aria-expanded') === 'true';
+      }
+
+      function navFocusables() {
+        if (!panel) return [];
+        return Array.from(panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'));
+      }
+
+      function openNav() {
+        if (!burger || !panel) return;
+        setMastHeight();
+        burger.setAttribute('aria-expanded', 'true');
+        panel.setAttribute('aria-hidden', 'false');
+        panel.style.transition = 'none';
+        panel.style.visibility = 'visible';
+        void panel.offsetWidth;
+        panel.style.transition = '';
+        panel.classList.add('is-open');
+        document.body.classList.add('nav-open');
+        backgroundElements.forEach((element) => (element.inert = true));
+        window.setTimeout(() => navFocusables()[0]?.focus(), 50);
+      }
+
+      function closeNav(returnFocus = false) {
+        if (!burger || !panel) return;
+        burger.setAttribute('aria-expanded', 'false');
+        panel.setAttribute('aria-hidden', 'true');
+        panel.classList.remove('is-open');
+        panel.style.visibility = '';
+        document.body.classList.remove('nav-open');
+        backgroundElements.forEach((element) => (element.inert = false));
+        if (returnFocus) burger.focus();
+      }
+
+      setMastHeight();
+      window.addEventListener('resize', setMastHeight);
+      document.fonts?.ready.then(setMastHeight);
+
+      burger?.addEventListener('click', () => (navOpen() ? closeNav() : openNav()));
+      panel?.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement;
+        if (target.closest('a, button') || !target.closest('.mnav-sheet')) closeNav();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && navOpen()) {
+          event.preventDefault();
+          closeNav(true);
+          return;
+        }
+        if (event.key !== 'Tab' || !navOpen()) return;
+        const focusables = navFocusables();
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
+
+      const wide = window.matchMedia('(min-width: 821px)');
+      const handleWideChange = (event: MediaQueryListEvent | MediaQueryList) => {
+        if (event.matches && navOpen()) closeNav();
+      };
+      wide.addEventListener('change', handleWideChange);
+
+      document.querySelectorAll<HTMLElement>('[data-signup-target]').forEach((button) => {
+        button.addEventListener('click', () => {
+          if (navOpen()) closeNav();
+          const selector = button.dataset.signupTarget;
+          const section = selector ? document.querySelector<HTMLElement>(selector) : null;
+          const input = section?.querySelector<HTMLInputElement>('input[type="email"]');
+          section?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          input?.focus({ preventScroll: true });
+        });
+      });
+
+      document.querySelectorAll<HTMLFormElement>('[data-subscribe]').forEach((form) => {
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const wrapper = form.parentElement;
+          const message = wrapper?.querySelector<HTMLElement>('[data-msg]');
+          if (message) message.textContent = 'Not wired up yet — this is where the sign-up posts.';
+          form.reset();
+        });
+      });
+
+      const weather = [
+        { line: "Weather's damp and sh*t. Leave the brolly, 'oss will spook.", temp: '11°C · WET' },
+        { line: 'Dry until three, then it turns. Rug on, rug off, rug on.', temp: '14°C · SMUG' },
+        { line: 'Bit of wind. Everything is a lion today, apparently.', temp: '9°C · BREEZY' },
+        { line: 'Frost. The trough is a skating rink and so is the yard.', temp: '-2°C · SOLID' },
+        { line: 'Actual sunshine. Someone will still be in a heavyweight.', temp: '19°C · ODD' },
+      ];
+      const weatherLine = document.querySelector<HTMLElement>('#wx-line');
+      const weatherTemp = document.querySelector<HTMLElement>('#wx-temp');
+      let weatherIndex = 0;
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && weatherLine && weatherTemp) {
+        window.setInterval(() => {
+          weatherIndex = (weatherIndex + 1) % weather.length;
+          weatherLine.textContent = weather[weatherIndex].line;
+          weatherTemp.textContent = weather[weatherIndex].temp;
+        }, 4200);
+      }
+    </script>
+  </body>
+</html>

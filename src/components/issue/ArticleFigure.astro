@@ -1,0 +1,12 @@
+---
+interface Props {
+  lineOne: string;
+  lineTwo: string;
+}
+
+const { lineOne, lineTwo } = Astro.props;
+---
+
+<figure class="article-figure">
+  <span>{lineOne}<br />{lineTwo}</span>
+</figure>

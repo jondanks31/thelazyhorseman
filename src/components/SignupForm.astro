@@ -1,0 +1,17 @@
+---
+interface Props {
+  id: string;
+  variant?: 'green' | 'strip';
+}
+
+const { id, variant = 'green' } = Astro.props;
+const formClass = variant === 'green' ? 'signup-form' : 'strip-form';
+const buttonClass = variant === 'green' ? 'btn btn-dark' : 'btn';
+---
+
+<form class={formClass} data-subscribe>
+  <label class="sr" for={id}>Your email address</label>
+  <input id={id} type="email" name="email" required autocomplete="email" placeholder="you@yourfield.co.uk" />
+  <button class={buttonClass} type="submit">Sign me up</button>
+</form>
+<p class="form-msg" role="status" data-msg></p>

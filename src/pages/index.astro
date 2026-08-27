@@ -1,0 +1,66 @@
+---
+import Highlight from '../components/Highlight.astro';
+import SignupForm from '../components/SignupForm.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+---
+
+<SiteLayout
+  title="The Lazy Horseman — a weekly letter about horses"
+  description="A weekly letter about horses. One subject, taken apart properly, Thursday mornings, five minutes, sources at the bottom. Written in Shropshire, read in wellingtons."
+  hasLocalSignup
+>
+  <section class="band hero">
+    <div class="wrap">
+      <h1><span>Hang on,</span><span>why do we</span><span><Highlight>do it</Highlight> that way?</span></h1>
+      <p class="hero-sub">A weekly letter about horses. Thursday mornings, five minutes, about as long as the rain takes to pass over.</p>
+      <div class="hero-cta">
+        <button class="btn btn-lg" type="button" data-signup-target="#signup">Get it Thursday</button>
+        <a class="squiggle" href="/issues/the-hell-is-a-frog-anyway">Read one first</a>
+      </div>
+    </div>
+    <div class="mud" aria-hidden="true"></div>
+  </section>
+
+  <div class="band marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>The hell is a frog anyway? ✦ Rope halters are worth their weight in hay ✦ The benefits of a track system ✦ Your horse is not cold, you are cold ✦ Everything I got wrong about haynets ✦ Nobody knows what "on the bit" means ✦&nbsp;</span>
+      <span>The hell is a frog anyway? ✦ Rope halters are worth their weight in hay ✦ The benefits of a track system ✦ Your horse is not cold, you are cold ✦ Everything I got wrong about haynets ✦ Nobody knows what "on the bit" means ✦&nbsp;</span>
+    </div>
+  </div>
+
+  <section class="band cream-band">
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <p class="kicker">On the word lazy</p>
+          <h2>Lazy is a compliment round here</h2>
+          <p>Nobody who keeps horses is lazy. You are up at six in the dark breaking ice out of a trough with the heel of a wellington, and you will do it again tomorrow. Lazy is what comes after that. It is the extra job somebody invented in 1987 that you have quietly stopped doing.</p>
+          <p>Most yard wisdom turns up without a receipt. Some of it is excellent and worth knowing why. Working that out takes an evening with the papers open and a tea going cold on the arm of the sofa, and that evening is Thursday morning's newsletter.</p>
+        </div>
+        <div class="cards">
+          <div class="card w1" style="transform:rotate(calc(var(--tilt) * -.6deg))">
+            <h3>Thursday, five minutes</h3>
+            <p>One subject, taken apart properly. It lands at seven, which is about when you are sat in the car deciding whether the ground is too hard.</p>
+          </div>
+          <div class="card w2" style="transform:rotate(calc(var(--tilt) * .5deg))">
+            <h3>Mud is the great leveller</h3>
+            <p>Every horse in the country is stood in it by November. Whatever the yard cost and whatever the horse cost, somebody is out there at six with a headtorch and a bucket.</p>
+          </div>
+          <div class="card w3" style="transform:rotate(calc(var(--tilt) * -.4deg))">
+            <h3>Sources at the bottom, always</h3>
+            <p>So you can check my working, or print it off and take it to your vet and have an argument with better ammunition than usual.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band signup" id="signup">
+    <div class="wrap">
+      <h2>Thursday morning, then.</h2>
+      <p>One letter a week, five minutes, sources at the bottom. Something to read in the car park while you wait for the rain to go over.</p>
+      <SignupForm id="email-main" />
+      <p class="fineprint">Free, and one click to leave. No hard feelings either way.</p>
+    </div>
+  </section>
+</SiteLayout>

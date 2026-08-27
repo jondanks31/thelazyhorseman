@@ -1,0 +1,47 @@
+---
+import Logo from './Logo.astro';
+
+interface Props {
+  pathname: string;
+  hasLocalSignup?: boolean;
+}
+
+const { pathname, hasLocalSignup = false } = Astro.props;
+const currentPath = pathname === '/' ? pathname : pathname.replace(/\/$/, '');
+const toolsCurrent = currentPath === '/tools';
+const aboutCurrent = currentPath === '/about';
+---
+
+<header class="band masthead">
+  <div class="wrap">
+    <Logo class="logo" />
+
+    <nav class="mast-nav" aria-label="Main">
+      <a class="navlink" href="/tools" aria-current={toolsCurrent ? 'page' : undefined}>Tools</a>
+      <a class="navlink" href="/about" aria-current={aboutCurrent ? 'page' : undefined}>About</a>
+      {hasLocalSignup ? (
+        <button class="btn" type="button" data-signup-target="#signup">Get it Thursday</button>
+      ) : (
+        <a class="btn" href="/#signup">Get it Thursday</a>
+      )}
+    </nav>
+
+    <button class="burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobile-nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+  <div class="mnav-sheet" role="dialog" aria-modal="true" aria-label="Site menu">
+    <nav class="mnav-links" aria-label="Mobile">
+      <a href="/tools" aria-current={toolsCurrent ? 'page' : undefined}>Tools</a>
+      <a href="/about" aria-current={aboutCurrent ? 'page' : undefined}>About</a>
+    </nav>
+    {hasLocalSignup ? (
+      <button class="btn btn-lg" type="button" data-signup-target="#signup">Get it Thursday</button>
+    ) : (
+      <a class="btn btn-lg" href="/#signup">Get it Thursday</a>
+    )}
+  </div>
+</div>

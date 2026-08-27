@@ -5,6 +5,8 @@ output/
 
 # Dependencies and environment secrets
 node_modules/
+dist/
+.astro/
 .env
 .env.*
 !.env.example

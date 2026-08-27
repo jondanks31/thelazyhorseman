@@ -1,0 +1,44 @@
+---
+import Highlight from '../components/Highlight.astro';
+import SignupForm from '../components/SignupForm.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+---
+
+<SiteLayout
+  title="Me and the cob — The Lazy Horseman"
+  description="Who writes The Lazy Horseman, what the weekly letter is for, and what it definitely is not."
+  hasLocalSignup
+>
+  <section class="band cream-band page-head">
+    <div class="wrap">
+      <p class="kicker">Who is writing this</p>
+      <h1>Me and the <Highlight>cob</Highlight></h1>
+      <p class="lede">I am not a vet, a farrier, a physio or a saddle fitter. I am the person who kept nodding along at the yard and then went home and looked it up.</p>
+    </div>
+  </section>
+
+  <section class="band cream-band">
+    <div class="wrap">
+      <div class="prose">
+        <p>There is one horse in this. A cob, opinionated, entirely certain that the third fence post from the gate has been moved and is not to be trusted. Most weeks the letter starts with something she has done, or something somebody told me about her that turned out to have no basis at all.</p>
+        <p>That is really the whole idea. Horses come with an enormous amount of received wisdom, handed down yard to yard, and a fair bit of it is sound. The trouble is that the sound bits and the nonsense arrive in exactly the same tone of voice, usually from someone holding a wheelbarrow. Nobody has time to tell them apart at half six in the morning.</p>
+        <p>So I do it on a Wednesday evening instead. One subject a week, the actual research where there is any, an honest note where there is not, and every source listed at the bottom so you can go and disagree with me properly.</p>
+        <h2>What this is not</h2>
+        <p>It is not veterinary advice, and it never will be. If your horse is unwell, ring your vet — the letter is for the things nobody rings anybody about, like whether the field really needs harrowing or why we all buy the purple spray.</p>
+        <p>I get things wrong. When that happens I say so the following Thursday, at the top, not tucked away at the bottom.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band cta-block" id="signup">
+    <div class="wrap strip">
+      <div>
+        <h2>Come along on Thursday.</h2>
+        <p class="fineprint" style="font-family:var(--hand);font-size:18px;color:var(--muted);margin:0">One letter a week. One click to leave.</p>
+      </div>
+      <div>
+        <SignupForm id="email-about" variant="strip" />
+      </div>
+    </div>
+  </section>
+</SiteLayout>

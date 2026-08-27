@@ -1,0 +1,64 @@
+---
+import Highlight from '../components/Highlight.astro';
+import SignupForm from '../components/SignupForm.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+---
+
+<SiteLayout
+  title="Tools for the yard — The Lazy Horseman"
+  description="Useful tools for yards, riders and equestrian planning, being built slowly and properly by The Lazy Horseman."
+  hasLocalSignup
+>
+  <section class="band cream-band page-head">
+    <div class="wrap">
+      <p class="kicker">Being built, slowly and properly</p>
+      <h1>Tools for the <Highlight>yard</Highlight></h1>
+      <p class="lede">Things the yard already does badly on paper, in a group chat, or on the back of a feed bag. Three of them are being built now. None is open yet, and I would rather say so than put up a waiting list with nothing behind it.</p>
+    </div>
+  </section>
+
+  <section class="band tools">
+    <div class="wrap">
+      <div class="tools-grid">
+        <article class="tool w1">
+          <span class="tool-soon">Coming soon</span>
+          <p class="tool-for">FOR YARDS</p>
+          <h3>Facility Booking</h3>
+          <p class="tool-line">The school is free at six. Look it up.</p>
+          <p>Arena, school and horsewalker bookings a yard can actually run. Customers see what is open and book it themselves, on a proper calendar, and the whole thing stops living in a WhatsApp group where nine people ask the same question before teatime.</p>
+        </article>
+        <article class="tool w2">
+          <span class="tool-soon">Coming soon</span>
+          <p class="tool-for">FOR PLANNING</p>
+          <h3>OssTrack</h3>
+          <p class="tool-line">Draw the track before you buy the fencing.</p>
+          <p>A field and track planner for one horse or a whole livery business. Map what you have got, lay a track system out on top of it, and work the rotation out on a screen instead of finding out in January where the mud was always going to be.</p>
+        </article>
+        <article class="tool w3">
+          <span class="tool-soon">Coming soon</span>
+          <p class="tool-for">FOR RIDERS</p>
+          <h3>Stallio</h3>
+          <p class="tool-line">Where you rode, and who else rides it.</p>
+          <p>Mileage, maps and routes the way the running apps do it, built for horses. Log the hack, keep the good routes, and find the people riding the same lanes as you. The horse world has never had a decent one of these, so we are making it.</p>
+        </article>
+        <div class="tool-more w4">
+          <h3>More on the way.</h3>
+          <p>These three are first, and there are others behind them. Nothing gets announced here until it is close enough to be worth your time.</p>
+          <div class="tool-more-row">
+            <button class="btn btn-cream" type="button" data-signup-target="#signup">Tell me when they land</button>
+            <span class="cta-note" style="margin:0">Same Thursday letter, no extra emails.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band signup" id="signup">
+    <div class="wrap">
+      <h2>First through the gate.</h2>
+      <p>Each tool opens to the letter first. Subscribers get in before anybody else, and there is nothing else to sign up to.</p>
+      <SignupForm id="email-tools" />
+      <p class="fineprint">Free, and one click to leave. No hard feelings either way.</p>
+    </div>
+  </section>
+</SiteLayout>
