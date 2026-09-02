@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
 import { FACILITY_KINDS, SLOT_MINUTES, kindLabel, prettyMinutes } from '@/lib/kinds';
+import Modal from '@/components/Modal';
 
 export type Facility = {
   id: string;
@@ -103,14 +104,12 @@ export default function Facilities({
             <h2 className="row-name" style={{ fontSize: 21 }}>What can be booked</h2>
             <p className="row-meta">{initial.length} SET UP</p>
           </div>
-          {editing === null && (
-            <button className="btn btn-small" type="button" onClick={startNew}>
-              Add a facility
-            </button>
-          )}
+          <button className="btn btn-small" type="button" onClick={startNew}>
+            Add a facility
+          </button>
         </div>
 
-        {initial.length === 0 && editing === null && (
+        {initial.length === 0 && (
           <div className="empty">
             Nothing to book yet. Add the arena, the school, whatever your riders use.
           </div>
@@ -142,94 +141,20 @@ export default function Facilities({
             </div>
           </div>
         ))}
+
+        {/* Turning a facility off happens out here, so its errors do too. */}
+        {editing === null && error && (
+          <p className="field-error" role="alert">{error}</p>
+        )}
       </section>
 
-      {editing !== null && (
-        <section className="card">
-          <h2 className="q" style={{ fontSize: 26 }}>
-            {editing === 'new' ? 'Add a facility' : 'Edit facility'}
-          </h2>
-
-          <div className="field">
-            <label htmlFor="fname">What is it called?</label>
-            <input
-              id="fname" value={draft.name} placeholder="Indoor school"
-              onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
-            />
-          </div>
-
-          <div className="field">
-            <label id="kind-label">What sort</label>
-            <div className="choices" role="group" aria-labelledby="kind-label">
-              {FACILITY_KINDS.map((k) => (
-                <button
-                  key={k.value} type="button" className="choice"
-                  aria-pressed={draft.kind === k.value}
-                  onClick={() => setDraft((d) => ({ ...d, kind: k.value }))}
-                >
-                  {k.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="field">
-            <label id="slot-label">How long is a slot</label>
-            <div className="choices" role="group" aria-labelledby="slot-label">
-              {SLOT_MINUTES.map((m) => (
-                <button
-                  key={m} type="button" className="choice"
-                  aria-pressed={draft.slot_minutes === m}
-                  onClick={() => setDraft((d) => ({ ...d, slot_minutes: m }))}
-                >
-                  {prettyMinutes(m)}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="two-up">
-            <div className="field">
-              <label htmlFor="opens">Opens</label>
-              <input
-                id="opens" type="time" value={draft.opens_at}
-                onChange={(e) => setDraft((d) => ({ ...d, opens_at: e.target.value }))}
-              />
-            </div>
-            <div className="field">
-              <label htmlFor="closes">Closes</label>
-              <input
-                id="closes" type="time" value={draft.closes_at}
-                aria-invalid={draft.closes_at <= draft.opens_at}
-                onChange={(e) => setDraft((d) => ({ ...d, closes_at: e.target.value }))}
-              />
-              {draft.closes_at <= draft.opens_at && (
-                <p className="field-error">Closing has to be after opening.</p>
-              )}
-            </div>
-          </div>
-
-          <div className="two-up">
-            <div className="field">
-              <label htmlFor="ahead">How far ahead they can book</label>
-              <input
-                id="ahead" type="number" min={1} max={365} value={draft.max_days_ahead}
-                onChange={(e) => setDraft((d) => ({ ...d, max_days_ahead: Number(e.target.value) }))}
-              />
-              <p className="field-hint">Days.</p>
-            </div>
-            <div className="field">
-              <label htmlFor="notice">Cutoff before a slot</label>
-              <input
-                id="notice" type="number" min={0} max={10080} value={draft.min_notice_minutes}
-                onChange={(e) => setDraft((d) => ({ ...d, min_notice_minutes: Number(e.target.value) }))}
-              />
-              <p className="field-hint">Minutes. Zero lets them book right up to the start.</p>
-            </div>
-          </div>
-
-          {error && <p className="field-error" role="alert">{error}</p>}
-
+      <Modal
+        open={editing !== null}
+        onClose={() => setEditing(null)}
+        busy={busy}
+        error={error}
+        title={editing === 'new' ? 'Add a facility' : 'Edit facility'}
+        footer={
           <div className="actions">
             <button className="btn btn-quiet" type="button" onClick={() => setEditing(null)} disabled={busy}>
               Cancel
@@ -238,8 +163,87 @@ export default function Facilities({
               {busy ? 'Saving…' : editing === 'new' ? 'Add it' : 'Save'}
             </button>
           </div>
-        </section>
-      )}
+        }
+      >
+        <div className="field">
+          <label htmlFor="fname">What is it called?</label>
+          <input
+            id="fname" value={draft.name} placeholder="Indoor school"
+            onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
+          />
+        </div>
+
+        <div className="field">
+          <label id="kind-label">What sort</label>
+          <div className="choices" role="group" aria-labelledby="kind-label">
+            {FACILITY_KINDS.map((k) => (
+              <button
+                key={k.value} type="button" className="choice"
+                aria-pressed={draft.kind === k.value}
+                onClick={() => setDraft((d) => ({ ...d, kind: k.value }))}
+              >
+                {k.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="field">
+          <label id="slot-label">How long is a slot</label>
+          <div className="choices" role="group" aria-labelledby="slot-label">
+            {SLOT_MINUTES.map((m) => (
+              <button
+                key={m} type="button" className="choice"
+                aria-pressed={draft.slot_minutes === m}
+                onClick={() => setDraft((d) => ({ ...d, slot_minutes: m }))}
+              >
+                {prettyMinutes(m)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="two-up">
+          <div className="field">
+            <label htmlFor="opens">Opens</label>
+            <input
+              id="opens" type="time" value={draft.opens_at}
+              onChange={(e) => setDraft((d) => ({ ...d, opens_at: e.target.value }))}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="closes">Closes</label>
+            <input
+              id="closes" type="time" value={draft.closes_at}
+              aria-invalid={draft.closes_at <= draft.opens_at}
+              onChange={(e) => setDraft((d) => ({ ...d, closes_at: e.target.value }))}
+            />
+            {draft.closes_at <= draft.opens_at && (
+              <p className="field-error">Closing has to be after opening.</p>
+            )}
+          </div>
+        </div>
+
+        <div className="two-up">
+          <div className="field">
+            <label htmlFor="ahead">How far ahead they can book</label>
+            <input
+              id="ahead" type="number" min={1} max={365} value={draft.max_days_ahead}
+              onChange={(e) => setDraft((d) => ({ ...d, max_days_ahead: Number(e.target.value) }))}
+            />
+            <p className="field-hint">Days.</p>
+          </div>
+          <div className="field">
+            <label htmlFor="notice">Cutoff before a slot</label>
+            <input
+              id="notice" type="number" min={0} max={10080} value={draft.min_notice_minutes}
+              onChange={(e) => setDraft((d) => ({ ...d, min_notice_minutes: Number(e.target.value) }))}
+            />
+            <p className="field-hint">Minutes. Zero lets them book right up to the start.</p>
+          </div>
+        </div>
+
+      </Modal>
     </>
   );
 }

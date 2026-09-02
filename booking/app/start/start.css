@@ -41,9 +41,7 @@
 .steps li.past { color: var(--on-paper); border-top-color: var(--ink); opacity: 1; }
 .steps li.on { color: var(--accent-deep); border-top-color: var(--accent-deep); opacity: 1; }
 
-.actions { display: flex; gap: 12px; align-items: center; margin-top: 6px; }
-.actions .btn { flex: 1; }
-.actions .btn-quiet { flex: 0 0 auto; }
+.actions { margin-top: 6px; }
 
 .done-url {
   font: 700 clamp(15px, 2.6vw, 22px) var(--mono);

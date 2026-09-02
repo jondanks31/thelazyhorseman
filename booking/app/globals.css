@@ -120,7 +120,8 @@ a:hover { color: var(--cream); }
 }
 
 /* ── buttons ─────────────────────────────────────────────── */
-.card .btn {
+.card .btn,
+.modal .btn {
   display: inline-flex; align-items: center; justify-content: center;
   font-family: var(--sans); font-weight: 700;
   font-size: clamp(16px, 1.6vw, 17px);
@@ -133,16 +134,21 @@ a:hover { color: var(--cream); }
   cursor: pointer; transition: transform .12s, box-shadow .12s;
   white-space: nowrap;
 }
-.card .btn:hover:not(:disabled) { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--ink); color: var(--ink); }
-.card .btn:active:not(:disabled) { transform: translate(5px, 5px); box-shadow: 0 0 0 var(--ink); }
-.card .btn:disabled { opacity: .4; cursor: not-allowed; }
+.card .btn:hover:not(:disabled),
+.modal .btn:hover:not(:disabled) { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--ink); color: var(--ink); }
+.card .btn:active:not(:disabled),
+.modal .btn:active:not(:disabled) { transform: translate(5px, 5px); box-shadow: 0 0 0 var(--ink); }
+.card .btn:disabled,
+.modal .btn:disabled { opacity: .4; cursor: not-allowed; }
 
-.card .btn-quiet {
+.card .btn-quiet,
+.modal .btn-quiet {
   background: transparent; color: var(--on-paper-soft);
   border-color: var(--paper-rule); box-shadow: none;
   font-weight: 600;
 }
-.card .btn-quiet:hover:not(:disabled) {
+.card .btn-quiet:hover:not(:disabled),
+.modal .btn-quiet:hover:not(:disabled) {
   color: var(--ink); background: rgba(60, 46, 34, .06);
   border-color: var(--on-paper-soft);
   transform: none; box-shadow: none;
@@ -204,4 +210,90 @@ a:hover { color: var(--cream); }
 .choice[aria-pressed="true"] {
   background: var(--accent); color: var(--ink); border-color: var(--ink);
   box-shadow: 3px 3px 0 var(--ink);
+}
+
+/* ── a row of buttons that ends a form ─────── */
+.actions { display: flex; gap: 12px; align-items: center; }
+.actions .btn { flex: 1; }
+.actions .btn-quiet { flex: 0 0 auto; }
+
+/* ── modal ───────────────────────────────────────────────── */
+/* Same paper card, but taking the screen. A deliberate action should
+   be the only thing in front of you, not appended below the button
+   that started it. */
+.modal {
+  width: min(620px, calc(100vw - 2 * var(--gutter)));
+  max-height: min(86dvh, 900px);
+  margin: auto;
+  padding: 0;
+  border: 3px solid var(--ink);
+  border-radius: 30px 11px 32px 12px;
+  background: var(--paper);
+  color: var(--on-paper);
+  box-shadow: 10px 10px 0 rgba(36, 28, 5, .5);
+  overflow: hidden;
+}
+.modal[open] { display: flex; flex-direction: column; }
+.modal:focus-visible { outline: none; }
+.modal :focus-visible { outline-color: var(--accent-deep); }
+
+.modal::backdrop {
+  background: rgba(36, 28, 5, .72);
+}
+
+/* the page heading size is too much inside a modal */
+.modal-head .q { font-size: clamp(23px, 3vw, 29px); }
+
+.modal-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; flex: none;
+  padding: clamp(22px, 4vw, 32px) clamp(22px, 4vw, 36px) 0;
+}
+
+.modal-x {
+  flex: none; width: 40px; height: 40px; padding: 0;
+  font: 400 26px/1 var(--sans); color: var(--on-paper-soft);
+  background: transparent; border: 3px solid var(--paper-rule);
+  border-radius: 14px 5px 16px 6px; cursor: pointer;
+  transition: border-color .12s, color .12s, background .12s;
+}
+.modal-x:hover:not(:disabled) { color: var(--ink); border-color: var(--ink); background: rgba(60, 46, 34, .06); }
+.modal-x:disabled { opacity: .4; cursor: not-allowed; }
+
+/* The body scrolls, so a long form on a short laptop window never
+   pushes its own buttons off the bottom. */
+.modal-body {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto;
+  padding: clamp(16px, 2.4vw, 22px) clamp(22px, 4vw, 36px);
+  display: flex; flex-direction: column; gap: clamp(16px, 2.2vw, 22px);
+}
+
+/* the default bar is a grey slab against the paper */
+.modal-body { scrollbar-width: thin; scrollbar-color: var(--paper-rule) transparent; }
+.modal-body::-webkit-scrollbar { width: 10px; }
+.modal-body::-webkit-scrollbar-track { background: transparent; }
+.modal-body::-webkit-scrollbar-thumb {
+  background: var(--paper-rule); border-radius: 6px;
+  border: 3px solid var(--paper);
+}
+.modal-body::-webkit-scrollbar-thumb:hover { background: var(--muted-dark); }
+
+.modal-foot {
+  flex: none;
+  padding: clamp(16px, 2.4vw, 22px) clamp(22px, 4vw, 36px) clamp(22px, 4vw, 32px);
+  border-top: 3px solid var(--paper-rule);
+  background: var(--paper);
+  display: flex; flex-direction: column; gap: 12px;
+}
+.modal-foot .actions { margin-top: 0; }
+
+/* showModal() does not stop the page behind from scrolling. */
+body:has(dialog[open]) { overflow: hidden; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .modal[open] { animation: modal-in .16s ease-out; }
+  @keyframes modal-in {
+    from { opacity: 0; transform: translateY(8px) scale(.99); }
+    to   { opacity: 1; transform: none; }
+  }
 }

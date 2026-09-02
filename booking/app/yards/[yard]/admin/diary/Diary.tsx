@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
 import { addMinutes, instantToZoned, todayAt, zonedToInstant } from '@/lib/time';
+import Modal from '@/components/Modal';
 
 export type DiaryFacility = {
   id: string;
@@ -129,11 +130,9 @@ export default function Diary({
             <h2 className="row-name" style={{ fontSize: 21 }}>Coming up</h2>
             <p className="row-meta">{entries.length} IN THE DIARY</p>
           </div>
-          {!open && (
-            <button className="btn btn-small" type="button" onClick={startNew}>
-              Block out time
-            </button>
-          )}
+          <button className="btn btn-small" type="button" onClick={startNew}>
+            Block out time
+          </button>
         </div>
 
         {entries.length === 0 && (
@@ -172,79 +171,18 @@ export default function Diary({
             </div>
           </div>
         ))}
+
+        {/* Cancelling happens out here, so its errors do too. */}
+        {!open && error && <p className="field-error" role="alert">{error}</p>}
       </section>
 
-      {open && (
-        <section className="card">
-          <h2 className="q" style={{ fontSize: 26 }}>Block out some time</h2>
-          <p className="sub">
-            A clinic, a farrier day, anything that should stop riders booking.
-            They will see the name, so it is worth writing what it is.
-          </p>
-
-          <div className="field">
-            <label htmlFor="etitle">What is it</label>
-            <input
-              id="etitle" value={title} placeholder="Jumping clinic"
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-
-          <div className="field">
-            <label id="fac-label">Which facility</label>
-            <div className="choices" role="group" aria-labelledby="fac-label">
-              {facilities.map((f) => (
-                <button
-                  key={f.id} type="button" className="choice"
-                  aria-pressed={facilityId === f.id}
-                  onClick={() => setFacilityId(f.id)}
-                >
-                  {f.name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="field">
-            <label htmlFor="edate">Which day</label>
-            <input
-              id="edate" type="date" value={date} min={todayAt(timezone)}
-              onChange={(e) => setDate(e.target.value)}
-            />
-          </div>
-
-          <div className="two-up">
-            <div className="field">
-              <label htmlFor="efrom">From</label>
-              <input
-                id="efrom" type="time" value={from}
-                onChange={(e) => {
-                  const v = e.target.value;
-                  setFrom(v);
-                  // keep the end after the start without making them redo it
-                  if (v >= to) setTo(addMinutes(v, facility?.slot_minutes ?? 60));
-                }}
-              />
-            </div>
-            <div className="field">
-              <label htmlFor="eto">Until</label>
-              <input
-                id="eto" type="time" value={to} aria-invalid={to <= from}
-                onChange={(e) => setTo(e.target.value)}
-              />
-              {to <= from && <p className="field-error">Has to end after it starts.</p>}
-            </div>
-          </div>
-
-          {outsideHours && facility && (
-            <p className="field-hint">
-              That runs outside {facility.name}&rsquo;s usual {hhmm(facility.opens_at)} to{' '}
-              {hhmm(facility.closes_at)}. Fine for the yard to do, riders just cannot book then.
-            </p>
-          )}
-
-          {error && <p className="field-error" role="alert">{error}</p>}
-
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        busy={busy}
+        error={error}
+        title="Block out some time"
+        footer={
           <div className="actions">
             <button className="btn btn-quiet" type="button" onClick={() => setOpen(false)} disabled={busy}>
               Cancel
@@ -253,8 +191,75 @@ export default function Diary({
               {busy ? 'Saving…' : 'Put it in the diary'}
             </button>
           </div>
-        </section>
-      )}
+        }
+      >
+        <p className="sub">
+          A clinic, a farrier day, anything that should stop riders booking.
+          They will see the name, so it is worth writing what it is.
+        </p>
+
+        <div className="field">
+          <label htmlFor="etitle">What is it</label>
+          <input
+            id="etitle" value={title} placeholder="Jumping clinic"
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+
+        <div className="field">
+          <label id="fac-label">Which facility</label>
+          <div className="choices" role="group" aria-labelledby="fac-label">
+            {facilities.map((f) => (
+              <button
+                key={f.id} type="button" className="choice"
+                aria-pressed={facilityId === f.id}
+                onClick={() => setFacilityId(f.id)}
+              >
+                {f.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="field">
+          <label htmlFor="edate">Which day</label>
+          <input
+            id="edate" type="date" value={date} min={todayAt(timezone)}
+            onChange={(e) => setDate(e.target.value)}
+          />
+        </div>
+
+        <div className="two-up">
+          <div className="field">
+            <label htmlFor="efrom">From</label>
+            <input
+              id="efrom" type="time" value={from}
+              onChange={(e) => {
+                const v = e.target.value;
+                setFrom(v);
+                // keep the end after the start without making them redo it
+                if (v >= to) setTo(addMinutes(v, facility?.slot_minutes ?? 60));
+              }}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="eto">Until</label>
+            <input
+              id="eto" type="time" value={to} aria-invalid={to <= from}
+              onChange={(e) => setTo(e.target.value)}
+            />
+            {to <= from && <p className="field-error">Has to end after it starts.</p>}
+          </div>
+        </div>
+
+        {outsideHours && facility && (
+          <p className="field-hint">
+            That runs outside {facility.name}&rsquo;s usual {hhmm(facility.opens_at)} to{' '}
+            {hhmm(facility.closes_at)}. Fine for the yard to do, riders just cannot book then.
+          </p>
+        )}
+
+      </Modal>
     </>
   );
 }
