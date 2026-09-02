@@ -114,12 +114,14 @@ export default function Wizard() {
     const { data: signIn } = await supabase.auth.signInWithPassword({ email, password });
     if (signIn?.session) return;
 
+    // Anything signUp actually complained about is a real problem, a
+    // rejected address or a refused password, and has to be shown.
+    // Only a clean signUp that yielded no session means confirmation.
+    if (authError) throw new Error(authError.message);
+
     // Genuinely waiting on a confirmation. The account step comes first
     // precisely so this interruption costs only an email and a
     // password, never a half-filled yard.
-    if (authError && authError.message.toLowerCase().includes('password')) {
-      throw new Error(authError.message);
-    }
     setNeedsConfirm(true);
     throw new Error('CONFIRM');
   }, [email, password, supabase]);
