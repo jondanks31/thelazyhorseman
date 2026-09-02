@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  The Lazy Horseman — the "lazy" mark.
+  The Lazy Horseman, the "lazy" mark.
   Drawn as stroked paths, so it needs no font and never reflows while
   a webfont loads. Stroke is currentColor: set `color` on the parent,
   or swap for #7ED957 when the file is used standalone.

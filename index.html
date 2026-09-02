@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Lazy Horseman — a weekly letter about horses</title>
-<meta name="description" content="A weekly letter about horses. One subject, taken apart properly, Thursday mornings, five minutes, sources at the bottom. Written in Shropshire, read in wellingtons.">
+<title>The Lazy Horseman · a letter and tools for horse people</title>
+<meta name="description" content="Horses come with a lot of rules nobody can explain, and a lot of jobs nobody should still be doing in a group chat. A weekly letter, and small useful tools for the yard.">
 <link rel="canonical" href="https://thelazyhorseman.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="The Lazy Horseman">
-<meta property="og:title" content="The Lazy Horseman — a weekly letter about horses">
-<meta property="og:description" content="One subject a week, taken apart properly. Thursday mornings, five minutes, sources at the bottom.">
+<meta property="og:title" content="The Lazy Horseman · a letter and tools for horse people">
+<meta property="og:description" content="A weekly letter about horses, and small useful tools for the yard. Arena booking first.">
 <meta property="og:url" content="https://thelazyhorseman.com/">
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
@@ -76,7 +76,7 @@ a:hover{color:var(--cream)}
 .skip:focus{left:8px;top:8px}
 .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
-/* wonky corners — the whole look hangs off these */
+/* wonky corners, the whole look hangs off these */
 .w1{border-radius:24px 9px 26px 10px}
 .w2{border-radius:9px 26px 8px 24px}
 .w3{border-radius:26px 10px 22px 9px}
@@ -151,7 +151,7 @@ a:hover{color:var(--cream)}
 /* A sheet dropping from under the masthead (z-index 70), so the burger
    stays visible and doubles as the close button. Three things only:
    Tools, About, CTA. The rest of the screen is a scrim that closes on
-   tap — a full-height panel looks empty with this few items. */
+   tap, because a full-height panel looks empty with this few items. */
 .mobile-nav{
   position:fixed;inset:0;z-index:60;
   padding-top:var(--mast-h);
@@ -211,24 +211,36 @@ a:hover{color:var(--cream)}
 .squiggle-ink:hover{color:var(--ink);text-decoration-color:var(--ink)}
 
 /* ── hero ───────────────────────────────────────────────── */
-.hero{position:relative;overflow:hidden;padding-block:clamp(34px,6vw,58px) clamp(52px,9vw,96px)}
-.hero h1{font-weight:800;font-size:clamp(44px,9.4vw,132px);line-height:.84;letter-spacing:-.055em;color:var(--cream);text-wrap:initial}
-/* Direct children only — the .hilite span nested inside line 3 must
-   stay inline-block or the green block runs the full column width. */
+.hero{
+  position:relative;overflow:hidden;
+  /* bottom padding must clear the 54px mud band pinned to the hero floor */
+  padding-block:clamp(34px,6vw,64px) clamp(76px,8vw,96px);
+  /* One secondary edge. Every line after the headline's first shares it,
+     so the block reads as two deliberate edges instead of a drift. */
+  --hero-step:clamp(16px,4.4vw,72px);
+}
+.hero h1{
+  font-weight:800;font-size:clamp(44px,9.6vw,136px);
+  /* Archivo's ascent+descent is ~1.09em, so anything under that pulls the
+     green block up into the line above. 1 gives it about .13em of daylight. */
+  line-height:1.05;
+  letter-spacing:-.055em;color:var(--cream);text-wrap:initial;
+}
+/* Direct children only. A .hilite nested inside a line must stay
+   inline-block or the green block runs the full column width. */
 .hero h1 > span{display:block}
-.hero h1 > span:nth-child(2){margin-left:clamp(18px,5.2vw,70px)}
-.hero h1 > span:nth-child(3){margin-left:clamp(36px,10.4vw,140px)}
+.hero h1 > span + span{margin-left:var(--hero-step)}
 .hilite{
   background:var(--accent);color:var(--ink);
-  padding:0 .09em .05em;border-radius:30px 10px 26px 9px;
+  padding:.03em .13em .07em;border-radius:30px 10px 26px 9px;
   display:inline-block;transform:rotate(calc(var(--tilt) * -1.4deg));
 }
 .hero-sub{
-  margin:26px 0 26px;margin-left:clamp(36px,10.4vw,140px);
-  font-weight:500;font-size:clamp(17px,2vw,21px);line-height:1.45;color:var(--cream-dim);
-  max-width:48ch;
+  margin:36px 0 32px var(--hero-step);
+  font-weight:500;font-size:clamp(17px,2vw,21px);line-height:1.5;color:var(--cream-dim);
+  max-width:44ch;
 }
-.hero-cta{display:flex;gap:clamp(14px,2vw,20px);align-items:center;flex-wrap:wrap;margin-left:clamp(36px,10.4vw,140px)}
+.hero-cta{display:flex;gap:clamp(14px,2vw,22px);align-items:center;flex-wrap:wrap;margin-left:var(--hero-step)}
 .mud{
   position:absolute;left:0;right:0;bottom:0;height:54px;opacity:.95;pointer-events:none;
   background-repeat:no-repeat;
@@ -281,6 +293,52 @@ a:hover{color:var(--cream)}
 .card h3{font-weight:700;font-size:19px;letter-spacing:-.02em;color:var(--ink);margin-bottom:7px}
 .card p{margin:0;font-size:15.5px;line-height:1.65;color:var(--body-on-cream-2)}
 
+/* ── what we make ───────────────────────────────────────── */
+.makes .wrap{padding-block:clamp(38px,5vw,56px) clamp(40px,5.5vw,58px)}
+.makes-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
+.make{
+  border:3px solid var(--cream);
+  background:rgba(242,239,232,.05);
+  padding:clamp(22px,3vw,28px);
+  display:flex;flex-direction:column;
+}
+.make-for{font:700 10px var(--mono);letter-spacing:.16em;color:var(--accent);margin-bottom:12px}
+.make h3{
+  font-weight:800;font-size:clamp(26px,3.2vw,34px);letter-spacing:-.04em;
+  color:var(--cream);line-height:1.02;margin-bottom:8px;
+}
+.make .make-line{font-family:var(--hand);font-size:20px;color:var(--accent);line-height:1.25;margin-bottom:13px}
+.make p{margin:0 0 22px;font-size:16px;line-height:1.68;color:var(--cream-dim)}
+.make-go{margin-top:auto;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+
+/* ── the yard owner call ────────────────────────────────── */
+.yard{background:var(--cream);color:var(--body-on-cream);border-top:3px solid var(--ink)}
+.yard .wrap{padding-block:clamp(38px,5vw,54px)}
+.yard-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(26px,4vw,46px);align-items:center}
+.yard h2{
+  font-weight:800;font-size:clamp(30px,4.4vw,46px);line-height:1;
+  letter-spacing:-.04em;color:var(--ink);margin-bottom:14px;
+}
+.yard-copy p{margin:0 0 14px;font-size:17px;line-height:1.7;color:var(--body-on-cream)}
+.yard-copy p:last-child{margin-bottom:0}
+.yard-price{font-family:var(--hand);font-size:21px;color:var(--pencil)}
+.yard-card{
+  background:#fff;border:3px solid var(--ink);
+  border-radius:26px 10px 28px 11px;padding:clamp(22px,3vw,28px);
+  box-shadow:6px 6px 0 var(--accent);
+}
+.yard-card h3{font-weight:800;font-size:21px;letter-spacing:-.03em;color:var(--ink);margin-bottom:6px}
+.yard-card > p{margin:0 0 16px;font-size:15.5px;line-height:1.6;color:var(--body-on-cream-2)}
+.yard-form{display:flex;flex-direction:column;gap:10px}
+.yard-form input{
+  width:100%;padding:14px 16px;border:3px solid var(--ink);
+  border-radius:18px 6px 20px 7px;background:var(--cream);
+  font-family:var(--sans);font-size:16px;color:var(--ink);
+}
+.yard-form input:focus{background:#fff;outline:none;box-shadow:0 0 0 3px rgba(60,46,34,.3)}
+.yard-form button{width:100%;padding:14px 20px;border-width:3px;border-radius:20px 7px 18px 8px;font-size:16px}
+.yard-note{font:600 11px/1.5 var(--mono);letter-spacing:.06em;color:var(--pencil);margin-top:12px}
+
 /* ── tools ──────────────────────────────────────────────── */
 .tools .wrap{padding-block:clamp(36px,5vw,54px) clamp(40px,5.5vw,58px)}
 .tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
@@ -293,7 +351,7 @@ a:hover{color:var(--cream)}
   display:flex;flex-direction:column;
   overflow:hidden;
 }
-/* the "coming soon" veil — dims the card without hiding what it says */
+/* the "coming soon" veil, dims the card without hiding what it says */
 .tool::after{
   content:"";position:absolute;inset:0;z-index:1;
   background:rgba(36,28,18,.42);
@@ -364,7 +422,7 @@ a:hover{color:var(--cream)}
 
 /* ── inner pages ────────────────────────────────────────── */
 .page-head .wrap{padding-block:clamp(34px,4.6vw,52px) clamp(26px,3.4vw,36px)}
-/* the head and the prose below it are both cream — collapse the seam so
+/* the head and the prose below it are both cream, so collapse the seam and
    they read as one band rather than two stacked ones */
 .page-head + .cream-band .wrap{padding-top:0}
 .page-head h1{
@@ -440,11 +498,13 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
 }
 @media (max-width:900px){
   .split{grid-template-columns:1fr;gap:30px}
+  .makes-grid{grid-template-columns:1fr}
+  .yard-grid{grid-template-columns:1fr;gap:26px}
   .strip{grid-template-columns:1fr;gap:18px}
   footer .wrap{grid-template-columns:1fr 1fr;gap:26px}
   footer .wrap > div:first-child{grid-column:1 / -1}
 }
-/* nav breakpoint — links collapse into the hamburger */
+/* nav breakpoint, links collapse into the hamburger */
 @media (max-width:820px){
   .mast-nav{display:none}
   .burger{display:block}
@@ -457,9 +517,9 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
   .wx-line{font-size:17px}
 
   /* the .hilite block needs room to sit under the line above */
-  .hero h1{line-height:1;letter-spacing:-.04em}
-  .hero h1 > span:nth-child(2),.hero h1 > span:nth-child(3){margin-left:0}
-  .hero-sub,.hero-cta{margin-left:0}
+  .hero{--hero-step:0px}
+  .hero h1{line-height:1.1;letter-spacing:-.04em}
+  .hero-sub{margin-top:28px;margin-bottom:26px}
   .hero-cta{gap:18px}
   .btn-lg{font-size:16px;padding:14px 22px}
 
@@ -551,11 +611,11 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
 
   <section class="band hero">
     <div class="wrap">
-      <h1><span>Hang on,</span><span>why do we</span><span><span class="hilite">do it</span> that way?</span></h1>
-      <p class="hero-sub">A weekly letter about horses. Thursday mornings, five minutes, about as long as the rain takes to pass over.</p>
+      <h1><span>Horses are</span><span><span class="hilite">hard enough.</span></span></h1>
+      <p class="hero-sub">A letter on Thursdays about the things everyone repeats and nobody checks. Software for the jobs your yard still does in a group chat.</p>
       <div class="hero-cta">
         <button class="btn btn-lg" data-signup>Get it Thursday</button>
-        <a class="squiggle" href="#/issue">Read one first</a>
+        <a class="squiggle" href="#/tools">See what we are building</a>
       </div>
     </div>
     <div class="mud" aria-hidden="true"></div>
@@ -572,24 +632,82 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
     <div class="wrap">
       <div class="split">
         <div>
-          <p class="kicker">On the word lazy</p>
-          <h2>Lazy is a compliment round here</h2>
-          <p>Nobody who keeps horses is lazy. You are up at six in the dark breaking ice out of a trough with the heel of a wellington, and you will do it again tomorrow. Lazy is what comes after that. It is the extra job somebody invented in 1987 that you have quietly stopped doing.</p>
-          <p>Most yard wisdom turns up without a receipt. Some of it is excellent and worth knowing why. Working that out takes an evening with the papers open and a tea going cold on the arm of the sofa, and that evening is Thursday morning's newsletter.</p>
+          <p class="kicker">How it goes round here</p>
+          <h2>Nobody here is going to tell you your rug is wrong</h2>
+          <p>Somebody on your yard has a firm opinion about your rug. Somebody else has one about your feed, and neither of them has read anything.</p>
+          <p>Round here nobody minds what you ride or what it cost. The letter goes out on Thursday, the tools are getting built, and that is about the size of it.</p>
         </div>
         <div class="cards">
           <div class="card w1" style="transform:rotate(calc(var(--tilt) * -.6deg))">
-            <h3>Thursday, five minutes</h3>
-            <p>One subject, taken apart properly. It lands at seven, which is about when you are sat in the car deciding whether the ground is too hard.</p>
-          </div>
-          <div class="card w2" style="transform:rotate(calc(var(--tilt) * .5deg))">
             <h3>Mud is the great leveller</h3>
             <p>Every horse in the country is stood in it by November. Whatever the yard cost and whatever the horse cost, somebody is out there at six with a headtorch and a bucket.</p>
           </div>
+          <div class="card w2" style="transform:rotate(calc(var(--tilt) * .5deg))">
+            <h3>Nothing here is for show</h3>
+            <p>The headcollar that has lasted nine years cost eleven quid, and nobody has ever advertised it.</p>
+          </div>
           <div class="card w3" style="transform:rotate(calc(var(--tilt) * -.4deg))">
             <h3>Sources at the bottom, always</h3>
-            <p>So you can check my working, or print it off and take it to your vet and have an argument with better ammunition than usual.</p>
+            <p>So you can check the working, or print it off and take it to your vet and have an argument with better ammunition than usual.</p>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band makes">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="kicker kicker-green">What comes out of all that</p>
+          <h2>A letter, and a bench of tools</h2>
+        </div>
+      </div>
+
+      <div class="makes-grid">
+        <article class="make w1">
+          <p class="make-for">EVERY THURSDAY</p>
+          <h3>The letter</h3>
+          <p class="make-line">One subject, taken apart properly.</p>
+          <p>Hooves one week, haynets the next, and whatever you have all been arguing about at the gate. Five minutes, with the sources underneath so you can go and check.</p>
+          <div class="make-go">
+            <button class="btn" data-signup>Get it Thursday</button>
+            <a class="squiggle" href="#/issue">Read one first</a>
+          </div>
+        </article>
+
+        <article class="make w2">
+          <p class="make-for">BEING BUILT NOW</p>
+          <h3>The tools</h3>
+          <p class="make-line">For the jobs the yard does the hard way.</p>
+          <p>Arena bookings living in a group chat. Track systems drawn on the back of a feed bag. Small, useful software for the bits of keeping horses that everyone puts up with because nobody has fixed them.</p>
+          <div class="make-go">
+            <a class="btn btn-cream" href="#/tools">See the tools</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band yard">
+    <div class="wrap">
+      <div class="yard-grid">
+        <div class="yard-copy">
+          <p class="kicker">If you run a yard</p>
+          <h2>Nobody has to ask if the school is free at six</h2>
+          <p>Facility Booking is the first tool out. Riders see what is open and book it themselves, from their phone or straight from WhatsApp. You decide who gets an account. The group chat goes back to being about lost headcollars.</p>
+          <p class="yard-price">Free for one arena, and it stays free.</p>
+        </div>
+        <div class="yard-card">
+          <h3>Get in first</h3>
+          <p>Leave your email and you will hear the week it opens, before it goes anywhere else. No sales call, because there is nobody here to make one.</p>
+          <form class="yard-form" data-subscribe data-list="yards">
+            <label class="sr" for="email-yard">Your email address</label>
+            <input id="email-yard" type="email" name="email" required autocomplete="email" placeholder="you@youryard.co.uk">
+            <button class="btn" type="submit">Tell me when it opens</button>
+          </form>
+          <p class="form-msg" role="status" data-msg></p>
+          <p class="yard-note">FOR YARD OWNERS · SEPARATE FROM THE LETTER</p>
         </div>
       </div>
     </div>
@@ -738,7 +856,7 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
 <!-- ══════════════ ME AND THE COB ══════════════ -->
 <!--
   DRAFT. Written to the right voice and length, but the personal
-  detail is mine, not yours — the horse, the county, how long you
+  detail is mine, not yours: the horse, the county, how long you
   have kept them. Swap those for the real thing before launch.
 -->
 <div data-page="about" hidden>
@@ -758,7 +876,7 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
         <p>That is really the whole idea. Horses come with an enormous amount of received wisdom, handed down yard to yard, and a fair bit of it is sound. The trouble is that the sound bits and the nonsense arrive in exactly the same tone of voice, usually from someone holding a wheelbarrow. Nobody has time to tell them apart at half six in the morning.</p>
         <p>So I do it on a Wednesday evening instead. One subject a week, the actual research where there is any, an honest note where there is not, and every source listed at the bottom so you can go and disagree with me properly.</p>
         <h2>What this is not</h2>
-        <p>It is not veterinary advice, and it never will be. If your horse is unwell, ring your vet — the letter is for the things nobody rings anybody about, like whether the field really needs harrowing or why we all buy the purple spray.</p>
+        <p>It is not veterinary advice, and it never will be. If your horse is unwell, ring your vet. The letter is for the things nobody rings anybody about, like whether the field really needs harrowing or why we all buy the purple spray.</p>
         <p>I get things wrong. When that happens I say so the following Thursday, at the top, not tucked away at the bottom.</p>
       </div>
     </div>
@@ -811,7 +929,7 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
       <h2>Go on then.</h2>
       <p>Opens your email app with the subject line filled in. A sentence is plenty.</p>
       <a class="btn btn-lg" href="mailto:hello@thelazyhorseman.com?subject=Topic%20suggestion&amp;body=What%20I%20keep%20being%20told%3A%0A%0AWhy%20I%20am%20not%20sure%20about%20it%3A%0A%0A">Email a suggestion</a>
-      <p class="cta-note">Or just reply to any Thursday letter — it comes straight to me.</p>
+      <p class="cta-note">Or just reply to any Thursday letter, it comes straight to me.</p>
     </div>
   </section>
 
@@ -842,7 +960,7 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
         </div>
         <div class="fit w2">
           <h3>People who turn up at the yard</h3>
-          <p>Farriers, physios, saddle fitters, dentists, trainers, transport. Especially regional ones — readers want to know who is any good near them.</p>
+          <p>Farriers, physios, saddle fitters, dentists, trainers, transport. Especially regional ones, because readers want to know who is any good near them.</p>
         </div>
         <div class="fit w3">
           <h3>Yards and services</h3>
@@ -867,9 +985,9 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
   <section class="band cta-block">
     <div class="wrap">
       <h2>Let's talk about it.</h2>
-      <p>Opens your email app with the subject line ready. Tell me who you are and what you are after — no deck needed.</p>
+      <p>Opens your email app with the subject line ready. Tell me who you are and what you are after. No deck needed.</p>
       <a class="btn btn-lg" href="mailto:hello@thelazyhorseman.com?subject=Sponsoring%20an%20issue&amp;body=Who%20we%20are%3A%0A%0AWhat%20we%20make%20or%20do%3A%0A%0ARoughly%20when%20we%27d%20want%20a%20slot%3A%0A%0A">Email about sponsoring</a>
-      <p class="cta-note">hello@thelazyhorseman.com — I answer these myself.</p>
+      <p class="cta-note">hello@thelazyhorseman.com, and I answer these myself.</p>
     </div>
   </section>
 
@@ -916,12 +1034,12 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
 
   var PAGES = ['letter', 'tools', 'issue', 'about', 'suggest', 'sponsor'];
   var TITLES = {
-    letter:  'The Lazy Horseman — a weekly letter about horses',
-    tools:   'Tools for the yard — The Lazy Horseman',
-    issue:   'The hell is a frog anyway? — The Lazy Horseman',
-    about:   'Me and the cob — The Lazy Horseman',
-    suggest: 'Suggest a topic — The Lazy Horseman',
-    sponsor: 'Sponsor an issue — The Lazy Horseman'
+    letter:  'The Lazy Horseman · a letter and tools for horse people',
+    tools:   'Tools for the yard · The Lazy Horseman',
+    issue:   'The hell is a frog anyway? · The Lazy Horseman',
+    about:   'Me and the cob · The Lazy Horseman',
+    suggest: 'Suggest a topic · The Lazy Horseman',
+    sponsor: 'Sponsor an issue · The Lazy Horseman'
   };
 
   /* ── masthead offset ──────────────────────────────────────
@@ -1015,7 +1133,9 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
   // letter page when the current one has none (suggest, sponsor).
   function focusSignup() {
     var page = document.querySelector('[data-page]:not([hidden])');
-    var form = page && page.querySelector('[data-subscribe]');
+    // "Get it Thursday" always means the letter. The yard early-access
+    // form is a separate list, so skip anything carrying a data-list.
+    var form = page && page.querySelector('[data-subscribe]:not([data-list])');
     if (!form) return false;
     form.scrollIntoView({ behavior: 'smooth', block: 'center' });
     var input = form.querySelector('input');
@@ -1037,7 +1157,10 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var msg = form.parentNode.querySelector('[data-msg]');
-      if (msg) msg.textContent = 'Not wired up yet — this is where the sign-up posts.';
+      var list = form.getAttribute('data-list') === 'yards'
+        ? 'yard early-access list'
+        : 'newsletter';
+      if (msg) msg.textContent = 'Not wired up yet. This is where the ' + list + ' sign-up posts.';
       form.reset();
     });
   });
