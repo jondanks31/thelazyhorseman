@@ -23,6 +23,7 @@ export default async function AdminLayout({ children, params }: Props) {
           </div>
           <nav className="admin-nav" aria-label="Yard controls">
             <Link href="/admin">Overview</Link>
+            <Link href="/admin/diary">Diary</Link>
             <Link href="/admin/facilities">Facilities</Link>
             <Link href="/admin/settings">Settings</Link>
             <Link href="/">Rider view</Link>
