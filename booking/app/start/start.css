@@ -1,12 +1,27 @@
-/* The flow sits on its own, centred, with nothing else on screen. A
-   yard owner doing this on a phone should see one question at a time. */
+/* The flow sits alone on the brown ground, centred on any screen. A
+   yard owner does this on a phone in a tack room, so one question at a
+   time, and nothing else competing for the screen. */
+
 .start {
   min-height: 100dvh;
-  display: flex; flex-direction: column; align-items: center;
-  gap: 26px; padding: clamp(24px, 6vw, 56px) var(--gutter) 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 3vw, 30px);
+  padding: clamp(24px, 4vw, 48px) var(--gutter);
+
+  /* Centre it, but never at the cost of reaching the top. Plain
+     `center` pushes overflow out of both ends and makes the top of a
+     tall card unscrollable, which is exactly what happens on a short
+     laptop window. `safe` falls back to start when it will not fit. */
+  justify-content: center;
+  justify-content: safe center;
 }
 
-.start-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.start-head {
+  display: flex; align-items: center; gap: 14px;
+  flex-wrap: wrap; justify-content: center;
+}
 .start-tag {
   font: 700 10px var(--mono); letter-spacing: .18em;
   color: var(--ink); background: var(--accent);
@@ -15,41 +30,63 @@
 }
 
 .card {
-  width: 100%; max-width: 540px;
-  background: var(--ink-soft);
-  border: 3px solid var(--cream);
-  border-radius: 28px 10px 30px 11px;
-  padding: clamp(24px, 5vw, 38px);
-  display: flex; flex-direction: column; gap: 22px;
+  width: 100%;
+  max-width: 620px;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 30px 11px 32px 12px;
+  box-shadow: 8px 8px 0 rgba(36, 28, 5, .45);
+  padding: clamp(24px, 4.5vw, 44px);
+  display: flex; flex-direction: column;
+  gap: clamp(18px, 2.4vw, 26px);
 }
 
 .steps {
-  display: flex; gap: 6px; margin: 0; padding: 0; list-style: none;
+  display: flex; gap: 7px; margin: 0; padding: 0; list-style: none;
   font: 700 9.5px var(--mono); letter-spacing: .14em; text-transform: uppercase;
 }
 .steps li {
-  flex: 1; padding-top: 9px; color: var(--muted-dark);
-  border-top: 3px solid var(--muted-dark);
+  flex: 1; padding-top: 10px; color: var(--on-paper-soft);
+  border-top: 3px solid var(--paper-rule);
+  opacity: .55;
 }
-.steps li.past { color: var(--cream); border-top-color: var(--cream); }
-.steps li.on { color: var(--accent); border-top-color: var(--accent); }
+.steps li.past { color: var(--on-paper); border-top-color: var(--ink); opacity: 1; }
+.steps li.on { color: var(--accent-deep); border-top-color: var(--accent-deep); opacity: 1; }
 
 .q {
-  font-weight: 800; font-size: clamp(27px, 5.5vw, 36px);
-  line-height: 1.05; letter-spacing: -.04em; color: var(--cream);
+  font-weight: 800;
+  font-size: clamp(28px, 4.4vw, 40px);
+  line-height: 1.03; letter-spacing: -.04em;
+  color: var(--ink);
 }
 .q:focus { outline: none; }
-.sub { font-size: 16.5px; line-height: 1.6; color: var(--cream-dim); }
 
-.actions { display: flex; gap: 12px; align-items: center; margin-top: 4px; }
+.sub {
+  font-size: clamp(16px, 1.7vw, 18px);
+  line-height: 1.6; color: var(--on-paper-soft);
+  max-width: 46ch;
+}
+
+.actions { display: flex; gap: 12px; align-items: center; margin-top: 6px; }
 .actions .btn { flex: 1; }
 .actions .btn-quiet { flex: 0 0 auto; }
 
 .done-url {
-  font: 700 clamp(15px, 3.6vw, 21px) var(--mono);
+  font: 700 clamp(15px, 2.6vw, 22px) var(--mono);
   color: var(--ink); background: var(--accent);
-  border: 3px solid var(--cream); border-radius: 18px 6px 20px 7px;
-  padding: 16px 18px; word-break: break-all;
+  border: 3px solid var(--ink); border-radius: 20px 7px 22px 8px;
+  padding: 18px 20px; word-break: break-all;
+  box-shadow: 4px 4px 0 var(--ink);
 }
 
-.start-foot { font-family: var(--hand); font-size: 19px; color: var(--muted); text-align: center; }
+.start-foot {
+  font-family: var(--hand); font-size: clamp(17px, 2vw, 20px);
+  color: var(--muted); text-align: center;
+}
+
+/* On a narrow phone the Back button eating half the row leaves the
+   primary action cramped, so stack them and lead with Next. */
+@media (max-width: 420px) {
+  .actions { flex-direction: column-reverse; align-items: stretch; }
+  .actions .btn-quiet { flex: 1 1 auto; }
+}
