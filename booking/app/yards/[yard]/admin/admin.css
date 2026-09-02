@@ -67,3 +67,75 @@
   border: 3px dashed var(--paper-rule); border-radius: 20px 7px 22px 8px;
   padding: 26px; text-align: center; color: var(--on-paper-soft);
 }
+
+/* ── plan ────────────────────────────────────────────────── */
+/* How much of the allowance is gone, readable at a glance and
+   without a percentage, because the numbers here are tiny. */
+.meter { display: flex; gap: 6px; flex-wrap: wrap; }
+.meter-pip {
+  flex: 1 1 22px; max-width: 64px; height: 12px;
+  border: 2px solid var(--ink); border-radius: 7px 3px 8px 3px;
+  background: transparent;
+}
+.meter-pip.on { background: var(--accent); }
+
+.plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+
+.plan-card {
+  background: var(--paper); color: var(--on-paper);
+  border: 3px solid var(--ink); border-radius: 24px 9px 26px 10px;
+  padding: 24px; display: flex; flex-direction: column; gap: 12px;
+}
+.plan-card.is-current { box-shadow: 6px 6px 0 var(--accent); }
+
+.plan-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.plan-name { font-size: 22px; font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
+
+.plan-price {
+  font-size: 38px; font-weight: 800; letter-spacing: -.045em;
+  color: var(--ink); line-height: 1;
+}
+.plan-per {
+  font-size: 15px; font-weight: 600; letter-spacing: 0;
+  color: var(--on-paper-soft); margin-left: 4px;
+}
+
+.plan-blurb { font-size: 15.5px; line-height: 1.5; color: var(--on-paper-soft); }
+
+.plan-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.plan-list li {
+  font-size: 15.5px; line-height: 1.45; color: var(--on-paper);
+  padding-left: 22px; position: relative;
+}
+.plan-list li::before {
+  content: ""; position: absolute; left: 4px; top: .52em;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent-deep);
+}
+
+.plan-allow {
+  font: 700 10.5px var(--mono); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--on-paper-soft);
+  padding-top: 12px; border-top: 2px solid var(--paper-rule);
+  margin-top: auto;
+}
+
+/* the plan cards are paper too, so they need the on-paper buttons */
+.plan-card .btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--sans); font-weight: 700; font-size: 16px;
+  color: var(--ink); background: var(--accent);
+  border: 3px solid var(--ink); padding: 13px 20px;
+  border-radius: 20px 8px 22px 9px; box-shadow: 4px 4px 0 var(--ink);
+  cursor: pointer; transition: transform .12s, box-shadow .12s;
+}
+.plan-card .btn:hover:not(:disabled) { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); color: var(--ink); }
+.plan-card .btn:disabled { opacity: .4; cursor: not-allowed; }
+.plan-card .btn-quiet {
+  background: transparent; color: var(--on-paper-soft);
+  border-color: var(--paper-rule); box-shadow: none; font-weight: 600;
+}
+.plan-card .btn-quiet:hover:not(:disabled) {
+  color: var(--ink); background: rgba(60, 46, 34, .06);
+  border-color: var(--on-paper-soft); transform: none; box-shadow: none;
+}

@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { getYard, requireAdmin } from '@/lib/yard';
 import { supabaseServer } from '@/lib/supabase-server';
 import Facilities, { type Facility } from './Facilities';
+import type { PlanId } from '@/lib/plans';
 
 type Props = { params: Promise<{ yard: string }> };
 
@@ -12,11 +13,15 @@ export default async function FacilitiesPage({ params }: Props) {
   await requireAdmin(yard, found.id);
 
   const supabase = await supabaseServer();
-  const { data } = await supabase
-    .from('facility')
-    .select('id, name, kind, slot_minutes, max_days_ahead, min_notice_minutes, opens_at, closes_at, is_active')
-    .eq('business_id', found.id)
-    .order('created_at');
+  const [{ data }, business] = await Promise.all([
+    supabase
+      .from('facility')
+      .select('id, name, kind, slot_minutes, max_days_ahead, min_notice_minutes, opens_at, closes_at, is_active')
+      .eq('business_id', found.id)
+      .order('created_at'),
+    supabase.from('business').select('plan').eq('id', found.id)
+      .maybeSingle<{ plan: PlanId }>(),
+  ]);
 
   return (
     <>
@@ -27,7 +32,11 @@ export default async function FacilitiesPage({ params }: Props) {
           diary and keeps the bookings already against it.
         </p>
       </div>
-      <Facilities yardId={found.id} initial={(data ?? []) as Facility[]} />
+      <Facilities
+        yardId={found.id}
+        initial={(data ?? []) as Facility[]}
+        plan={business.data?.plan ?? 'free'}
+      />
     </>
   );
 }

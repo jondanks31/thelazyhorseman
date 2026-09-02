@@ -5,6 +5,14 @@ import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
 import { FACILITY_KINDS, SLOT_MINUTES, kindLabel, prettyMinutes } from '@/lib/kinds';
 import Modal from '@/components/Modal';
+import {
+  ALLOWANCE_REACHED,
+  allowanceLabel,
+  nextPlanUp,
+  planById,
+  priceLabel,
+  type PlanId,
+} from '@/lib/plans';
 
 export type Facility = {
   id: string;
@@ -37,9 +45,11 @@ const hhmm = (t: string) => t.slice(0, 5);
 export default function Facilities({
   yardId,
   initial,
+  plan,
 }: {
   yardId: string;
   initial: Facility[];
+  plan: PlanId;
 }) {
   const supabase = useMemo(() => supabaseBrowser(), []);
   const router = useRouter();
@@ -48,8 +58,19 @@ export default function Facilities({
   const [draft, setDraft] = useState<Draft>(BLANK);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [blocked, setBlocked] = useState(false);
+
+  const allowance = planById(plan).facilities;
+  const used = initial.filter((f) => f.is_active).length;
+  const atLimit = allowance !== null && used >= allowance;
 
   function startNew() {
+    // The database refuses this anyway. Asking them to fill the form in
+    // first and then telling them is just rude.
+    if (atLimit) {
+      setBlocked(true);
+      return;
+    }
     setDraft(BLANK);
     setEditing('new');
     setError(null);
@@ -76,6 +97,13 @@ export default function Facilities({
 
     setBusy(false);
     if (writeError) {
+      // Another admin may have used the last one while this form was
+      // open, so the count that hid the button can be out of date.
+      if (writeError.code === ALLOWANCE_REACHED) {
+        setEditing(null);
+        setBlocked(true);
+        return;
+      }
       setError(writeError.message);
       return;
     }
@@ -92,8 +120,13 @@ export default function Facilities({
       .update({ is_active: !f.is_active })
       .eq('id', f.id);
     setBusy(false);
-    if (writeError) setError(writeError.message);
-    else router.refresh();
+    if (writeError) {
+      // Switching one back on spends an allowance just like adding one.
+      if (writeError.code === ALLOWANCE_REACHED) setBlocked(true);
+      else setError(writeError.message);
+      return;
+    }
+    router.refresh();
   }
 
   return (
@@ -102,7 +135,11 @@ export default function Facilities({
         <div className="row" style={{ paddingTop: 0, borderBottom: 'none' }}>
           <div className="row-main">
             <h2 className="row-name" style={{ fontSize: 21 }}>What can be booked</h2>
-            <p className="row-meta">{initial.length} SET UP</p>
+            <p className="row-meta">
+              {allowance === null
+                ? `${used} ON, NO LIMIT`
+                : `${used} OF ${allowance} ON · ${planById(plan).name.toUpperCase()} PLAN`}
+            </p>
           </div>
           <button className="btn btn-small" type="button" onClick={startNew}>
             Add a facility
@@ -242,8 +279,64 @@ export default function Facilities({
             <p className="field-hint">Minutes. Zero lets them book right up to the start.</p>
           </div>
         </div>
-
       </Modal>
+
+      <UpgradePrompt
+        open={blocked}
+        onClose={() => setBlocked(false)}
+        plan={plan}
+        used={used}
+      />
     </>
+  );
+}
+
+/** What a yard sees when it asks for one more than it is allowed. */
+function UpgradePrompt({
+  open,
+  onClose,
+  plan,
+  used,
+}: {
+  open: boolean;
+  onClose: () => void;
+  plan: PlanId;
+  used: number;
+}) {
+  const current = planById(plan);
+  const next = nextPlanUp(plan);
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={used === 1 ? 'That is your one used up' : `That is all ${used} used up`}
+      footer={
+        <div className="actions">
+          <button className="btn btn-quiet" type="button" onClick={onClose}>
+            Not now
+          </button>
+          {next && (
+            <a className="btn" href="/admin/plan">
+              See {next.name}
+            </a>
+          )}
+        </div>
+      }
+    >
+      <p className="sub">
+        {current.name} covers {allowanceLabel(current.facilities).toLowerCase()},
+        and {used === 1 ? 'it is' : 'they are'} switched on. Turn one off to swap
+        it for another, and the bookings already against it stay put.
+      </p>
+
+      {next && (
+        <p className="sub">
+          Or {next.name} is {priceLabel(next.pence)} a month for{' '}
+          {allowanceLabel(next.facilities).toLowerCase()}. Riders are never
+          counted on any plan.
+        </p>
+      )}
+    </Modal>
   );
 }
