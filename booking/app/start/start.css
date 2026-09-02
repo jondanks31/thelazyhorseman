@@ -1,0 +1,55 @@
+/* The flow sits on its own, centred, with nothing else on screen. A
+   yard owner doing this on a phone should see one question at a time. */
+.start {
+  min-height: 100dvh;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 26px; padding: clamp(24px, 6vw, 56px) var(--gutter) 48px;
+}
+
+.start-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.start-tag {
+  font: 700 10px var(--mono); letter-spacing: .18em;
+  color: var(--ink); background: var(--accent);
+  border: 2px solid var(--ink); padding: 5px 9px;
+  border-radius: 11px 4px 13px 5px; transform: rotate(-1.5deg);
+}
+
+.card {
+  width: 100%; max-width: 540px;
+  background: var(--ink-soft);
+  border: 3px solid var(--cream);
+  border-radius: 28px 10px 30px 11px;
+  padding: clamp(24px, 5vw, 38px);
+  display: flex; flex-direction: column; gap: 22px;
+}
+
+.steps {
+  display: flex; gap: 6px; margin: 0; padding: 0; list-style: none;
+  font: 700 9.5px var(--mono); letter-spacing: .14em; text-transform: uppercase;
+}
+.steps li {
+  flex: 1; padding-top: 9px; color: var(--muted-dark);
+  border-top: 3px solid var(--muted-dark);
+}
+.steps li.past { color: var(--cream); border-top-color: var(--cream); }
+.steps li.on { color: var(--accent); border-top-color: var(--accent); }
+
+.q {
+  font-weight: 800; font-size: clamp(27px, 5.5vw, 36px);
+  line-height: 1.05; letter-spacing: -.04em; color: var(--cream);
+}
+.q:focus { outline: none; }
+.sub { font-size: 16.5px; line-height: 1.6; color: var(--cream-dim); }
+
+.actions { display: flex; gap: 12px; align-items: center; margin-top: 4px; }
+.actions .btn { flex: 1; }
+.actions .btn-quiet { flex: 0 0 auto; }
+
+.done-url {
+  font: 700 clamp(15px, 3.6vw, 21px) var(--mono);
+  color: var(--ink); background: var(--accent);
+  border: 3px solid var(--cream); border-radius: 18px 6px 20px 7px;
+  padding: 16px 18px; word-break: break-all;
+}
+
+.start-foot { font-family: var(--hand); font-size: 19px; color: var(--muted); text-align: center; }
