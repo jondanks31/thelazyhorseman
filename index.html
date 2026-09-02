@@ -383,6 +383,15 @@ a:hover{color:var(--cream)}
 .tool-more h3{font-weight:800;font-size:clamp(22px,2.4vw,27px);letter-spacing:-.03em;color:var(--cream);line-height:1.1}
 .tool-more p{margin:0;font-size:15.5px;line-height:1.65;color:var(--muted);max-width:60ch}
 .tool-more-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:4px}
+/* sits above the coming-soon veil, so a tool with a real page reads as
+   the one you can actually go and look at */
+.tool-link{
+  position:relative;z-index:2;margin-top:18px;align-self:flex-start;
+  font-weight:700;font-size:14px;color:var(--ink);background:var(--cream);
+  border:2px solid var(--ink);padding:9px 15px;border-radius:15px 6px 17px 7px;
+  box-shadow:3px 3px 0 var(--accent);transition:transform .12s,box-shadow .12s;
+}
+.tool-link:hover{color:var(--ink);transform:translate(1px,1px);box-shadow:2px 2px 0 var(--accent)}
 
 /* ── signup ─────────────────────────────────────────────── */
 .signup{background:var(--accent);border-top:3px solid var(--ink);color:var(--ink)}
@@ -697,6 +706,7 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
           <h2>Nobody has to ask if the school is free at six</h2>
           <p>Facility Booking is the first tool out. Riders see what is open and book it themselves, from their phone or straight from WhatsApp. You decide who gets an account. The group chat goes back to being about lost headcollars.</p>
           <p class="yard-price">Free for one arena, and it stays free.</p>
+          <p style="margin-top:14px"><a class="squiggle squiggle-ink" href="/tools/facility-booking/">See how it works</a></p>
         </div>
         <div class="yard-card">
           <h3>Get in first</h3>
@@ -750,6 +760,7 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
           <h3>Facility Booking</h3>
           <p class="tool-line">The school is free at six. Look it up.</p>
           <p>Arena, school and horsewalker bookings a yard can actually run. Customers see what is open and book it themselves, on a proper calendar, and the whole thing stops living in a WhatsApp group where nine people ask the same question before teatime.</p>
+          <a class="tool-link" href="/tools/facility-booking/">See how it works</a>
         </article>
 
         <article class="tool w2">

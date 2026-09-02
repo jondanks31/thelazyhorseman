@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Facility Booking · arena booking for yards · The Lazy Horseman</title>
+<meta name="description" content="Arena and facility booking for livery yards. Riders get their own login, book from their phone or from WhatsApp, and your yard gets its own address. Free for one arena.">
+<link rel="canonical" href="https://thelazyhorseman.com/tools/facility-booking/">
+<meta property="og:type" content="product">
+<meta property="og:site_name" content="The Lazy Horseman">
+<meta property="og:title" content="Facility Booking · arena booking for yards">
+<meta property="og:description" content="Riders see what is free and book it themselves, from their phone or straight from WhatsApp. Free for one arena.">
+<meta property="og:url" content="https://thelazyhorseman.com/tools/facility-booking/">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#3C2E22">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%233C2E22'/%3E%3Cg fill='none' stroke='%237ED957' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16 L22 42 C22 47 26 49 30 47'/%3E%3Cpath d='M44 20 C44 30 43 42 39 48 C36 53 30 53 27 49'/%3E%3Cpath d='M33 26 C33 33 35 39 39 42'/%3E%3C/g%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+<!--
+  NOTE ON DUPLICATION. The tokens and primitives below are copied from
+  index.html rather than shared. That is fine for one page and will not
+  be fine for three, so the next tidy-up is pulling tokens, .band/.wrap,
+  .btn, .hilite and the logo mark into assets/tlh.css and linking it
+  from both. Flagged deliberately rather than half-refactored here.
+-->
+<style>
+:root{
+  --ink:#3C2E22;
+  --ink-deep:#241C05;
+  --cream:#F2EFE8;
+  --cream-dim:#DED4C7;
+  --accent:#7ED957;
+  --yellow:#F2B01E;
+  --muted:#BCAE9B;
+  --muted-dark:#8E8071;
+  --body-on-cream:#33291F;
+  --body-on-cream-2:#3E352B;
+  --pencil:#6B5B4A;
+  --tilt:1;
+
+  --sans:Archivo,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --hand:"Patrick Hand",cursive;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+
+  --gutter:clamp(18px,4.5vw,52px);
+  --measure:1240px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;background:var(--ink);color:var(--cream);
+  font-family:var(--sans);font-size:17px;line-height:1.6;overflow-x:hidden;
+}
+img,svg{display:block;max-width:100%}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{text-wrap:balance}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--cream)}
+::selection{background:var(--accent);color:var(--ink)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--accent);color:var(--ink);padding:12px 18px;font-weight:700;z-index:99}
+.skip:focus{left:8px;top:8px}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+.band{width:100%}
+.wrap{width:100%;max-width:var(--measure);margin-inline:auto;padding-inline:var(--gutter)}
+.w1{border-radius:24px 9px 26px 10px}
+.w2{border-radius:9px 26px 8px 24px}
+.w3{border-radius:26px 10px 22px 9px}
+.w4{border-radius:8px 24px 9px 26px}
+
+.mark{display:inline-block;height:1.14em;width:2.06em;color:var(--accent);vertical-align:-.14em;transform:rotate(-2.5deg);margin-inline:.1em .14em;flex:none}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--sans);font-weight:700;font-size:14px;
+  color:var(--ink);background:var(--accent);border:2px solid var(--ink);
+  padding:10px 15px;border-radius:16px 7px 18px 6px;
+  box-shadow:3px 3px 0 var(--cream);cursor:pointer;
+  transition:transform .12s,box-shadow .12s;white-space:nowrap;
+}
+.btn:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--cream);color:var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--cream)}
+.btn-lg{font-size:17px;padding:15px 26px;border-width:3px;border-radius:24px 8px 26px 9px;box-shadow:5px 5px 0 var(--cream)}
+.btn-lg:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--cream)}
+.btn-dark{background:var(--ink);color:var(--accent)}
+.btn-dark:hover{color:var(--accent)}
+
+.hilite{background:var(--accent);color:var(--ink);padding:.03em .13em .07em;border-radius:30px 10px 26px 9px;display:inline-block;transform:rotate(calc(var(--tilt) * -1.4deg))}
+.kicker{font-family:var(--hand);font-size:21px;color:var(--pencil);margin-bottom:8px}
+.kicker-green{color:var(--accent)}
+.cream-band{background:var(--cream);color:var(--body-on-cream)}
+.cream-band .wrap{padding-block:clamp(38px,5vw,56px) clamp(40px,5vw,58px)}
+
+/* ── masthead ───────────────────────────────────────────── */
+.masthead{border-bottom:1px solid rgba(242,239,232,.2);position:sticky;top:0;z-index:70;background:var(--ink)}
+.masthead .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:14px;flex-wrap:nowrap}
+.logo{display:flex;align-items:center;font-weight:800;font-size:20px;letter-spacing:-.03em;color:var(--cream);white-space:nowrap;min-width:0}
+.logo:hover,.logo:hover .mark{color:var(--cream)}
+.mast-right{display:flex;align-items:center;gap:6px;flex:none}
+.navlink{font-weight:600;font-size:14.5px;color:var(--cream);padding:10px 12px;border-radius:14px 6px 16px 7px;white-space:nowrap}
+.navlink:hover{background:rgba(242,239,232,.12);color:var(--cream)}
+
+/* ── hero ───────────────────────────────────────────────── */
+.hero{position:relative;overflow:hidden;padding-block:clamp(34px,5vw,58px) clamp(40px,5vw,62px)}
+.hero .eyebrow{font:700 10.5px var(--mono);letter-spacing:.18em;color:var(--accent);margin-bottom:18px}
+.hero h1{
+  font-weight:800;font-size:clamp(36px,6.4vw,74px);line-height:1.04;
+  letter-spacing:-.045em;color:var(--cream);max-width:17ch;margin-bottom:22px;
+}
+.hero-sub{font-weight:500;font-size:clamp(17px,1.9vw,20px);line-height:1.55;color:var(--cream-dim);max-width:52ch;margin-bottom:28px}
+.hero-cta{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.hero-note{font-family:var(--hand);font-size:19px;color:var(--muted)}
+
+/* ── problem ────────────────────────────────────────────── */
+.problem .wrap{padding-block:clamp(38px,5vw,54px)}
+.problem h2{font-weight:800;font-size:clamp(28px,4vw,42px);letter-spacing:-.04em;color:var(--ink);line-height:1.05;margin-bottom:20px;max-width:18ch}
+.chat{display:grid;gap:9px;max-width:430px}
+.bub{padding:11px 15px;font-size:15px;line-height:1.45;max-width:88%;border:2px solid var(--ink)}
+.bub.them{background:#fff;border-radius:15px 15px 15px 4px;justify-self:start;color:var(--body-on-cream)}
+.bub.me{background:var(--accent);color:var(--ink);border-radius:15px 15px 4px 15px;justify-self:end}
+.bub b{display:block;font:700 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;opacity:.55;margin-bottom:3px}
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,52px);align-items:start}
+.problem p{margin:0 0 16px;font-size:17.5px;line-height:1.7;color:var(--body-on-cream)}
+.problem p:last-child{margin-bottom:0}
+
+/* ── how it works ───────────────────────────────────────── */
+.how .wrap{padding-block:clamp(40px,5vw,58px)}
+.section-head{margin-bottom:28px}
+.section-head h2{font-weight:800;font-size:clamp(28px,4vw,44px);letter-spacing:-.04em;color:var(--cream);line-height:1.03}
+.cream-band .section-head h2{color:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.panel{border:3px solid var(--cream);background:rgba(242,239,232,.05);padding:clamp(22px,3vw,28px)}
+.panel h3{font-weight:800;font-size:clamp(21px,2.4vw,26px);letter-spacing:-.03em;color:var(--cream);margin-bottom:14px}
+.panel ul{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+.panel li{position:relative;padding-left:26px;font-size:16px;line-height:1.6;color:var(--cream-dim)}
+.panel li::before{content:"";position:absolute;left:2px;top:.6em;width:9px;height:9px;background:var(--accent);border:1.5px solid var(--ink);border-radius:60% 40% 55% 45%}
+
+/* ── whatsapp ───────────────────────────────────────────── */
+.wa{background:var(--accent);color:var(--ink);border-top:3px solid var(--ink);border-bottom:3px solid var(--ink)}
+.wa .wrap{padding-block:clamp(40px,5vw,58px);display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,4vw,52px);align-items:center}
+.wa h2{font-weight:800;font-size:clamp(28px,4vw,44px);letter-spacing:-.04em;color:var(--ink);line-height:1.03;margin-bottom:16px}
+.wa p{margin:0 0 15px;font-size:17px;line-height:1.7;color:#23180E;max-width:52ch}
+.wa .caveat{font-family:var(--hand);font-size:19px;color:#3C2E22;margin:0}
+.wa-chat{background:var(--ink);border:3px solid var(--ink);border-radius:24px 9px 26px 10px;padding:18px;display:grid;gap:9px}
+.wa-chat .bub{border-color:var(--cream);font-size:14.5px}
+.wa-chat .bub.them{background:#4A392B;color:var(--cream)}
+.wa-chat .bub.me{background:var(--accent);color:var(--ink)}
+
+/* ── own address ────────────────────────────────────────── */
+.addr .wrap{padding-block:clamp(40px,5vw,58px)}
+.addr h2{font-weight:800;font-size:clamp(28px,4vw,44px);letter-spacing:-.04em;color:var(--ink);line-height:1.03;margin-bottom:18px;max-width:16ch}
+.addr p{margin:0 0 16px;font-size:17.5px;line-height:1.7;color:var(--body-on-cream);max-width:56ch}
+.urlbar{
+  display:inline-flex;align-items:center;gap:10px;
+  background:#fff;border:3px solid var(--ink);border-radius:20px 8px 22px 9px;
+  padding:14px 20px;margin:6px 0 20px;box-shadow:5px 5px 0 var(--accent);
+  font:700 clamp(14px,2vw,19px) var(--mono);color:var(--ink);
+  max-width:100%;overflow-x:auto;
+}
+.urlbar .yard{background:var(--accent);padding:3px 8px;border-radius:8px 3px 9px 4px}
+
+/* ── pricing ────────────────────────────────────────────── */
+.pricing .wrap{padding-block:clamp(40px,5vw,58px)}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
+.tier{border:3px solid var(--cream);background:rgba(242,239,232,.05);padding:24px 22px;display:flex;flex-direction:column;gap:4px}
+.tier.pick{background:var(--accent);border-color:var(--ink);box-shadow:6px 6px 0 var(--cream)}
+.tier.pick .tname,.tier.pick .tprice,.tier.pick .tfac,.tier.pick li{color:var(--ink)}
+.tier.pick li::before{background:var(--ink);border-color:var(--ink)}
+.tname{font:700 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.tier.pick .tname{opacity:.7}
+.tprice{font-weight:800;font-size:38px;letter-spacing:-.045em;line-height:1.1;color:var(--cream);font-variant-numeric:tabular-nums}
+.tprice small{font-weight:600;font-size:14px;letter-spacing:0;color:var(--muted)}
+.tier.pick .tprice small{color:var(--ink);opacity:.75}
+.tfac{font-family:var(--hand);font-size:19px;color:var(--accent);margin-bottom:10px}
+.tier ul{margin:0;padding:0;list-style:none;display:grid;gap:9px}
+.tier li{position:relative;padding-left:22px;font-size:14.5px;line-height:1.5;color:var(--cream-dim)}
+.tier li::before{content:"";position:absolute;left:2px;top:.55em;width:7px;height:7px;background:var(--accent);border:1.5px solid var(--ink);border-radius:60% 40% 55% 45%}
+.pricing-note{font-family:var(--hand);font-size:19px;color:var(--muted);margin-top:20px}
+
+/* ── signup ─────────────────────────────────────────────── */
+.signup{background:var(--cream);color:var(--body-on-cream);border-top:3px solid var(--ink)}
+.signup .wrap{padding-block:clamp(40px,5vw,56px);text-align:center}
+.signup h2{font-weight:800;font-size:clamp(30px,4.6vw,50px);letter-spacing:-.045em;color:var(--ink);line-height:1;margin-bottom:14px}
+.signup > .wrap > p{margin:0 auto 24px;font-size:17.5px;line-height:1.65;color:var(--body-on-cream);max-width:52ch}
+.signup-form{display:flex;gap:10px;max-width:470px;margin:0 auto 10px;flex-wrap:wrap}
+.signup-form input{
+  flex:1 1 220px;min-width:0;padding:15px 17px;border:3px solid var(--ink);
+  border-radius:18px 6px 20px 7px;background:#fff;
+  font-family:var(--sans);font-size:16px;color:var(--ink);
+}
+.signup-form input:focus{outline:none;box-shadow:0 0 0 3px rgba(60,46,34,.3)}
+.signup-form button{padding:15px 26px;border-width:3px;border-radius:20px 7px 18px 8px;font-size:16px;box-shadow:4px 4px 0 var(--accent)}
+.signup-form button:hover{box-shadow:2px 2px 0 var(--accent)}
+.form-msg{margin:0 0 10px;font-weight:600;min-height:1.4em;font-size:15px;color:var(--body-on-cream)}
+.fineprint{font-family:var(--hand);font-size:19px;color:var(--pencil);margin:0}
+
+/* ── footer ─────────────────────────────────────────────── */
+footer .wrap{padding-block:30px 26px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline}
+footer small{font-size:13px;color:var(--muted-dark)}
+footer .sign{font-family:var(--hand);font-size:19px;color:var(--muted)}
+
+@media (max-width:900px){
+  .problem-grid,.two,.wa .wrap{grid-template-columns:1fr}
+  .tiers{grid-template-columns:1fr}
+}
+@media (max-width:700px){
+  .masthead{position:static}
+  .logo{font-size:18px}
+  /* logo plus link plus button overruns 390px and the logo, being
+     nowrap with min-width 0, overlaps rather than wrapping. The footer
+     and the logo both still reach the rest of the site. */
+  .mast-right .navlink{display:none}
+  .btn{font-size:13.5px;padding:10px 13px}
+  footer .wrap{flex-direction:column;gap:8px}
+}
+@media (max-width:400px){
+  .logo{font-size:16px}
+  .btn{font-size:12.5px;padding:9px 11px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition-duration:.01ms !important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="lazy-mark" viewBox="20 18 262 145">
+    <g fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+      <g transform="rotate(-2 52 68)"><path d="M 40,28 C 48,24 52,30 52,44 L 52,92 C 52,106 60,112 70,108"/></g>
+      <g transform="rotate(1.5 98 82)"><path d="M 118,62 C 104,52 80,56 74,76 C 68,96 84,110 102,104 C 114,100 121,86 118,70"/><path d="M 121,58 C 123,76 121,96 123,103 C 125,111 131,113 139,109"/></g>
+      <g transform="rotate(-1.5 185 85)"><path d="M 155,70 C 170,60 190,60 204,64 C 208,65 208,69 204,73 L 165,102 C 162,105 164,108 169,107 C 184,104 200,102 214,106"/></g>
+      <g transform="rotate(2 254 100)"><path d="M 234,66 C 234,82 238,98 248,104 C 256,108 264,102 268,90 C 271,80 273,70 273,64"/><path d="M 273,64 C 273,88 272,122 264,140 C 257,155 244,156 236,148"/></g>
+    </g>
+  </symbol>
+</svg>
+
+<header class="band masthead">
+  <div class="wrap">
+    <a class="logo" href="/" aria-label="The Lazy Horseman, home">
+      The<svg class="mark" aria-hidden="true" focusable="false"><use href="#lazy-mark"/></svg>Horseman.
+    </a>
+    <nav class="mast-right" aria-label="Main">
+      <a class="navlink" href="/#/tools">All tools</a>
+      <a class="btn" href="#early">Get early access</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="band hero">
+    <div class="wrap">
+      <p class="eyebrow">FACILITY BOOKING · FOR YARDS</p>
+      <h1>Stop asking the <span class="hilite">group chat</span> if the school is free.</h1>
+      <p class="hero-sub">Your riders see what is open and book it themselves. You decide who gets an account. Free for one arena, and your yard gets its own address.</p>
+      <div class="hero-cta">
+        <a class="btn btn-lg" href="#early">Get early access</a>
+        <span class="hero-note">Opening to the first yards shortly.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="band cream-band problem">
+    <div class="wrap">
+      <div class="problem-grid">
+        <div>
+          <h2>You already know how this goes</h2>
+          <p>Somebody asks whether the school is free at six. Four people answer and two of them are wrong. Somebody else turns up to find a lesson running, because the person who booked it said so on Tuesday and it has scrolled off the top.</p>
+          <p>A group chat is a fine place to lose a headcollar. It is a poor place to keep a diary that eight people rely on.</p>
+        </div>
+        <div class="chat">
+          <div class="bub them"><b>Kirsty</b>Anyone in the school at 6?</div>
+          <div class="bub them"><b>Dave</b>Don't think so</div>
+          <div class="bub them"><b>Sam</b>I'm in it til half 6 sorry</div>
+          <div class="bub me"><b>Kirsty</b>Ah. 7 then?</div>
+          <div class="bub them"><b>Yard</b>Jumping clinic at 7 x</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band how">
+    <div class="wrap">
+      <div class="section-head"><h2>How it works</h2></div>
+      <div class="two">
+        <article class="panel w1">
+          <h3>For the yard</h3>
+          <ul>
+            <li>Add what you have got: indoor, outdoor, horsewalker, lunge pen, gallops.</li>
+            <li>Set the hours, the slot length, and how far ahead people can book.</li>
+            <li>Approve riders yourself, or paste in thirty email addresses and invite them.</li>
+            <li>Block out a clinic or a farrier day and everyone sees it straight away.</li>
+            <li>See who booked what, and who keeps not turning up.</li>
+          </ul>
+        </article>
+        <article class="panel w2">
+          <h3>For your riders</h3>
+          <ul>
+            <li>Their own login, not one shared around the yard.</li>
+            <li>What is free today, on their phone, without asking anybody.</li>
+            <li>Book a slot, or cancel one, in about four seconds.</li>
+            <li>Book straight from WhatsApp if they would rather.</li>
+            <li>Nothing to install and nothing to pay.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band wa">
+    <div class="wrap">
+      <div>
+        <h2>They can book from WhatsApp</h2>
+        <p>Your yard already runs on WhatsApp, so the booking can happen there too. Pin one link in the group and a tap opens a private chat with the booking line. It lists what is free, they pick a slot, and that is the booking made.</p>
+        <p class="caveat">The bot cannot sit in the group itself, because WhatsApp does not let businesses do that. The pinned link is the way in.</p>
+      </div>
+      <div class="wa-chat">
+        <div class="bub me">book</div>
+        <div class="bub them">Manor Farm. Which one?<br>&#9642; Indoor school<br>&#9642; Outdoor arena<br>&#9642; Horsewalker</div>
+        <div class="bub me">Indoor school</div>
+        <div class="bub them">Free today: 16:00, 17:00, 18:30, 19:00</div>
+        <div class="bub me">18:30</div>
+        <div class="bub them">Booked. Indoor school, 18:30 to 19:30.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band cream-band addr">
+    <div class="wrap">
+      <p class="kicker">It runs on its own</p>
+      <h2>Your yard gets its own address</h2>
+      <div class="urlbar"><span class="yard">manorfarm</span>.thelazyhorseman.com</div>
+      <p>Riders go straight there. They save it to their phone, add it to their home screen if they want an icon, and book without ever passing through us. Put it on the noticeboard and on the gate.</p>
+      <p>Nobody has to make an account with The Lazy Horseman to use your yard's booking. It is your system, at your address, and it works on its own.</p>
+    </div>
+  </section>
+
+  <section class="band pricing" id="pricing">
+    <div class="wrap">
+      <div class="section-head"><h2>What it costs</h2></div>
+      <div class="tiers">
+        <div class="tier w1">
+          <span class="tname">Free</span>
+          <span class="tprice">£0</span>
+          <span class="tfac">One facility</span>
+          <ul>
+            <li>Unlimited riders, own logins</li>
+            <li>Approvals and email invites</li>
+            <li>Live availability</li>
+            <li>Booking from WhatsApp</li>
+            <li>Your own address</li>
+          </ul>
+        </div>
+        <div class="tier pick w2">
+          <span class="tname">Yard</span>
+          <span class="tprice">£12<small> a month</small></span>
+          <span class="tfac">Up to five facilities</span>
+          <ul>
+            <li>Everything in Free</li>
+            <li>Recurring bookings</li>
+            <li>Waiting lists</li>
+            <li>Booking rules and cutoffs</li>
+            <li>No-show tracking</li>
+          </ul>
+        </div>
+        <div class="tier w3">
+          <span class="tname">Centre</span>
+          <span class="tprice">£29<small> a month</small></span>
+          <span class="tfac">Unlimited, several sites</span>
+          <ul>
+            <li>Everything in Yard</li>
+            <li>More than one site</li>
+            <li>Reporting and exports</li>
+            <li>Paid bookings</li>
+            <li>Cancellation alerts</li>
+          </ul>
+        </div>
+      </div>
+      <p class="pricing-note">Priced on facilities, never on riders. Add every livery on the yard and the bill does not move. Two months free if you pay yearly.</p>
+    </div>
+  </section>
+
+  <section class="band signup" id="early">
+    <div class="wrap">
+      <h2>Get in before it opens</h2>
+      <p>Leave your email and you will hear the week your yard can set up. No sales call, because there is nobody here to make one.</p>
+      <form class="signup-form" data-subscribe data-list="yards">
+        <label class="sr" for="email-yard">Your email address</label>
+        <input id="email-yard" type="email" name="email" required autocomplete="email" placeholder="you@youryard.co.uk">
+        <button class="btn btn-dark" type="submit">Tell me when it opens</button>
+      </form>
+      <p class="form-msg" role="status" data-msg></p>
+      <p class="fineprint">For yard owners. Separate from the Thursday letter.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="band">
+  <div class="wrap">
+    <small>© 2026 The Lazy Horseman · <a href="/">thelazyhorseman.com</a></small>
+    <span class="sign">Built by somebody who has stood in that group chat.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  // No mailing list wired up yet. Point this at the provider's endpoint
+  // and the markup above stays exactly as it is.
+  Array.prototype.forEach.call(document.querySelectorAll('[data-subscribe]'), function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var msg = form.parentNode.querySelector('[data-msg]');
+      if (msg) msg.textContent = 'Not wired up yet. This is where the yard early-access list sign-up posts.';
+      form.reset();
+    });
+  });
+})();
+</script>
+</body>
+</html>
