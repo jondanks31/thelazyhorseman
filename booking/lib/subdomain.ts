@@ -46,6 +46,10 @@ export const REJECTION_MESSAGE: Record<Rejection, string> = {
   reserved: 'That one is taken by us, sorry. Try your yard name.',
 };
 
+export function isReservedSubdomain(name: string): boolean {
+  return RESERVED.has(name.trim().toLowerCase());
+}
+
 export function validateSubdomain(
   input: string,
 ): { ok: true; value: string } | { ok: false; reason: Rejection } {

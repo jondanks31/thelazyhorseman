@@ -29,18 +29,6 @@
   border-radius: 11px 4px 13px 5px; transform: rotate(-1.5deg);
 }
 
-.card {
-  width: 100%;
-  max-width: 620px;
-  background: var(--paper);
-  border: 3px solid var(--ink);
-  border-radius: 30px 11px 32px 12px;
-  box-shadow: 8px 8px 0 rgba(36, 28, 5, .45);
-  padding: clamp(24px, 4.5vw, 44px);
-  display: flex; flex-direction: column;
-  gap: clamp(18px, 2.4vw, 26px);
-}
-
 .steps {
   display: flex; gap: 7px; margin: 0; padding: 0; list-style: none;
   font: 700 9.5px var(--mono); letter-spacing: .14em; text-transform: uppercase;
@@ -52,20 +40,6 @@
 }
 .steps li.past { color: var(--on-paper); border-top-color: var(--ink); opacity: 1; }
 .steps li.on { color: var(--accent-deep); border-top-color: var(--accent-deep); opacity: 1; }
-
-.q {
-  font-weight: 800;
-  font-size: clamp(28px, 4.4vw, 40px);
-  line-height: 1.03; letter-spacing: -.04em;
-  color: var(--ink);
-}
-.q:focus { outline: none; }
-
-.sub {
-  font-size: clamp(16px, 1.7vw, 18px);
-  line-height: 1.6; color: var(--on-paper-soft);
-  max-width: 46ch;
-}
 
 .actions { display: flex; gap: 12px; align-items: center; margin-top: 6px; }
 .actions .btn { flex: 1; }
