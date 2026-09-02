@@ -1,17 +1,30 @@
 ---
 interface Props {
   id: string;
-  variant?: 'green' | 'strip';
+  variant?: 'green' | 'strip' | 'yard';
+  /** Which list this posts to. Yard early access is deliberately not the
+   *  newsletter, so the two can never be merged by accident. */
+  list?: 'yards';
+  placeholder?: string;
+  label?: string;
 }
 
-const { id, variant = 'green' } = Astro.props;
-const formClass = variant === 'green' ? 'signup-form' : 'strip-form';
-const buttonClass = variant === 'green' ? 'btn btn-dark' : 'btn';
+const {
+  id,
+  variant = 'green',
+  list,
+  placeholder = 'you@yourfield.co.uk',
+  label = 'Sign me up',
+} = Astro.props;
+
+const formClass =
+  variant === 'green' ? 'signup-form' : variant === 'yard' ? 'yard-form' : 'strip-form';
+const buttonClass = variant === 'strip' ? 'btn' : 'btn btn-dark';
 ---
 
-<form class={formClass} data-subscribe>
+<form class={formClass} data-subscribe data-list={list}>
   <label class="sr" for={id}>Your email address</label>
-  <input id={id} type="email" name="email" required autocomplete="email" placeholder="you@yourfield.co.uk" />
-  <button class={buttonClass} type="submit">Sign me up</button>
+  <input id={id} type="email" name="email" required autocomplete="email" placeholder={placeholder} />
+  <button class={buttonClass} type="submit">{label}</button>
 </form>
 <p class="form-msg" role="status" data-msg></p>

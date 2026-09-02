@@ -1,0 +1,366 @@
+---
+import Highlight from '../../components/Highlight.astro';
+import SignupForm from '../../components/SignupForm.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+---
+
+<SiteLayout
+  title="Facility Booking · arena booking for yards · The Lazy Horseman"
+  description="Arena and facility booking for livery yards. Riders get their own login, book from their phone or from WhatsApp, and your yard gets its own address. Free for one arena."
+>
+  <section class="band fb-hero">
+    <div class="wrap">
+      <p class="eyebrow">FACILITY BOOKING · FOR YARDS</p>
+      <h1>Stop asking the <Highlight>group chat</Highlight> if the school is free.</h1>
+      <p class="hero-sub">Your riders see what is open and book it themselves. You decide who gets an account. Free for one arena.</p>
+      <div class="hero-cta">
+        <a class="btn btn-lg" href="#early">Get early access</a>
+        <span class="hero-note">Opening to the first yards shortly.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="band cream-band problem">
+    <div class="wrap">
+      <div class="problem-grid">
+        <div>
+          <h2>You already know how this goes</h2>
+          <p>Somebody asks whether the school is free at six. Four people answer and two of them are wrong. Somebody else turns up to find a lesson running, because the person who booked it said so on Tuesday and it has scrolled off the top.</p>
+          <p>A group chat is no place to keep a diary that eight people rely on.</p>
+        </div>
+        <div class="chat">
+          <div class="bub them"><b>Kirsty</b>Anyone in the school at 6?</div>
+          <div class="bub them"><b>Dave</b>Don't think so</div>
+          <div class="bub them"><b>Sam</b>I'm in it til half 6 sorry</div>
+          <div class="bub me"><b>Kirsty</b>Ah. 7 then?</div>
+          <div class="bub them"><b>Yard</b>Jumping clinic at 7 x</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band how">
+    <div class="wrap">
+      <div class="section-head"><h2>How it works</h2></div>
+      <div class="two">
+        <article class="panel w1">
+          <h3>For the yard</h3>
+          <ul>
+            <li>Add what you have got: indoor, outdoor, horsewalker, lunge pen, gallops.</li>
+            <li>Set the hours, the slot length, and how far ahead people can book.</li>
+            <li>Approve riders yourself, or invite them by email.</li>
+            <li>Block out a clinic or a farrier day.</li>
+            <li>See who booked what, and who keeps not turning up.</li>
+          </ul>
+        </article>
+        <article class="panel w2">
+          <h3>For your riders</h3>
+          <ul>
+            <li>A login each.</li>
+            <li>See what is free from their phone.</li>
+            <li>Book or cancel a slot with ease.</li>
+            <li>Book straight from WhatsApp if they would rather.</li>
+            <li>Free for riders, with nothing to install.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band wa">
+    <div class="wrap">
+      <div>
+        <h2>They can book from WhatsApp</h2>
+        <p>Your yard already runs on WhatsApp, so the booking can happen there too. Pin one link in the group and a tap opens a private chat with the booking line. It lists what is free and they pick a slot.</p>
+        <p class="caveat">The bot cannot sit in the group itself, because WhatsApp does not let businesses do that. The pinned link is the way in.</p>
+      </div>
+      <div class="wa-chat">
+        <div class="bub me">book</div>
+        <div class="bub them">Manor Farm. Which one?<br />&#9642; Indoor school<br />&#9642; Outdoor arena<br />&#9642; Horsewalker</div>
+        <div class="bub me">Indoor school</div>
+        <div class="bub them">Free today: 16:00, 17:00, 18:30, 19:00</div>
+        <div class="bub me">18:30</div>
+        <div class="bub them">Booked. Indoor school, 18:30 to 19:30.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band cream-band addr">
+    <div class="wrap">
+      <p class="kicker">It runs on its own</p>
+      <h2>Your yard gets its own address</h2>
+      <div class="urlbar"><span class="yardname">manorfarm</span>.thelazyhorseman.com</div>
+      <p>Riders go straight there and save it to their phone. Put it on the noticeboard and on the gate.</p>
+      <p>Nobody has to make an account with The Lazy Horseman to book at your yard.</p>
+    </div>
+  </section>
+
+  <section class="band pricing" id="pricing">
+    <div class="wrap">
+      <div class="section-head"><h2>What it costs</h2></div>
+      <div class="tiers">
+        <div class="tier w1">
+          <span class="tname">Free</span>
+          <span class="tprice">£0</span>
+          <span class="tfac">One facility</span>
+          <ul>
+            <li>Unlimited riders, a login each</li>
+            <li>Approvals and email invites</li>
+            <li>Live availability</li>
+            <li>Riders book from WhatsApp</li>
+            <li>Your own address</li>
+          </ul>
+        </div>
+        <div class="tier pick w2">
+          <span class="tname">Yard</span>
+          <span class="tprice">£12<small> a month</small></span>
+          <span class="tfac">Up to five facilities</span>
+          <ul>
+            <li>Everything in Free</li>
+            <li>Message riders when plans change</li>
+            <li>Recurring bookings</li>
+            <li>Waiting lists</li>
+            <li>Booking rules and cutoffs</li>
+            <li>No-show tracking</li>
+          </ul>
+        </div>
+        <div class="tier w3">
+          <span class="tname">Centre</span>
+          <span class="tprice">£29<small> a month</small></span>
+          <span class="tfac">Unlimited, several sites</span>
+          <ul>
+            <li>Everything in Yard</li>
+            <li>More than one site</li>
+            <li>Reporting and exports</li>
+            <li>Paid bookings</li>
+          </ul>
+        </div>
+      </div>
+      <p class="pricing-note">Priced on facilities, never on riders. Add every livery on the yard and the bill does not move. Two months free if you pay yearly.</p>
+      <p class="pricing-note">Riders book from WhatsApp on every plan, free ones included. Messaging them first, when a clinic lands or the arena floods, starts at Yard.</p>
+    </div>
+  </section>
+
+  <section class="band fb-signup" id="early">
+    <div class="wrap">
+      <h2>Get in before it opens</h2>
+      <p>Leave your email and you will hear the week your yard can set up. No sales call, because there is nobody here to make one.</p>
+      <SignupForm
+        id="email-yard"
+        list="yards"
+        placeholder="you@youryard.co.uk"
+        label="Tell me when it opens"
+      />
+      <p class="fineprint">For yard owners. Separate from the Thursday letter.</p>
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  /* Page-specific only. Tokens, bands, buttons and the hilite come from
+     global.css, so nothing here repeats them. */
+  .fb-hero .wrap { padding-block: clamp(34px, 5vw, 58px) clamp(40px, 5vw, 62px); }
+  .fb-hero .eyebrow {
+    font: 700 10.5px var(--mono);
+    letter-spacing: .18em;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .fb-hero h1 {
+    font-weight: 800;
+    font-size: clamp(36px, 6.4vw, 74px);
+    line-height: 1.04;
+    letter-spacing: -.045em;
+    color: var(--cream);
+    max-width: 17ch;
+    margin-bottom: 22px;
+  }
+  .fb-hero .hero-sub {
+    margin: 0 0 28px;
+    max-width: 52ch;
+    font-size: clamp(17px, 1.9vw, 20px);
+    line-height: 1.55;
+  }
+  .fb-hero .hero-cta { margin-left: 0; gap: 20px; }
+  .hero-note { font-family: var(--hand); font-size: 19px; color: var(--muted); }
+
+  .problem .wrap { padding-block: clamp(38px, 5vw, 54px); }
+  .problem h2 {
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 42px);
+    letter-spacing: -.04em;
+    color: var(--ink);
+    line-height: 1.05;
+    margin-bottom: 20px;
+    max-width: 18ch;
+  }
+  .problem p { margin: 0 0 16px; font-size: 17.5px; line-height: 1.7; color: var(--body-on-cream); }
+  .problem p:last-child { margin-bottom: 0; }
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 4vw, 52px);
+    align-items: start;
+  }
+  .chat { display: grid; gap: 9px; max-width: 430px; }
+  .bub { padding: 11px 15px; font-size: 15px; line-height: 1.45; max-width: 88%; border: 2px solid var(--ink); }
+  .bub.them { background: #fff; border-radius: 15px 15px 15px 4px; justify-self: start; color: var(--body-on-cream); }
+  .bub.me { background: var(--accent); color: var(--ink); border-radius: 15px 15px 4px 15px; justify-self: end; }
+  .bub b {
+    display: block;
+    font: 700 9.5px var(--mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    opacity: .55;
+    margin-bottom: 3px;
+  }
+
+  .how .wrap { padding-block: clamp(40px, 5vw, 58px); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .panel { border: 3px solid var(--cream); background: rgba(242, 239, 232, .05); padding: clamp(22px, 3vw, 28px); }
+  .panel h3 {
+    font-weight: 800;
+    font-size: clamp(21px, 2.4vw, 26px);
+    letter-spacing: -.03em;
+    color: var(--cream);
+    margin-bottom: 14px;
+  }
+  .panel ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+  .panel li { position: relative; padding-left: 26px; font-size: 16px; line-height: 1.6; color: var(--cream-dim); }
+  .panel li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: .6em;
+    width: 9px;
+    height: 9px;
+    background: var(--accent);
+    border: 1.5px solid var(--ink);
+    border-radius: 60% 40% 55% 45%;
+  }
+
+  .wa { background: var(--accent); color: var(--ink); border-top: 3px solid var(--ink); border-bottom: 3px solid var(--ink); }
+  .wa .wrap {
+    padding-block: clamp(40px, 5vw, 58px);
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: clamp(28px, 4vw, 52px);
+    align-items: center;
+  }
+  .wa h2 {
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 44px);
+    letter-spacing: -.04em;
+    color: var(--ink);
+    line-height: 1.03;
+    margin-bottom: 16px;
+  }
+  .wa p { margin: 0 0 15px; font-size: 17px; line-height: 1.7; color: #23180E; max-width: 52ch; }
+  .wa .caveat { font-family: var(--hand); font-size: 19px; color: #3C2E22; margin: 0; }
+  .wa-chat {
+    background: var(--ink);
+    border: 3px solid var(--ink);
+    border-radius: 24px 9px 26px 10px;
+    padding: 18px;
+    display: grid;
+    gap: 9px;
+  }
+  .wa-chat .bub { border-color: var(--cream); font-size: 14.5px; }
+  .wa-chat .bub.them { background: #4A392B; color: var(--cream); }
+  .wa-chat .bub.me { background: var(--accent); color: var(--ink); }
+
+  .addr .wrap { padding-block: clamp(40px, 5vw, 58px); }
+  .addr h2 {
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 44px);
+    letter-spacing: -.04em;
+    color: var(--ink);
+    line-height: 1.03;
+    margin-bottom: 18px;
+    max-width: 16ch;
+  }
+  .addr p { margin: 0 0 16px; font-size: 17.5px; line-height: 1.7; color: var(--body-on-cream); max-width: 56ch; }
+  .urlbar {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border: 3px solid var(--ink);
+    border-radius: 20px 8px 22px 9px;
+    padding: 14px 20px;
+    margin: 6px 0 20px;
+    box-shadow: 5px 5px 0 var(--accent);
+    font: 700 clamp(14px, 2vw, 19px) var(--mono);
+    color: var(--ink);
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .urlbar .yardname { background: var(--accent); padding: 3px 8px; border-radius: 8px 3px 9px 4px; }
+
+  .pricing .wrap { padding-block: clamp(40px, 5vw, 58px); }
+  .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; }
+  .tier {
+    border: 3px solid var(--cream);
+    background: rgba(242, 239, 232, .05);
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .tier.pick { background: var(--accent); border-color: var(--ink); box-shadow: 6px 6px 0 var(--cream); }
+  .tier.pick .tname, .tier.pick .tprice, .tier.pick .tfac, .tier.pick li { color: var(--ink); }
+  .tier.pick li::before { background: var(--ink); border-color: var(--ink); }
+  .tname { font: 700 11px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+  .tier.pick .tname { opacity: .7; }
+  .tprice {
+    font-weight: 800;
+    font-size: 38px;
+    letter-spacing: -.045em;
+    line-height: 1.1;
+    color: var(--cream);
+    font-variant-numeric: tabular-nums;
+  }
+  .tprice small { font-weight: 600; font-size: 14px; letter-spacing: 0; color: var(--muted); }
+  .tier.pick .tprice small { color: var(--ink); opacity: .75; }
+  .tfac { font-family: var(--hand); font-size: 19px; color: var(--accent); margin-bottom: 10px; }
+  .tier ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+  .tier li { position: relative; padding-left: 22px; font-size: 14.5px; line-height: 1.5; color: var(--cream-dim); }
+  .tier li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: .55em;
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    border: 1.5px solid var(--ink);
+    border-radius: 60% 40% 55% 45%;
+  }
+  .pricing-note { font-family: var(--hand); font-size: 19px; color: var(--muted); margin-top: 20px; }
+
+  .fb-signup { background: var(--cream); color: var(--body-on-cream); border-top: 3px solid var(--ink); }
+  .fb-signup .wrap { padding-block: clamp(40px, 5vw, 56px); text-align: center; }
+  .fb-signup h2 {
+    font-weight: 800;
+    font-size: clamp(30px, 4.6vw, 50px);
+    letter-spacing: -.045em;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .fb-signup > .wrap > p { margin: 0 auto 24px; font-size: 17.5px; line-height: 1.65; max-width: 52ch; }
+  .fb-signup .fineprint { font-family: var(--hand); font-size: 19px; color: var(--pencil); margin: 0; }
+  /* SignupForm renders its own elements, so reaching them needs :global.
+     The shared form is built for the green band: on cream its input and
+     its cream drop shadow both disappear. */
+  .fb-signup :global(.signup-form) { justify-content: center; }
+  .fb-signup :global(.signup-form input) { background: #fff; }
+  .fb-signup :global(.signup-form button) { box-shadow: 4px 4px 0 var(--accent); }
+  .fb-signup :global(.signup-form button:hover) { box-shadow: 2px 2px 0 var(--accent); }
+  .fb-signup :global(.form-msg) { color: var(--body-on-cream); }
+
+  @media (max-width: 900px) {
+    .problem-grid, .two, .wa .wrap { grid-template-columns: 1fr; }
+    .tiers { grid-template-columns: 1fr; }
+  }
+</style>

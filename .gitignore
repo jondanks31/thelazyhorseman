@@ -15,3 +15,7 @@ dist/
 .DS_Store
 Thumbs.db
 *.swp
+
+# Claude Code local state, but keep the shared launch config
+.claude/*
+!.claude/launch.json

@@ -5,17 +5,17 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 ---
 
 <SiteLayout
-  title="The Lazy Horseman — a weekly letter about horses"
-  description="A weekly letter about horses. One subject, taken apart properly, Thursday mornings, five minutes, sources at the bottom. Written in Shropshire, read in wellingtons."
+  title="The Lazy Horseman · a letter and tools for horse people"
+  description="Horses come with a lot of rules nobody can explain, and a lot of jobs nobody should still be doing in a group chat. A weekly letter, and small useful tools for the yard."
   hasLocalSignup
 >
   <section class="band hero">
     <div class="wrap">
-      <h1><span>Hang on,</span><span>why do we</span><span><Highlight>do it</Highlight> that way?</span></h1>
-      <p class="hero-sub">A weekly letter about horses. Thursday mornings, five minutes, about as long as the rain takes to pass over.</p>
+      <h1><span>Horses are</span><span><Highlight>hard enough.</Highlight></span></h1>
+      <p class="hero-sub">A letter on Thursdays about the things everyone repeats and nobody checks. Software for the jobs your yard still does in a group chat.</p>
       <div class="hero-cta">
         <button class="btn btn-lg" type="button" data-signup-target="#signup">Get it Thursday</button>
-        <a class="squiggle" href="/issues/the-hell-is-a-frog-anyway">Read one first</a>
+        <a class="squiggle" href="/tools">See what we are building</a>
       </div>
     </div>
     <div class="mud" aria-hidden="true"></div>
@@ -32,24 +32,84 @@ import SiteLayout from '../layouts/SiteLayout.astro';
     <div class="wrap">
       <div class="split">
         <div>
-          <p class="kicker">On the word lazy</p>
-          <h2>Lazy is a compliment round here</h2>
-          <p>Nobody who keeps horses is lazy. You are up at six in the dark breaking ice out of a trough with the heel of a wellington, and you will do it again tomorrow. Lazy is what comes after that. It is the extra job somebody invented in 1987 that you have quietly stopped doing.</p>
-          <p>Most yard wisdom turns up without a receipt. Some of it is excellent and worth knowing why. Working that out takes an evening with the papers open and a tea going cold on the arm of the sofa, and that evening is Thursday morning's newsletter.</p>
+          <p class="kicker">How it goes round here</p>
+          <h2>Nobody here is going to tell you your rug is wrong</h2>
+          <p>Somebody on your yard has a firm opinion about your rug. Somebody else has one about your feed, and neither of them has read anything.</p>
+          <p>Round here nobody minds what you ride or what it cost. The letter goes out on Thursday, the tools are getting built, and that is about the size of it.</p>
         </div>
         <div class="cards">
           <div class="card w1" style="transform:rotate(calc(var(--tilt) * -.6deg))">
-            <h3>Thursday, five minutes</h3>
-            <p>One subject, taken apart properly. It lands at seven, which is about when you are sat in the car deciding whether the ground is too hard.</p>
-          </div>
-          <div class="card w2" style="transform:rotate(calc(var(--tilt) * .5deg))">
             <h3>Mud is the great leveller</h3>
             <p>Every horse in the country is stood in it by November. Whatever the yard cost and whatever the horse cost, somebody is out there at six with a headtorch and a bucket.</p>
           </div>
+          <div class="card w2" style="transform:rotate(calc(var(--tilt) * .5deg))">
+            <h3>Nothing here is for show</h3>
+            <p>The headcollar that has lasted nine years cost eleven quid, and nobody has ever advertised it.</p>
+          </div>
           <div class="card w3" style="transform:rotate(calc(var(--tilt) * -.4deg))">
             <h3>Sources at the bottom, always</h3>
-            <p>So you can check my working, or print it off and take it to your vet and have an argument with better ammunition than usual.</p>
+            <p>So you can check the working, or print it off and take it to your vet and have an argument with better ammunition than usual.</p>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band makes">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="kicker kicker-green">What comes out of all that</p>
+          <h2>A letter, and a bench of tools</h2>
+        </div>
+      </div>
+
+      <div class="makes-grid">
+        <article class="make w1">
+          <p class="make-for">EVERY THURSDAY</p>
+          <h3>The letter</h3>
+          <p class="make-line">One subject, taken apart properly.</p>
+          <p>Hooves one week, haynets the next, and whatever you have all been arguing about at the gate. Five minutes, with the sources underneath.</p>
+          <div class="make-go">
+            <button class="btn" type="button" data-signup-target="#signup">Get it Thursday</button>
+            <a class="squiggle" href="/issues/the-hell-is-a-frog-anyway">Read one first</a>
+          </div>
+        </article>
+
+        <article class="make w2">
+          <p class="make-for">BEING BUILT NOW</p>
+          <h3>The tools</h3>
+          <p class="make-line">For the jobs the yard does the hard way.</p>
+          <p>Arena bookings living in a group chat. Track systems drawn on the back of a feed bag. Small, useful software for the bits of keeping horses nobody has got round to fixing.</p>
+          <div class="make-go">
+            <a class="btn btn-cream" href="/tools">See the tools</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band yard">
+    <div class="wrap">
+      <div class="yard-grid">
+        <div class="yard-copy">
+          <p class="kicker">If you run a yard</p>
+          <h2>Nobody has to ask if the school is free at six</h2>
+          <p>Facility Booking is the first tool out. Riders see what is open and book it themselves, from their phone or straight from WhatsApp. You decide who gets an account. The group chat goes back to being about lost headcollars.</p>
+          <p class="yard-price">Free for one arena, and it stays free.</p>
+          <p><a class="squiggle squiggle-ink" href="/tools/facility-booking">See how it works</a></p>
+        </div>
+        <div class="yard-card">
+          <h3>Get in first</h3>
+          <p>Leave your email and you will hear the week it opens. No sales call, because there is nobody here to make one.</p>
+          <SignupForm
+            id="email-yard"
+            variant="yard"
+            list="yards"
+            placeholder="you@youryard.co.uk"
+            label="Tell me when it opens"
+          />
+          <p class="yard-note">FOR YARD OWNERS · SEPARATE FROM THE LETTER</p>
         </div>
       </div>
     </div>
