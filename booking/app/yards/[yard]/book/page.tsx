@@ -102,7 +102,7 @@ export default async function BookPage({ params }: Props) {
   // The yard's name and the way to its controls are both in the header
   // now, so this page is only the grid.
   return (
-    <main className="yard">
+    <main className="yard is-wide">
       <Book
         yardId={yard.id}
         userId={user.id}

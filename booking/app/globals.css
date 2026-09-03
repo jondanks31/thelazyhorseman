@@ -367,11 +367,13 @@ body:has(dialog[open]) { overflow: hidden; }
 .shell { min-height: 100dvh; display: flex; flex-direction: column; }
 
 .bar {
-  width: 100%; max-width: 660px;
-  margin: clamp(14px, 2.5vw, 24px) auto 0;
   flex: none;
-  /* Sits inside the page gutter, not against the glass. */
-  inline-size: calc(100% - var(--gutter) * 2);
+  /* Lines its outer edges up with the page content below it, which is
+     1000px wide inside the same gutter. One width everywhere: giving
+     the rider's pages a narrower bar made the whole screen look
+     shrunken next to the admin ones. */
+  width: calc(min(100%, 1000px) - var(--gutter) * 2);
+  margin: clamp(14px, 2.5vw, 24px) auto 0;
   background: var(--paper); color: var(--on-paper);
   border: 3px solid var(--ink);
   border-radius: 22px 8px 24px 9px;
@@ -458,11 +460,6 @@ body:has(dialog[open]) { overflow: hidden; }
 .menu-out { margin-top: 5px; padding-top: 12px; border-top: 2px solid var(--paper-rule); border-radius: 0; }
 .menu-out:hover { border-color: transparent; border-top-color: var(--paper-rule); }
 .menu-out .menu-item-name { color: var(--danger-deep); }
-
-/* The bar lines up with whatever is under it. Admin screens run wide;
-   a rider's card does not, and a header twice its width looks like a
-   mistake. The admin wrapper is the only thing that differs, so ask. */
-.shell:has(.admin-main) .bar { max-width: 1000px; }
 
 @media (max-width: 560px) {
   .bar { gap: 10px; }
