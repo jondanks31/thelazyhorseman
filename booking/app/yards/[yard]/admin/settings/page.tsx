@@ -14,21 +14,17 @@ export default async function SettingsPage({ params }: Props) {
   const supabase = await supabaseServer();
   const { data } = await supabase
     .from('business')
-    .select('name, join_policy')
+    .select('name')
     .eq('id', found.id)
-    .maybeSingle<{ name: string; join_policy: 'request' | 'invite' }>();
+    .maybeSingle<{ name: string }>();
 
   return (
     <>
       <div>
         <h1 className="admin-h">Settings</h1>
-        <p className="admin-lead">The yard itself, and who is allowed to get on it.</p>
+        <p className="admin-lead">The yard itself.</p>
       </div>
-      <Settings
-        yardId={found.id}
-        initialName={data?.name ?? found.name}
-        initialPolicy={data?.join_policy ?? 'request'}
-      />
+      <Settings yardId={found.id} initialName={data?.name ?? found.name} />
     </>
   );
 }

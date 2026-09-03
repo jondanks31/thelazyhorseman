@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { supabaseServer } from '@/lib/supabase-server';
 import './yard.css';
@@ -31,6 +32,18 @@ export default async function YardPage({ params }: Props) {
   const supabase = await supabaseServer();
   const { data: { user } } = await supabase.auth.getUser();
 
+  const { data: membership } = user
+    ? await supabase
+        .from('membership')
+        .select('role, status')
+        .eq('business_id', yard.id)
+        .eq('user_id', user.id)
+        .maybeSingle<{ role: string; status: string }>()
+    : { data: null };
+
+  const onTheYard = membership?.status === 'approved';
+  const admin = onTheYard && (membership?.role === 'owner' || membership?.role === 'admin');
+
   return (
     <main className="yard">
       <header className="yard-head">
@@ -39,22 +52,31 @@ export default async function YardPage({ params }: Props) {
       </header>
 
       <section className="card">
-        {user ? (
+        {!user && (
           <>
-            <h2 className="q">You are signed in.</h2>
-            <p className="sub">
-              The diary is next. For now this proves the yard resolved from its own
-              address and that the session came with you.
-            </p>
+            <h2 className="q">Sign in.</h2>
+            <div className="actions">
+              <Link className="btn" href="/sign-in">Sign in</Link>
+            </div>
+            <p className="field-hint">Riders join with a link or code from the yard.</p>
           </>
-        ) : (
+        )}
+
+        {user && !onTheYard && (
           <>
-            <h2 className="q">Ask to join {yard.name}.</h2>
-            <p className="sub">
-              Bookings are for people on the yard, so {yard.name} approves everyone
-              before they can take a slot.
-            </p>
-            <p className="field-hint">Joining is next on the list.</p>
+            <h2 className="q">You need an invite.</h2>
+            <p className="sub">Ask {yard.name} for a link, or scan their code.</p>
+          </>
+        )}
+
+        {onTheYard && (
+          <>
+            <h2 className="q">You are on {yard.name}.</h2>
+            {admin && (
+              <div className="actions">
+                <Link className="btn" href="/admin">Yard controls</Link>
+              </div>
+            )}
           </>
         )}
       </section>

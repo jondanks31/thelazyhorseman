@@ -124,3 +124,21 @@
   color: var(--ink); background: rgba(60, 46, 34, .06);
   border-color: var(--on-paper-soft); transform: none; box-shadow: none;
 }
+
+/* ── join code ───────────────────────────────────────────── */
+.qr {
+  align-self: center;
+  width: min(240px, 60vw);
+  padding: 18px;
+  background: var(--paper-input);
+  border: 3px solid var(--ink);
+  border-radius: 22px 8px 24px 9px;
+}
+.qr svg { display: block; width: 100%; height: auto; }
+
+.join-link {
+  font: 600 13px var(--mono); color: var(--on-paper-soft);
+  word-break: break-all; text-align: center;
+  padding: 12px 14px; background: rgba(60, 46, 34, .06);
+  border-radius: 14px 5px 16px 6px;
+}

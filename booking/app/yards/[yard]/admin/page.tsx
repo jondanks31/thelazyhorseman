@@ -13,18 +13,16 @@ export default async function AdminOverview({ params }: Props) {
 
   const supabase = await supabaseServer();
 
-  const [facilities, riders, pending, business] = await Promise.all([
+  const [facilities, riders, pending] = await Promise.all([
     supabase.from('facility').select('id', { count: 'exact', head: true })
       .eq('business_id', found.id).eq('is_active', true),
     supabase.from('membership').select('id', { count: 'exact', head: true })
       .eq('business_id', found.id).eq('status', 'approved'),
-    supabase.from('membership').select('id', { count: 'exact', head: true })
-      .eq('business_id', found.id).eq('status', 'pending'),
-    supabase.from('business').select('join_policy').eq('id', found.id)
-      .maybeSingle<{ join_policy: string }>(),
+    // Nobody waits for approval any more, so what is outstanding is
+    // invites that have been sent and not taken up.
+    supabase.from('invite').select('id', { count: 'exact', head: true })
+      .eq('business_id', found.id).is('accepted_at', null),
   ]);
-
-  const openToRequests = business.data?.join_policy === 'request';
 
   return (
     <>
@@ -50,9 +48,9 @@ export default async function AdminOverview({ params }: Props) {
         </div>
         <div className="tile">
           <span className="tile-num">{pending.count ?? 0}</span>
-          <span className="tile-label">Waiting on you</span>
+          <span className="tile-label">Invites out</span>
           <span className="tile-note">
-            {openToRequests ? 'Anyone with the link can ask.' : 'Invite only, so nobody can ask.'}
+            <Link href="/admin/riders">Invite someone</Link>
           </span>
         </div>
       </div>
