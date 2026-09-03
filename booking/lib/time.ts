@@ -72,3 +72,28 @@ export function addMinutes(time: string, minutes: number): string {
   const total = Math.min(h * 60 + m + minutes, 23 * 60 + 59);
   return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
 }
+
+/**
+ * Calendar arithmetic on "2026-09-04", with no zone involved.
+ *
+ * Deliberately not `zonedToInstant` plus 24 hours, which is wrong twice
+ * a year: the day the clocks go forward is 23 hours long.
+ */
+export function addDays(date: string, days: number): string {
+  const [y, m, d] = date.split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10);
+}
+
+/** "Today", "Tomorrow", or "Sat 5 Sep". */
+export function dayLabel(date: string, timeZone: string): string {
+  const today = todayAt(timeZone);
+  if (date === today) return 'Today';
+  if (date === addDays(today, 1)) return 'Tomorrow';
+
+  // Read back as UTC, because the value is a calendar date rather than
+  // an instant and formatting it in any other zone can shift the day.
+  const [y, m, d] = date.split('-').map(Number);
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short',
+  }).format(new Date(Date.UTC(y, m - 1, d)));
+}

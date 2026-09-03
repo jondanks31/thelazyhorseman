@@ -17,3 +17,80 @@
   color: var(--accent); margin-top: 6px;
 }
 .yard-foot { font-family: var(--hand); font-size: 18px; color: var(--muted); }
+
+/* The one way off this page, so it sits on the ground rather than
+   inside the card, where it would compete with the slots. */
+.yard-nav {
+  font-weight: 700; font-size: 15px; color: var(--cream);
+  padding: 10px 16px;
+  border: 2px solid var(--muted-dark); border-radius: 16px 6px 18px 7px;
+}
+.yard-nav:hover { color: var(--ink); background: var(--accent); border-color: var(--accent); }
+
+/* ── the days ────────────────────────────────────────────── */
+/* A yard can look a year ahead, so this scrolls sideways rather than
+   wrapping into a wall of dates nobody reads. */
+.days {
+  display: flex; gap: 8px;
+  overflow-x: auto; scroll-snap-type: x proximity;
+  margin-inline: calc(clamp(24px, 4.5vw, 44px) * -1);
+  padding-inline: clamp(24px, 4.5vw, 44px);
+  padding-bottom: 4px;
+  scrollbar-width: thin; scrollbar-color: var(--paper-rule) transparent;
+}
+.day {
+  flex: none; scroll-snap-align: start;
+  font-family: var(--sans); font-weight: 700; font-size: 14.5px;
+  color: var(--on-paper-soft); background: var(--paper-input);
+  border: 2px solid var(--paper-rule); border-radius: 14px 5px 16px 6px;
+  padding: 9px 14px; cursor: pointer; white-space: nowrap;
+}
+.day:hover { border-color: var(--on-paper-soft); color: var(--ink); }
+.day[aria-pressed="true"] {
+  background: var(--ink); border-color: var(--ink); color: var(--cream);
+}
+
+/* ── the slots ───────────────────────────────────────────── */
+.slots {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 8px;
+}
+.slot {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-family: var(--sans);
+  background: var(--paper-input); color: var(--ink);
+  border: 2px solid var(--ink); border-radius: 15px 6px 17px 6px;
+  padding: 11px 6px; cursor: pointer;
+  transition: transform .1s, box-shadow .1s;
+}
+.slot-at { font-weight: 700; font-size: 16px; font-variant-numeric: tabular-nums; }
+.slot-word {
+  font: 700 9.5px var(--mono); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--on-paper-soft);
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.slot.is-free { box-shadow: 3px 3px 0 var(--ink); }
+/* A tint, not the full accent: solid green has to keep meaning "yours",
+   or hovering a free slot looks exactly like one you already hold. */
+.slot.is-free:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 30%, var(--paper-input));
+  transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* Yours is the only other one you can act on, so it is the only other
+   one that looks like a button. */
+.slot.is-yours { background: var(--accent); box-shadow: 3px 3px 0 var(--ink); }
+.slot.is-yours .slot-word { color: var(--ink); }
+.slot.is-yours:hover:not(:disabled) { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--ink); }
+
+.slot.is-taken, .slot.is-event, .slot.is-gone {
+  background: transparent; border-color: var(--paper-rule);
+  color: var(--on-paper-soft); cursor: not-allowed;
+}
+.slot.is-event { border-style: dashed; border-color: var(--on-paper-soft); }
+.slot.is-gone { opacity: .45; }
+
+/* Everything is disabled while a write is in flight, so this catches
+   the free ones too. */
+.slot:disabled { cursor: not-allowed; }

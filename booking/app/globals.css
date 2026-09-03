@@ -370,6 +370,18 @@ body:has(dialog[open]) { overflow: hidden; }
   font: 700 10px var(--mono); letter-spacing: .12em; text-transform: uppercase;
 }
 .pill.off { background: transparent; color: var(--on-paper-soft); border-color: var(--paper-rule); }
+/* a line in a list: what it is on the left, what you can do on the right */
+.row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+  padding: 16px 0; border-bottom: 2px solid var(--paper-rule);
+}
+.row:last-of-type { border-bottom: none; }
+.row-main { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.row-name { font-weight: 700; font-size: 18px; letter-spacing: -.02em; color: var(--ink); }
+.row-meta { font: 600 13px var(--mono); color: var(--on-paper-soft); letter-spacing: .04em; }
+.row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
 .btn.btn-small { font-size: 14px; padding: 9px 14px; border-width: 2px; box-shadow: 3px 3px 0 var(--ink); }
 .btn.btn-small:hover:not(:disabled) { box-shadow: 2px 2px 0 var(--ink); }
 .empty {
