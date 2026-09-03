@@ -34,6 +34,9 @@ export type Held = {
    * rider sees that a slot is taken, not by whom.
    */
   who: string | null;
+  /** Which horse, on the same terms. Too long for the chip, so it is
+   *  only ever shown on hover. */
+  horse: string | null;
 };
 
 export type SlotState =
@@ -55,6 +58,8 @@ export type Slot = {
   bookingId: string | null;
   /** Who has it. Only ever filled in for somebody running the yard. */
   who: string | null;
+  /** And on which horse, for the hover label. */
+  horse: string | null;
 };
 
 const toMinutes = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5));
@@ -109,6 +114,7 @@ export function buildDay(
       title: clash?.kind === 'event' ? clash.title : null,
       bookingId: state === 'yours' ? clash!.id : null,
       who: state === 'taken' ? clash!.who : null,
+      horse: state === 'taken' ? clash!.horse : null,
     });
   }
 

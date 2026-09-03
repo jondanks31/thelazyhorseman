@@ -1,7 +1,7 @@
 import { notFound, redirect } from 'next/navigation';
 import { getYard } from '@/lib/yard';
 import { supabaseServer } from '@/lib/supabase-server';
-import Me from './Me';
+import Me, { type MyHorse } from './Me';
 
 type Props = { params: Promise<{ yard: string }> };
 
@@ -16,11 +16,14 @@ export default async function MePage({ params }: Props) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/sign-in?next=%2Fme');
 
-  const { data: profile } = await supabase
-    .from('profile')
-    .select('name, horse_name')
-    .eq('user_id', user.id)
-    .maybeSingle<{ name: string | null; horse_name: string | null }>();
+  const [{ data: profile }, { data: horses }] = await Promise.all([
+    supabase.from('profile').select('name').eq('user_id', user.id)
+      .maybeSingle<{ name: string | null }>(),
+    // Row level security limits this to their own, so no admin function
+    // is needed and it works for a rider as well as an owner.
+    supabase.from('horse').select('id, name, retired_at')
+      .eq('user_id', user.id).order('name'),
+  ]);
 
   return (
     <main className="yard">
@@ -28,7 +31,7 @@ export default async function MePage({ params }: Props) {
         userId={user.id}
         email={user.email ?? ''}
         initialName={profile?.name ?? ''}
-        initialHorse={profile?.horse_name ?? ''}
+        horses={(horses ?? []) as MyHorse[]}
       />
     </main>
   );

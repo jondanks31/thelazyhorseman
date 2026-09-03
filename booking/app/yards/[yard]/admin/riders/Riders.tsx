@@ -11,10 +11,11 @@ export type Rider = {
   email: string;
   /** Null on accounts made before names were asked for. */
   rider_name: string | null;
-  rider_horse: string | null;
   role: 'owner' | 'admin' | 'rider';
   status: 'pending' | 'approved' | 'blocked';
   joined_at: string;
+  /** Their horses, worked out on the server. Retired ones left out. */
+  horses: string[];
 };
 
 export type Invite = {
@@ -153,7 +154,9 @@ export default function Riders({
                 {/* The email is the fallback, not the label. It is what an
                     admin had to read before, and often says nothing. */}
                 {r.rider_name ?? r.email}{' '}
-                {r.rider_horse && <span className="row-horse">{r.rider_horse}</span>}{' '}
+                {r.horses.length > 0 && (
+                  <span className="row-horse">{r.horses.join(', ')}</span>
+                )}{' '}
                 {r.role !== 'rider' && (
                   <span className="pill">{r.role === 'owner' ? 'Owner' : 'Admin'}</span>
                 )}

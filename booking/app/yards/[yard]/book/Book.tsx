@@ -6,6 +6,7 @@ import { supabaseBrowser } from '@/lib/supabase';
 import { bookableDays, buildDay, type Held, type Slot, type SlotFacility } from '@/lib/slots';
 import { dayLabel, instantToZoned } from '@/lib/time';
 import { kindLabel } from '@/lib/kinds';
+import Modal from '@/components/Modal';
 
 const hhmm = (t: string) => t.slice(0, 5);
 
@@ -17,12 +18,16 @@ const WORD: Record<Slot['state'], string> = {
   gone: 'Gone',
 };
 
+export type MyHorse = { id: string; name: string };
+
 export default function Book({
   yardId,
   userId,
   timezone,
   facilities,
   held,
+  myHorses,
+  myName,
   now,
 }: {
   yardId: string;
@@ -31,6 +36,10 @@ export default function Book({
   facilities: SlotFacility[];
   /** Everything already standing in the way, across the whole horizon. */
   held: Held[];
+  /** The rider's own horses, retired ones left out. */
+  myHorses: MyHorse[];
+  /** Their own name, blank if they never set one. */
+  myName: string;
   /** The server's clock, so what renders matches what was sent. */
   now: string;
 }) {
@@ -41,6 +50,10 @@ export default function Book({
   const [wanted, setWanted] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  /** The slot being checked over, and which horse it is for. */
+  const [pending, setPending] = useState<Slot | null>(null);
+  const [horseId, setHorseId] = useState(myHorses[0]?.id ?? '');
 
   const facility = facilities.find((f) => f.id === facilityId) ?? facilities[0];
 
@@ -111,21 +124,32 @@ export default function Book({
     );
   }
 
-  async function take(slot: Slot) {
-    if (!facility) return;
-    setBusy(slot.at);
+  /** Opens the check, rather than booking on the first tap. */
+  function ask(slot: Slot) {
+    setError(null);
+    setHorseId((was) => (myHorses.some((h) => h.id === was) ? was : myHorses[0]?.id ?? ''));
+    setPending(slot);
+  }
+
+  async function take() {
+    if (!facility || !pending) return;
+    setBusy(pending.at);
     setError(null);
 
     const { error: writeError } = await supabase.from('booking').insert({
       business_id: yardId,
       facility_id: facility.id,
       user_id: userId,
-      starts_at: slot.startsAt,
-      ends_at: slot.endsAt,
+      starts_at: pending.startsAt,
+      ends_at: pending.endsAt,
+      // Null rather than an empty string when they have no horse on
+      // their account yet, which the column allows.
+      horse_id: horseId || null,
     });
 
     setBusy(null);
     if (writeError) return report(writeError);
+    setPending(null);
     router.refresh();
   }
 
@@ -159,7 +183,10 @@ export default function Book({
           {mine.map((h) => (
             <div className="row" key={h.id}>
               <div className="row-main">
-                <span className="row-name">{instantToZoned(h.starts_at, timezone)}</span>
+                <span className="row-name">
+                  {instantToZoned(h.starts_at, timezone)}{' '}
+                  {h.horse && <span className="row-horse">{h.horse}</span>}
+                </span>
                 <span className="row-meta">{named[h.facility_id]?.toUpperCase()}</span>
               </div>
               <div className="row-actions">
@@ -234,8 +261,10 @@ export default function Book({
                 type="button"
                 className={`slot is-${s.state}`}
                 disabled={(!open && !yours) || busy !== null}
-                onClick={() => (yours ? give(s.bookingId!) : take(s))}
-                title={word ?? undefined}
+                onClick={() => (yours ? give(s.bookingId!) : ask(s))}
+                // The horse only ever appears here: there is no room for
+                // it on a chip this size.
+                title={[word, s.horse].filter(Boolean).join(' · ') || undefined}
                 // The time alone is what a sighted rider needs, because
                 // the state is in the colour. Read aloud it is not.
                 aria-label={
@@ -251,8 +280,87 @@ export default function Book({
           })}
         </div>
 
-        {error && <p className="field-error" role="alert">{error}</p>}
+        {/* Errors from the check sit in the modal with the button that
+            caused them, so out here is only ever a failed cancel. */}
+        {!pending && error && <p className="field-error" role="alert">{error}</p>}
       </section>
+
+      <Modal
+        open={pending !== null}
+        onClose={() => setPending(null)}
+        busy={busy !== null}
+        error={error}
+        title="Check this over"
+        footer={
+          <div className="actions">
+            <button
+              className="btn btn-quiet" type="button"
+              onClick={() => setPending(null)} disabled={busy !== null}
+            >
+              Back
+            </button>
+            <button className="btn" type="button" onClick={take} disabled={busy !== null}>
+              {busy !== null ? 'Booking…' : 'Book it'}
+            </button>
+          </div>
+        }
+      >
+        <dl className="summary">
+          <div>
+            <dt>When</dt>
+            <dd>
+              {pending &&
+                instantToZoned(pending.startsAt, timezone, { weekday: 'long' })}
+              {' to '}
+              {pending &&
+                instantToZoned(pending.endsAt, timezone, {
+                  weekday: undefined, day: undefined, month: undefined,
+                })}
+            </dd>
+          </div>
+          <div>
+            <dt>Where</dt>
+            <dd>{facility.name}</dd>
+          </div>
+          <div>
+            <dt>Rider</dt>
+            <dd>{myName || 'You'}</dd>
+          </div>
+        </dl>
+
+        {/* One horse needs no choosing; several do. None at all is not an
+            obstacle to booking, just a nudge, because a rider without a
+            horse on their account can still want the arena. */}
+        {myHorses.length === 1 && (
+          <dl className="summary">
+            <div>
+              <dt>Horse</dt>
+              <dd>{myHorses[0].name}</dd>
+            </div>
+          </dl>
+        )}
+
+        {myHorses.length > 1 && (
+          <div className="field">
+            <label htmlFor="which-horse">Which horse</label>
+            <select
+              id="which-horse" value={horseId}
+              onChange={(e) => setHorseId(e.target.value)}
+            >
+              {myHorses.map((h) => (
+                <option key={h.id} value={h.id}>{h.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {myHorses.length === 0 && (
+          <p className="field-hint">
+            You have no horse on your account. Add one under your details
+            and the yard will see it against your bookings.
+          </p>
+        )}
+      </Modal>
     </>
   );
 }

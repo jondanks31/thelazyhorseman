@@ -173,6 +173,37 @@ a:hover { color: var(--cream); }
 .field input:focus { outline: none; border-color: var(--accent-deep); box-shadow: 0 0 0 3px rgba(63, 122, 33, .2); }
 .field input[aria-invalid="true"] { border-color: var(--danger-deep); }
 
+/* Matches the inputs above rather than the browser's own control, and
+   keeps the native arrow, which is the bit people recognise. */
+.field select {
+  font-family: var(--sans); font-size: 17px; font-weight: 600;
+  color: var(--on-paper); background: var(--paper-input);
+  border: 3px solid var(--ink); border-radius: 16px 6px 18px 7px;
+  padding: 13px 14px; width: 100%; cursor: pointer;
+}
+.field select:focus {
+  outline: none; border-color: var(--accent-deep);
+  box-shadow: 0 0 0 3px rgba(63, 122, 33, .2);
+}
+
+/* What you are about to do, laid out as pairs so it reads as a receipt
+   rather than another form to fill in. */
+.summary { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.summary > div {
+  display: flex; align-items: baseline; gap: 14px;
+  padding-bottom: 12px; border-bottom: 2px solid var(--paper-rule);
+}
+.summary > div:last-child { padding-bottom: 0; border-bottom: none; }
+.summary dt {
+  flex: 0 0 5.5rem;
+  font: 700 10.5px var(--mono); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--on-paper-soft);
+}
+.summary dd {
+  margin: 0; flex: 1; min-width: 0;
+  font-size: 17.5px; font-weight: 700; letter-spacing: -.015em; color: var(--ink);
+}
+
 .field-hint { font-size: 15px; line-height: 1.5; color: var(--on-paper-soft); }
 .field-error { font-size: 15px; line-height: 1.5; color: var(--danger-deep); font-weight: 600; }
 .field-ok { font-size: 15px; line-height: 1.5; color: var(--accent-deep); font-weight: 600; }

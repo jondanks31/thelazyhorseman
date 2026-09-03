@@ -24,6 +24,8 @@ export type DiaryEntry = {
   status: 'confirmed' | 'cancelled';
   /** Who has it, for a rider's slot. Null on an account with no name. */
   who: string | null;
+  /** And which horse, where one was chosen. */
+  horse: string | null;
 };
 
 const hhmm = (t: string) => t.slice(0, 5);
@@ -146,6 +148,7 @@ export default function Diary({
             <div className="row-main">
               <span className="row-name">
                 {e.title ?? e.who ?? 'Rider booking'}{' '}
+                {!e.title && e.horse && <span className="row-horse">{e.horse}</span>}{' '}
                 <span className={e.kind === 'event' ? 'pill' : 'pill off'}>
                   {e.kind === 'event' ? 'Yard' : 'Rider'}
                 </span>
