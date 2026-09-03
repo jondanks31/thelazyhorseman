@@ -48,11 +48,6 @@ export default function SignIn() {
   return (
     <form className="card" onSubmit={submit}>
       <h1 className="q">Sign in.</h1>
-      <p className="sub">
-        The details you set your yard up with, or the ones you made when you
-        joined one.
-      </p>
-
       <div className="field">
         <label htmlFor="email">Your email</label>
         <input

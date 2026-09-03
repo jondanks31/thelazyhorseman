@@ -136,10 +136,7 @@ export default function Diary({
         </div>
 
         {entries.length === 0 && (
-          <div className="empty">
-            Nothing booked yet. Clinics, farrier days and lessons go in here so
-            riders cannot book over them.
-          </div>
+          <div className="empty">Nothing booked yet.</div>
         )}
 
         {entries.map((e) => (
@@ -193,11 +190,6 @@ export default function Diary({
           </div>
         }
       >
-        <p className="sub">
-          A clinic, a farrier day, anything that should stop riders booking.
-          They will see the name, so it is worth writing what it is.
-        </p>
-
         <div className="field">
           <label htmlFor="etitle">What is it</label>
           <input

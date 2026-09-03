@@ -39,11 +39,6 @@ export default function SignIn({ yardName }: { yardName: string }) {
   return (
     <form className="card" onSubmit={submit}>
       <h1 className="q">Sign in to {yardName}.</h1>
-      <p className="sub">
-        The same details you set the yard up with. Sessions belong to one address,
-        so this is separate from signing in anywhere else.
-      </p>
-
       <div className="field">
         <label htmlFor="email">Your email</label>
         <input

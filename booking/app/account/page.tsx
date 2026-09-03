@@ -41,20 +41,11 @@ export default async function AccountPage() {
 
         {yards.length === 0 ? (
           <>
-            <p className="sub">
-              You are signed in as <strong>{user.email}</strong>, and this
-              account is not on a yard yet.
-            </p>
-            <div className="empty">
-              If your yard already uses this, ask them for their address and
-              join from there. Otherwise you can set one up.
-            </div>
+            <p className="sub">Signed in as <strong>{user.email}</strong>.</p>
+            <div className="empty">You are not on a yard yet.</div>
           </>
         ) : (
-          <p className="sub">
-            Signed in as <strong>{user.email}</strong>. Opening one takes you to
-            its own address, where you sign in to that yard.
-          </p>
+          <p className="sub">Signed in as <strong>{user.email}</strong>.</p>
         )}
 
         {yards.map((y) => {
@@ -97,10 +88,6 @@ export default async function AccountPage() {
         </div>
       </div>
 
-      <p className="gate-foot">
-        A sign in belongs to one address at a time, so opening a yard asks for
-        your password again. Nothing else on that yard can see this account.
-      </p>
     </main>
   );
 }

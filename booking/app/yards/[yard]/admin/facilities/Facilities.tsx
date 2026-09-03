@@ -147,9 +147,7 @@ export default function Facilities({
         </div>
 
         {initial.length === 0 && (
-          <div className="empty">
-            Nothing to book yet. Add the arena, the school, whatever your riders use.
-          </div>
+          <div className="empty">Nothing to book yet.</div>
         )}
 
         {initial.map((f) => (
@@ -325,16 +323,14 @@ function UpgradePrompt({
       }
     >
       <p className="sub">
-        {current.name} covers {allowanceLabel(current.facilities).toLowerCase()},
-        and {used === 1 ? 'it is' : 'they are'} switched on. Turn one off to swap
-        it for another, and the bookings already against it stay put.
+        {current.name} covers {allowanceLabel(current.facilities).toLowerCase()}.
+        Turn one off to swap it, or move up a plan.
       </p>
 
       {next && (
         <p className="sub">
-          Or {next.name} is {priceLabel(next.pence)} a month for{' '}
-          {allowanceLabel(next.facilities).toLowerCase()}. Riders are never
-          counted on any plan.
+          {next.name} is {priceLabel(next.pence)} a month for{' '}
+          {allowanceLabel(next.facilities).toLowerCase()}.
         </p>
       )}
     </Modal>

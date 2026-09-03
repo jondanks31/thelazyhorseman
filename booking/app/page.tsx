@@ -29,16 +29,13 @@ export default async function Home() {
 
       <div className="card">
         <h1 className="q">Arena bookings, off the group chat.</h1>
-        <p className="sub">
-          Riders book a slot themselves. You stop answering the same question
-          at half past nine at night.
-        </p>
+        <p className="sub">Riders book their own slots.</p>
 
         <div className="doors">
           <Link className="door primary" href="/sign-in">
             <span className="door-main">
               <span className="door-name">Sign in</span>
-              <span className="door-note">You or your yard are already on here.</span>
+              <span className="door-note">Owners and riders.</span>
             </span>
             <span className="door-go" aria-hidden="true">&rarr;</span>
           </Link>
@@ -46,18 +43,13 @@ export default async function Home() {
           <Link className="door" href="/start">
             <span className="door-main">
               <span className="door-name">Set up a yard</span>
-              <span className="door-note">Free for one facility, and no card.</span>
+              <span className="door-note">Free for one facility.</span>
             </span>
             <span className="door-go" aria-hidden="true">&rarr;</span>
           </Link>
         </div>
       </div>
 
-      <p className="gate-foot">
-        Riders: your yard has its own address, something like{' '}
-        <strong>riverside.thelazyhorseman.com</strong>. Sign in there and you
-        will land straight on the diary.
-      </p>
     </main>
   );
 }

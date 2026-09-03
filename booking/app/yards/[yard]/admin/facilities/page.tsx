@@ -27,10 +27,7 @@ export default async function FacilitiesPage({ params }: Props) {
     <>
       <div>
         <h1 className="admin-h">Facilities</h1>
-        <p className="admin-lead">
-          Everything a rider can take a slot on. Turning one off hides it from the
-          diary and keeps the bookings already against it.
-        </p>
+        <p className="admin-lead">Everything a rider can take a slot on.</p>
       </div>
       <Facilities
         yardId={found.id}

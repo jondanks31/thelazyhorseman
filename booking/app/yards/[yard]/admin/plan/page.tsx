@@ -25,10 +25,7 @@ export default async function PlanPage({ params }: Props) {
     <>
       <div>
         <h1 className="admin-h">Plan</h1>
-        <p className="admin-lead">
-          What you are on, and what the next one up gives you. Riders are
-          never counted, so signing the whole yard up costs nothing extra.
-        </p>
+        <p className="admin-lead">Riders are never counted, on any plan.</p>
       </div>
       <Plan
         current={business.data?.plan ?? 'free'}

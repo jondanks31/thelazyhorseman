@@ -22,10 +22,6 @@ export default async function SignInPage() {
       <Suspense>
         <SignIn />
       </Suspense>
-      <p className="gate-foot">
-        Signing in on your yard&rsquo;s own address takes you straight to its
-        diary. This one is for finding your way back to it.
-      </p>
     </main>
   );
 }

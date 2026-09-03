@@ -89,10 +89,7 @@ export default function Plan({
         )}
 
         {atLimit && (
-          <p className="sub">
-            Every facility you are allowed is switched on. To add another, move
-            up a plan.
-          </p>
+          <p className="sub">All switched on. Move up a plan to add another.</p>
         )}
       </section>
 
@@ -153,9 +150,8 @@ export default function Plan({
         <section className="card">
           <h2 className="q" style={{ fontSize: 24 }}>Nearly.</h2>
           <p className="sub">
-            Card payment is not switched on yet, so {holding} cannot be bought
-            in here today. Email us and we will put you on it, and you will not
-            pay for anything until it is running.
+            Card payment is not switched on yet. Email us and we will put you
+            on {holding}.
           </p>
           <div className="actions">
             <a

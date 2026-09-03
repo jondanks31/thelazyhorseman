@@ -32,10 +32,7 @@ export default async function DiaryPage({ params }: Props) {
     <>
       <div>
         <h1 className="admin-h">Diary</h1>
-        <p className="admin-lead">
-          What is booked, and where you block time out for clinics, farrier days
-          and anything else riders should not book over.
-        </p>
+        <p className="admin-lead">What is booked, and what you have blocked out.</p>
       </div>
       <Diary
         yardId={found.id}

@@ -31,8 +31,7 @@ export default async function AdminOverview({ params }: Props) {
       <div>
         <h1 className="admin-h">{found.name}</h1>
         <p className="admin-lead">
-          Riders book at <strong>{yard}.thelazyhorseman.com</strong>. Put it on the
-          noticeboard and in the group chat.
+          Riders book at <strong>{yard}.thelazyhorseman.com</strong>.
         </p>
       </div>
 
