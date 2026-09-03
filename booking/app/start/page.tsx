@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import Wizard from './Wizard';
 import './start.css';
 
@@ -32,7 +33,11 @@ export default function StartPage() {
 
       <Wizard />
 
-      <p className="start-foot">Free for one facility. No card, and nothing to cancel.</p>
+      <p className="start-foot">
+        Free for one facility. No card, and nothing to cancel.
+        <br />
+        Already on a yard? <Link href="/sign-in">Sign in</Link>.
+      </p>
     </main>
   );
 }

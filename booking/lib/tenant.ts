@@ -57,3 +57,25 @@ export function tenantFromHost(rawHost: string | null | undefined): string | nul
 
   return sub;
 }
+
+/**
+ * The absolute address of a yard, built from the host this request came
+ * in on so local development and production both work.
+ *
+ * Yards only ever exist under the root domain, so a Vercel deployment
+ * URL is answered with the real domain rather than a subdomain of
+ * something.vercel.app, which would not resolve.
+ */
+export function yardUrl(subdomain: string, rawHost: string | null | undefined): string {
+  const [hostname, port] = (rawHost ?? '').split(':');
+  const host = hostname.trim().toLowerCase().replace(/\.$/, '');
+
+  const isLocal =
+    host === 'localhost' || host === '127.0.0.1' || host.endsWith('.localhost');
+
+  if (isLocal) {
+    return `http://${subdomain}.localhost${port ? `:${port}` : ''}`;
+  }
+
+  return `https://${subdomain}.${ROOT}`;
+}

@@ -297,3 +297,82 @@ body:has(dialog[open]) { overflow: hidden; }
     to   { opacity: 1; transform: none; }
   }
 }
+
+/* ── the gate: front door, sign in, your yards ────────────── */
+/* Same brown ground and centred card as onboarding. These pages only
+   ever serve the platform host; a yard's own address never reaches
+   them. */
+.gate {
+  min-height: 100dvh;
+  display: flex; flex-direction: column; align-items: center;
+  gap: clamp(20px, 3vw, 30px);
+  padding: clamp(24px, 4vw, 48px) var(--gutter);
+  /* safe centring, so a tall card's top stays reachable */
+  justify-content: center;
+  justify-content: safe center;
+}
+
+.gate-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.gate-tag {
+  font: 700 10px var(--mono); letter-spacing: .18em;
+  color: var(--ink); background: var(--accent);
+  border: 2px solid var(--ink); padding: 5px 9px;
+  border-radius: 11px 4px 13px 5px; transform: rotate(-1.5deg);
+}
+.gate-foot {
+  font-size: 14.5px; color: var(--muted); text-align: center;
+  max-width: 46ch; line-height: 1.55;
+}
+.gate-foot a { color: var(--cream-dim); text-decoration: underline; text-underline-offset: 3px; }
+.gate-foot a:hover { color: var(--accent); }
+
+/* the two doors on the front page */
+.doors { display: flex; flex-direction: column; gap: 12px; }
+.door {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  text-align: left; width: 100%;
+  padding: 18px 20px; cursor: pointer;
+  background: transparent; color: var(--on-paper);
+  border: 3px solid var(--paper-rule); border-radius: 20px 7px 22px 8px;
+  font-family: var(--sans);
+  transition: border-color .12s, background .12s, transform .12s;
+}
+.door:hover { border-color: var(--ink); background: rgba(60, 46, 34, .05); color: var(--on-paper); }
+.door-main { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.door-name { font-size: 17.5px; font-weight: 700; letter-spacing: -.02em; color: var(--ink); }
+.door-note { font-size: 14.5px; line-height: 1.45; color: var(--on-paper-soft); }
+.door-go { font-size: 22px; color: var(--on-paper-soft); flex: none; }
+.door.primary { border-color: var(--ink); background: var(--accent); box-shadow: 4px 4px 0 var(--ink); }
+.door.primary:hover { background: var(--accent); transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
+.door.primary .door-note { color: rgba(51, 41, 31, .8); }
+
+/* your yards */
+.yard-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; flex-wrap: wrap;
+  padding: 15px 0; border-bottom: 2px solid var(--paper-rule);
+}
+.yard-row:last-of-type { border-bottom: none; }
+.yard-row-main { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.yard-row-name { font-size: 18px; font-weight: 700; letter-spacing: -.02em; color: var(--ink); }
+.yard-row-addr {
+  font: 600 13px var(--mono); color: var(--on-paper-soft);
+  letter-spacing: .01em; word-break: break-all;
+}
+
+/* ── shared bits ─────────────────────────────────────────── */
+/* These started in the admin stylesheet, which only the admin layout
+   imports, so the gate pages rendered bare text where a pill should be.
+   Anything used by more than one page belongs here. */
+.pill {
+  padding: 4px 9px; border: 2px solid var(--ink); border-radius: 10px 4px 12px 5px;
+  background: var(--accent); color: var(--ink);
+  font: 700 10px var(--mono); letter-spacing: .12em; text-transform: uppercase;
+}
+.pill.off { background: transparent; color: var(--on-paper-soft); border-color: var(--paper-rule); }
+.btn.btn-small { font-size: 14px; padding: 9px 14px; border-width: 2px; box-shadow: 3px 3px 0 var(--ink); }
+.btn.btn-small:hover:not(:disabled) { box-shadow: 2px 2px 0 var(--ink); }
+.empty {
+  border: 3px dashed var(--paper-rule); border-radius: 20px 7px 22px 8px;
+  padding: 26px; text-align: center; color: var(--on-paper-soft);
+}

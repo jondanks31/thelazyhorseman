@@ -53,8 +53,10 @@
 
 .start-foot {
   font-family: var(--hand); font-size: clamp(17px, 2vw, 20px);
-  color: var(--muted); text-align: center;
+  color: var(--muted); text-align: center; line-height: 1.5;
 }
+.start-foot a { color: var(--cream-dim); text-decoration: underline; text-underline-offset: 3px; }
+.start-foot a:hover { color: var(--accent); }
 
 /* On a narrow phone the Back button eating half the row leaves the
    primary action cramped, so stack them and lead with Next. */

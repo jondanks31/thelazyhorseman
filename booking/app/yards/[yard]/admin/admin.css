@@ -50,23 +50,8 @@
 .row-meta { font: 600 13px var(--mono); color: var(--on-paper-soft); letter-spacing: .04em; }
 .row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
-.pill {
-  font: 700 10px var(--mono); letter-spacing: .12em; text-transform: uppercase;
-  padding: 4px 9px; border: 2px solid var(--ink); border-radius: 10px 4px 12px 5px;
-  background: var(--accent); color: var(--ink);
-}
-.pill.off { background: transparent; color: var(--on-paper-soft); border-color: var(--paper-rule); }
-
-.btn-small { font-size: 14px; padding: 9px 14px; border-width: 2px; box-shadow: 3px 3px 0 var(--ink); }
-.btn-small:hover:not(:disabled) { box-shadow: 2px 2px 0 var(--ink); }
-
 .two-up { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 @media (max-width: 560px) { .two-up { grid-template-columns: 1fr; } }
-
-.empty {
-  border: 3px dashed var(--paper-rule); border-radius: 20px 7px 22px 8px;
-  padding: 26px; text-align: center; color: var(--on-paper-soft);
-}
 
 /* ── plan ────────────────────────────────────────────────── */
 /* How much of the allowance is gone, readable at a glance and
