@@ -27,6 +27,7 @@ export default function Wizard() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [needsConfirm, setNeedsConfirm] = useState(false);
@@ -89,7 +90,11 @@ export default function Wizard() {
   const canContinue = (): boolean => {
     switch (STEPS[step] as StepName) {
       case 'Account':
-        return /.+@.+\..+/.test(email) && password.length >= 8;
+        return (
+          fullName.trim().length >= 2 &&
+          /.+@.+\..+/.test(email) &&
+          password.length >= 8
+        );
       case 'Yard':
         return yardName.trim().length >= 2;
       case 'Address':
@@ -100,7 +105,14 @@ export default function Wizard() {
   };
 
   const createAccount = useCallback(async () => {
-    const { data, error: authError } = await supabase.auth.signUp({ email, password });
+    // The name rides along as user metadata because there is no session
+    // yet to write a profile row with. A trigger copies it across the
+    // moment the account exists. See migration 0016.
+    const { data, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { name: fullName.trim() } },
+    });
     if (data?.session) return;
 
     // No session means one of two things, and Supabase deliberately
@@ -124,7 +136,7 @@ export default function Wizard() {
     // password, never a half-filled yard.
     setNeedsConfirm(true);
     throw new Error('CONFIRM');
-  }, [email, password, supabase]);
+  }, [fullName, email, password, supabase]);
 
   const finish = useCallback(async () => {
     const { data: businessId, error: yardError } = await supabase.rpc('create_yard', {
@@ -207,6 +219,14 @@ export default function Wizard() {
         <>
           <h1 ref={headingRef} tabIndex={-1} className="q">First, an account.</h1>
           <p className="sub">This is yours, not the yard&rsquo;s. Riders get their own later.</p>
+          <div className="field">
+            <label htmlFor="full-name">Your name</label>
+            <input
+              id="full-name" type="text" autoComplete="name" value={fullName}
+              placeholder="Kate Fielding"
+              onChange={(e) => setFullName(e.target.value)}
+            />
+          </div>
           <div className="field">
             <label htmlFor="email">Your email</label>
             <input

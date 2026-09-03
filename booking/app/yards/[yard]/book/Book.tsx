@@ -189,7 +189,12 @@ export default function Book({
           {slots.map((s) => {
             const open = s.state === 'free';
             const yours = s.state === 'yours';
-            const word = s.state === 'event' ? s.title : WORD[s.state];
+            // Somebody running the yard gets the name; a rider gets
+            // "Taken", because the grid never carries who to them.
+            const word =
+              s.state === 'event' ? s.title
+                : s.state === 'taken' ? s.who ?? WORD.taken
+                : WORD[s.state];
 
             return (
               <button
@@ -198,13 +203,13 @@ export default function Book({
                 className={`slot is-${s.state}`}
                 disabled={(!open && !yours) || busy !== null}
                 onClick={() => (yours ? give(s.bookingId!) : take(s))}
-                title={s.state === 'event' ? s.title ?? undefined : undefined}
+                title={word ?? undefined}
                 // The time alone is what a sighted rider needs, because
                 // the state is in the colour. Read aloud it is not.
                 aria-label={
                   open ? `Take ${s.at}`
                     : yours ? `Cancel your ${s.at}`
-                    : `${s.at}, ${s.state === 'event' ? s.title : WORD[s.state].toLowerCase()}`
+                    : `${s.at}, ${word ?? WORD[s.state].toLowerCase()}`
                 }
               >
                 <span className="slot-at">{s.at}</span>

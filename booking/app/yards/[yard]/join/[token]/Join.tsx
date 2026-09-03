@@ -11,6 +11,8 @@ export default function Join({ yardName, token }: { yardName: string; token: str
   const router = useRouter();
 
   const [mode, setMode] = useState<Mode>('new');
+  const [fullName, setFullName] = useState('');
+  const [horse, setHorse] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
@@ -59,7 +61,13 @@ export default function Join({ yardName, token }: { yardName: string; token: str
       return;
     }
 
-    const { data, error: signUpError } = await supabase.auth.signUp({ email, password });
+    // Carried as user metadata, because signUp happens before there is
+    // a session to write a profile row with. Migration 0016 copies it.
+    const { data, error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { name: fullName.trim(), horse_name: horse.trim() } },
+    });
 
     // signUp returns a user with no session both when confirmation is
     // pending and when the address is already registered, and gives no
@@ -122,6 +130,31 @@ export default function Join({ yardName, token }: { yardName: string; token: str
           I have an account
         </button>
       </div>
+
+      {/* Only asked of somebody new. Anybody signing in already has a
+          name on their account and should not be typing it twice. */}
+      {mode === 'new' && (
+        <>
+          <div className="field">
+            <label htmlFor="join-name">Your name</label>
+            <input
+              id="join-name" type="text" autoComplete="name" required value={fullName}
+              placeholder="Sarah Bell"
+              onChange={(e) => setFullName(e.target.value)}
+            />
+            <p className="field-hint">So the yard knows who has the arena.</p>
+          </div>
+
+          <div className="field">
+            <label htmlFor="join-horse">Your horse</label>
+            <input
+              id="join-horse" type="text" value={horse}
+              placeholder="Bramble"
+              onChange={(e) => setHorse(e.target.value)}
+            />
+          </div>
+        </>
+      )}
 
       <div className="field">
         <label htmlFor="join-email">Your email</label>

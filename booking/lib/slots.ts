@@ -29,6 +29,11 @@ export type Held = {
   kind: 'slot' | 'event';
   title: string | null;
   mine: boolean;
+  /**
+   * Who has it, and only ever set for somebody who runs the yard. A
+   * rider sees that a slot is taken, not by whom.
+   */
+  who: string | null;
 };
 
 export type SlotState =
@@ -48,6 +53,8 @@ export type Slot = {
   title: string | null;
   /** Your booking's id, so you can give it up again. */
   bookingId: string | null;
+  /** Who has it. Only ever filled in for somebody running the yard. */
+  who: string | null;
 };
 
 const toMinutes = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5));
@@ -101,6 +108,7 @@ export function buildDay(
       state,
       title: clash?.kind === 'event' ? clash.title : null,
       bookingId: state === 'yours' ? clash!.id : null,
+      who: state === 'taken' ? clash!.who : null,
     });
   }
 

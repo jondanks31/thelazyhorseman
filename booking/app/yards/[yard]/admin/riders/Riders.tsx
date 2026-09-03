@@ -7,8 +7,11 @@ import Modal from '@/components/Modal';
 
 export type Rider = {
   membership_id: string;
-  user_id: string;
+  member_id: string;
   email: string;
+  /** Null on accounts made before names were asked for. */
+  rider_name: string | null;
+  rider_horse: string | null;
   role: 'owner' | 'admin' | 'rider';
   status: 'pending' | 'approved' | 'blocked';
   joined_at: string;
@@ -147,13 +150,18 @@ export default function Riders({
           <div className="row" key={r.membership_id}>
             <div className="row-main">
               <span className="row-name">
-                {r.email}{' '}
+                {/* The email is the fallback, not the label. It is what an
+                    admin had to read before, and often says nothing. */}
+                {r.rider_name ?? r.email}{' '}
+                {r.rider_horse && <span className="row-horse">{r.rider_horse}</span>}{' '}
                 {r.role !== 'rider' && (
                   <span className="pill">{r.role === 'owner' ? 'Owner' : 'Admin'}</span>
                 )}
                 {r.status === 'blocked' && <span className="pill off">Blocked</span>}
               </span>
-              <span className="row-meta">JOINED {day(r.joined_at).toUpperCase()}</span>
+              <span className="row-meta">
+                {r.rider_name ? `${r.email} · ` : ''}JOINED {day(r.joined_at).toUpperCase()}
+              </span>
             </div>
 
             {r.role === 'rider' && (

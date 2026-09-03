@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { getYard } from '@/lib/yard';
 import { supabaseServer } from '@/lib/supabase-server';
+import { personName, yardPeople } from '@/lib/people';
 import Book from './Book';
 import type { Held, SlotFacility } from '@/lib/slots';
 import '../yard.css';
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: Props) {
  * so the facilities have to come back first. In exchange the rider can
  * flick between days and facilities without another request.
  */
-async function loadBooking(yardId: string, userId: string) {
+async function loadBooking(yardId: string, userId: string, runsIt: boolean) {
   const supabase = await supabaseServer();
 
   const [{ data: business }, { data: facilities }] = await Promise.all([
@@ -46,15 +47,19 @@ async function loadBooking(yardId: string, userId: string) {
     .order('starts_at')
     .limit(2000);
 
-  type Row = Omit<Held, 'mine'> & { user_id: string };
+  type Row = Omit<Held, 'mine' | 'who'> & { user_id: string };
+
+  // Names are fetched only for somebody who runs the yard, so a rider's
+  // browser never receives them.
+  const people = runsIt ? await yardPeople(yardId) : null;
 
   return {
     timezone: business?.timezone ?? 'Europe/London',
     facilities: open,
     now: now.toISOString(),
-    // Whose booking it is never leaves the server. A member may read the
-    // whole diary, which is the point of a shared one, but the grid only
-    // needs to know which are the rider's own.
+    // Whose booking it is never leaves the server as an id. A member may
+    // read the whole diary, which is the point of a shared one, but a
+    // rider only needs to know which are their own.
     held: ((bookings ?? []) as Row[]).map((b): Held => ({
       id: b.id,
       facility_id: b.facility_id,
@@ -63,6 +68,12 @@ async function loadBooking(yardId: string, userId: string) {
       kind: b.kind,
       title: b.title,
       mine: b.user_id === userId,
+      // The name alone. A slot is 92px wide and the horse belongs on the
+      // diary, where there is room to read it.
+      who: (() => {
+        const p = people?.get(b.user_id);
+        return p ? personName(p) : null;
+      })(),
     })),
   };
 }
@@ -88,7 +99,7 @@ export default async function BookPage({ params }: Props) {
   if (membership?.status !== 'approved') redirect('/');
 
   const runsIt = membership.role === 'owner' || membership.role === 'admin';
-  const booking = await loadBooking(yard.id, user.id);
+  const booking = await loadBooking(yard.id, user.id, runsIt);
 
   return (
     <main className="yard">
