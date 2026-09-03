@@ -14,12 +14,16 @@ export default function SignIn({ yardName }: { yardName: string }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Only ever follow a path on this yard. Taking the value straight
-  // from the query string would let a link push somebody to any site
-  // after a successful sign in.
+  // Back to the yard's front door by default, which works out whether
+  // this is a rider or somebody who runs the place. Guessing here would
+  // mean two answers to the same question, drifting apart.
+  //
+  // Only ever a path on this yard: taking the value straight from the
+  // query string would let a link push somebody to any site after a
+  // successful sign in.
   const nextPath = (() => {
-    const raw = params.get('next') ?? '/admin';
-    return raw.startsWith('/') && !raw.startsWith('//') ? raw : '/admin';
+    const raw = params.get('next') ?? '/';
+    return raw.startsWith('/') && !raw.startsWith('//') ? raw : '/';
   })();
 
   async function submit(e: React.FormEvent) {

@@ -47,8 +47,18 @@ export default async function AccountPage() {
 
         <p className="sub">Signed in as <strong>{user.email}</strong>.</p>
 
+        {/* Signed in and on nobody's list. Usually somebody who has moved
+            yards, so the useful thing is the sentence they can forward to
+            their new one, not an apology. */}
         {yards.length === 0 && asRider.length === 0 && (
-          <div className="empty">You do not run a yard.</div>
+          <>
+            <div className="empty">You are not on a yard.</div>
+            <p className="field-hint">
+              Yards hand out their own booking link. If yours does not use
+              The Lazy Horseman yet, tell them: it is free for one facility
+              and takes about five minutes to set up.
+            </p>
+          </>
         )}
 
         {yards.length === 0 && asRider.map((y) => (
@@ -70,7 +80,10 @@ export default async function AccountPage() {
         {yards.map((y) => {
           const admin = y.role === 'owner' || y.role === 'admin';
           const base = y.subdomain ? yardUrl(y.subdomain, host) : null;
-          const href = base ? `${base}${admin ? '/admin' : '/'}` : null;
+          // Always the yard's own front door. It works out whether this
+          // is a rider or somebody who runs the place, so the role is
+          // decided in one spot rather than three.
+          const href = base;
 
           return (
             <div className="yard-row" key={y.business_id}>

@@ -28,7 +28,7 @@ export default async function AdminLayout({ children, params }: Props) {
             <Link href="/admin/riders">Riders</Link>
             <Link href="/admin/settings">Settings</Link>
             <Link href="/admin/plan">Plan</Link>
-            <Link href="/">Rider view</Link>
+            <Link href="/book">Book a slot</Link>
           </nav>
         </div>
       </header>
