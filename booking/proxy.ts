@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { tenantFromHost } from '@/lib/tenant';
+import { supabaseCredentials } from '@/lib/supabase-config';
 
 /**
  * Two jobs, in this order. Named proxy.ts because Next 16 renamed the
@@ -38,8 +39,7 @@ export async function proxy(request: NextRequest) {
   }
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    ...supabaseCredentials(),
     {
       cookies: {
         getAll: () => request.cookies.getAll(),
