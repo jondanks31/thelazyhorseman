@@ -1,7 +1,7 @@
 import { notFound, redirect } from 'next/navigation';
+import SignOutButton from '@/components/SignOutButton';
 import { getYard } from '@/lib/yard';
 import { supabaseServer } from '@/lib/supabase-server';
-import './yard.css';
 
 type Props = { params: Promise<{ yard: string }> };
 
@@ -49,6 +49,8 @@ export default async function YardPage({ params }: Props) {
   // Never invited, taken off the list, or blocked. All three are the
   // same to the person standing here, and the yard is the only one who
   // can do anything about it.
+  // No header above this one: the layout gives it only to members, and
+  // a nav bar full of places they cannot go would be no help at all.
   return (
     <main className="yard">
       <header className="yard-head">
@@ -62,6 +64,12 @@ export default async function YardPage({ params }: Props) {
           Ask them for their booking link or code, and you are back on in a
           couple of taps.
         </p>
+        {/* Their only way out. There is no header on this page, and
+            somebody signed in on the wrong account would otherwise be
+            stuck here with no way to try the right one. */}
+        <div className="actions">
+          <SignOutButton />
+        </div>
       </section>
 
       <p className="yard-foot">

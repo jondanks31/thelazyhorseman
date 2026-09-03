@@ -27,7 +27,9 @@ export default async function AdminOverview({ params }: Props) {
   return (
     <>
       <div>
-        <h1 className="admin-h">{found.name}</h1>
+        {/* The yard's name is in the header now, so this says where you
+            are instead of saying it twice. */}
+        <h1 className="admin-h">Overview</h1>
         <p className="admin-lead">
           Riders book at <strong>{yard}.thelazyhorseman.com</strong>.
         </p>

@@ -1,11 +1,9 @@
-import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { getYard } from '@/lib/yard';
 import { supabaseServer } from '@/lib/supabase-server';
 import { personName, yardPeople } from '@/lib/people';
 import Book from './Book';
 import type { Held, SlotFacility } from '@/lib/slots';
-import '../yard.css';
 
 type Props = { params: Promise<{ yard: string }> };
 
@@ -101,13 +99,10 @@ export default async function BookPage({ params }: Props) {
   const runsIt = membership.role === 'owner' || membership.role === 'admin';
   const booking = await loadBooking(yard.id, user.id, runsIt);
 
+  // The yard's name and the way to its controls are both in the header
+  // now, so this page is only the grid.
   return (
     <main className="yard">
-      <header className="yard-head">
-        <h1 className="yard-name">{yard.name}</h1>
-        <p className="yard-sub">Arena booking</p>
-      </header>
-
       <Book
         yardId={yard.id}
         userId={user.id}
@@ -116,12 +111,6 @@ export default async function BookPage({ params }: Props) {
         held={booking.held}
         now={booking.now}
       />
-
-      {runsIt && <Link className="yard-nav" href="/admin">Yard controls</Link>}
-
-      <p className="yard-foot">
-        Runs on <a href="https://www.thelazyhorseman.com/">The Lazy Horseman</a>
-      </p>
     </main>
   );
 }

@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { getYard } from '@/lib/yard';
+import { supabaseServer } from '@/lib/supabase-server';
 import SignIn from './SignIn';
-import '../yard.css';
 
 type Props = { params: Promise<{ yard: string }> };
 
@@ -16,6 +16,13 @@ export default async function SignInPage({ params }: Props) {
   const { yard } = await params;
   const found = await getYard(yard);
   if (!found) notFound();
+
+  // Somebody already signed in has nothing to do here. Sending them to
+  // the root puts them wherever they belong instead of showing a form
+  // for an account they are already using.
+  const supabase = await supabaseServer();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) redirect('/');
 
   return (
     <main className="yard">

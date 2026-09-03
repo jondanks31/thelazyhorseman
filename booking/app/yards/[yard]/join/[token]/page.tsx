@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getYard } from '@/lib/yard';
 import Join from './Join';
-import '../../yard.css';
 
 type Props = { params: Promise<{ yard: string; token: string }> };
 

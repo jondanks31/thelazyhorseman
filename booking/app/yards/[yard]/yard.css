@@ -1,5 +1,7 @@
+/* Fills whatever the header leaves, rather than claiming the viewport
+   for itself and pushing the header off the top. */
 .yard {
-  min-height: 100dvh;
+  flex: 1;
   display: flex; flex-direction: column; align-items: center;
   gap: clamp(20px, 3vw, 30px);
   padding: clamp(24px, 4vw, 48px) var(--gutter);
