@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
 import { bookableDays, buildDay, type Held, type Slot, type SlotFacility } from '@/lib/slots';
@@ -56,6 +56,38 @@ export default function Book({
     () => (facility ? buildDay(facility, day, timezone, held, new Date(now)) : []),
     [facility, day, timezone, held, now],
   );
+
+  /**
+   * Tells the day strip which of its ends still has days behind it, so
+   * only those ends fade. Written straight to the element rather than
+   * held in state: it is a scroll position being mirrored onto the DOM,
+   * which is what an effect is actually for, and re-rendering the whole
+   * grid on every scroll frame would be daft.
+   */
+  const strip = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = strip.current;
+    if (!el) return;
+
+    const mark = () => {
+      const room = el.scrollWidth - el.clientWidth;
+      const ends: string[] = [];
+      // A pixel of slack, because scrollLeft is fractional under zoom.
+      if (el.scrollLeft > 1) ends.push('start');
+      if (el.scrollLeft < room - 1) ends.push('end');
+      el.dataset.more = ends.join(' ');
+    };
+
+    mark();
+    el.addEventListener('scroll', mark, { passive: true });
+    // The row is inside a card that reflows, so width changes too.
+    const watch = new ResizeObserver(mark);
+    watch.observe(el);
+    return () => {
+      el.removeEventListener('scroll', mark);
+      watch.disconnect();
+    };
+  }, [days]);
 
   const mine = useMemo(
     () => held.filter((h) => h.mine && h.kind === 'slot'),
@@ -173,7 +205,7 @@ export default function Book({
           </div>
         </div>
 
-        <div className="days" role="group" aria-label="Which day">
+        <div className="days" role="group" aria-label="Which day" ref={strip}>
           {days.map((d) => (
             <button
               key={d} type="button" className="day"

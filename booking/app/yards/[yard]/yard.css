@@ -31,15 +31,47 @@
 
 /* ── the days ────────────────────────────────────────────── */
 /* A yard can look a year ahead, so this scrolls sideways rather than
-   wrapping into a wall of dates nobody reads. */
+   wrapping into a wall of dates nobody reads.
+
+   It runs to the card's edges on purpose, so the full width is usable,
+   and the ends fade out to say the row continues. Without the fade the
+   last chip stopped dead against the card and read as a clipping bug. */
 .days {
+  --gutter-in: clamp(24px, 4.5vw, 44px);
+  --fade: 30px;
+
   display: flex; gap: 8px;
-  overflow-x: auto; scroll-snap-type: x proximity;
-  margin-inline: calc(clamp(24px, 4.5vw, 44px) * -1);
-  padding-inline: clamp(24px, 4.5vw, 44px);
-  padding-bottom: 4px;
-  scrollbar-width: thin; scrollbar-color: var(--paper-rule) transparent;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  /* Snapped chips land clear of the fade rather than under it. */
+  scroll-padding-inline: var(--gutter-in);
+  margin-inline: calc(var(--gutter-in) * -1);
+  padding-inline: var(--gutter-in);
+  padding-block: 2px 6px;
+
+  /* The row is short and its chips obviously a sequence, so the fade
+     carries the affordance and the scrollbar is just scruff. */
+  scrollbar-width: none;
 }
+.days::-webkit-scrollbar { display: none; }
+
+/* Faded only on the sides that actually have more to show, so the first
+   chip is never dimmed while sitting at the start. The data attributes
+   are set from the scroll position in Book.tsx. */
+.days[data-more~="start"] {
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--fade), #000 100%);
+}
+.days[data-more~="end"] {
+  mask-image: linear-gradient(to right, #000 0, #000 calc(100% - var(--fade)), transparent 100%);
+}
+.days[data-more~="start"][data-more~="end"] {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0, #000 var(--fade),
+    #000 calc(100% - var(--fade)), transparent 100%
+  );
+}
+
 .day {
   flex: none; scroll-snap-align: start;
   font-family: var(--sans); font-weight: 700; font-size: 14.5px;
