@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getYard } from '@/lib/yard';
+import { adminOrReason, getYard } from '@/lib/yard';
 import { supabaseServer } from '@/lib/supabase-server';
 import { PLANS, planById, type PlanId } from '@/lib/plans';
 
@@ -45,32 +45,12 @@ export async function POST(
     return NextResponse.json({ error: 'No such yard.' }, { status: 404 });
   }
 
+  const who = await adminOrReason(found.id);
+  if (!who.ok) {
+    return NextResponse.json({ error: who.error }, { status: who.status });
+  }
+
   const supabase = await supabaseServer();
-
-  // requireAdmin() redirects, which is right for a page and wrong for a
-  // fetch, so the same check is made here and answered with a status.
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: 'Sign in first.' }, { status: 401 });
-  }
-
-  const { data: membership } = await supabase
-    .from('membership')
-    .select('role, status')
-    .eq('business_id', found.id)
-    .eq('user_id', user.id)
-    .maybeSingle<{ role: string; status: string }>();
-
-  const isAdmin =
-    membership?.status === 'approved' &&
-    (membership.role === 'owner' || membership.role === 'admin');
-
-  if (!isAdmin) {
-    return NextResponse.json(
-      { error: 'Only the yard can change the plan.' },
-      { status: 403 },
-    );
-  }
 
   let wanted: unknown;
   try {

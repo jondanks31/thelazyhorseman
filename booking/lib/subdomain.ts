@@ -4,8 +4,11 @@
  * cannot take one. Keep the two in step.
  */
 const RESERVED = new Set([
-  // DNS and mail, several of these are live records on the zone
+  // DNS and mail, several of these are live records on the zone.
+  // "send" is Resend's return path and carries an MX record, so a yard
+  // holding that name would have an address that does not resolve.
   'www', 'mail', 'email', 'webmail', 'smtp', 'imap', 'pop', 'pop3',
+  'send', 'bounce', 'bounces', 'dkim', 'dmarc', 'spf',
   'ns1', 'ns2', 'dns', 'ftp', 'sftp', 'autodiscover', 'autoconfig',
   'cpanel', 'whm', 'webdisk', 'cdn', 'static', 'assets', 'media', 'files',
   // the platform itself
@@ -26,7 +29,7 @@ const RESERVED = new Set([
   'abuse', 'security', 'postmaster', 'hostmaster', 'webmaster', 'noc', 'root',
   'ssl', 'tls', 'acme', 'legal', 'privacy', 'terms', 'gdpr', 'dpo',
   // vendors, so nobody can impersonate infrastructure
-  'vercel', 'supabase', 'hostinger', 'stripe', 'whatsapp',
+  'vercel', 'supabase', 'hostinger', 'stripe', 'whatsapp', 'resend',
   // generic words that collide with routes or confuse
   'new', 'edit', 'delete', 'settings', 'search', 'home', 'index',
   'null', 'undefined', 'true', 'false',

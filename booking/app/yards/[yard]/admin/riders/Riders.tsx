@@ -51,26 +51,64 @@ export default function Riders({
   const [email, setEmail] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [copiedInvite, setCopiedInvite] = useState(false);
+
+  /** Set only when the invite exists but the email did not go. */
+  const [unsent, setUnsent] = useState<{ email: string; link: string } | null>(null);
 
   const outstanding = invites.filter((i) => !i.accepted_at);
 
-  async function invite() {
+  /**
+   * The invite is written by the route rather than from here, because
+   * only the server can send the email that goes with it. Row level
+   * security is unchanged: the route acts as this admin.
+   */
+  async function send(what: { email: string } | { inviteId: string }) {
     setBusy(true);
     setError(null);
-    const { error: writeError } = await supabase.from('invite').insert({
-      business_id: yardId,
-      email: email.trim().toLowerCase(),
-      invited_by: (await supabase.auth.getUser()).data.user?.id,
-    });
-    setBusy(false);
-    if (writeError) {
-      setError(writeError.message);
-      return;
+    setNotice(null);
+
+    try {
+      const res = await fetch('/admin/riders/invite', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(what),
+      });
+      const body = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setError(body.error ?? 'That did not work. Try again in a minute.');
+        return;
+      }
+
+      setEmail('');
+      router.refresh();
+
+      if (body.sent) {
+        setUnsent(null);
+        setInviting(false);
+        setNotice(`Invite sent to ${body.email}.`);
+        return;
+      }
+
+      // The row is there and the link works, so the yard is shown it
+      // rather than told that nothing happened.
+      setUnsent({ email: body.email, link: body.link });
+      setCopiedInvite(false);
+      setInviting(true);
+    } catch {
+      setError('That did not work. Try again in a minute.');
+    } finally {
+      setBusy(false);
     }
-    setEmail('');
+  }
+
+  function closeInvite() {
     setInviting(false);
-    router.refresh();
+    setUnsent(null);
+    setError(null);
   }
 
   async function setStatus(r: Rider, status: 'approved' | 'blocked') {
@@ -116,11 +154,11 @@ export default function Riders({
     }
   }
 
-  async function copy() {
+  async function copy(link: string, mark: (done: boolean) => void) {
     try {
-      await navigator.clipboard.writeText(joinLink);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      await navigator.clipboard.writeText(link);
+      mark(true);
+      setTimeout(() => mark(false), 2000);
     } catch {
       setError('Could not copy. Select the link and copy it by hand.');
     }
@@ -195,6 +233,7 @@ export default function Riders({
           </div>
         ))}
 
+        {notice && <p className="field-ok" role="status">{notice}</p>}
         {error && <p className="field-error" role="alert">{error}</p>}
       </section>
 
@@ -217,6 +256,12 @@ export default function Riders({
               <div className="row-actions">
                 <button
                   className="btn btn-small btn-quiet" type="button" disabled={busy}
+                  onClick={() => send({ inviteId: i.id })}
+                >
+                  Send again
+                </button>
+                <button
+                  className="btn btn-small btn-quiet" type="button" disabled={busy}
                   onClick={() => dropInvite(i)}
                 >
                   Cancel
@@ -229,31 +274,55 @@ export default function Riders({
 
       <Modal
         open={inviting}
-        onClose={() => setInviting(false)}
+        onClose={closeInvite}
         busy={busy}
         error={error}
-        title="Invite a rider"
+        title={unsent ? 'Send it yourself' : 'Invite a rider'}
         footer={
-          <div className="actions">
-            <button className="btn btn-quiet" type="button" onClick={() => setInviting(false)} disabled={busy}>
-              Cancel
-            </button>
-            <button
-              className="btn" type="button" onClick={invite}
-              disabled={busy || !email.includes('@')}
-            >
-              {busy ? 'Saving…' : 'Invite'}
-            </button>
-          </div>
+          unsent ? (
+            <div className="actions">
+              <button className="btn btn-quiet" type="button" onClick={closeInvite}>
+                Done
+              </button>
+              <button
+                className="btn" type="button"
+                onClick={() => copy(unsent.link, setCopiedInvite)}
+              >
+                {copiedInvite ? 'Copied' : 'Copy link'}
+              </button>
+            </div>
+          ) : (
+            <div className="actions">
+              <button className="btn btn-quiet" type="button" onClick={closeInvite} disabled={busy}>
+                Cancel
+              </button>
+              <button
+                className="btn" type="button" onClick={() => send({ email: email.trim().toLowerCase() })}
+                disabled={busy || !email.includes('@')}
+              >
+                {busy ? 'Sending…' : 'Invite'}
+              </button>
+            </div>
+          )
         }
       >
-        <div className="field">
-          <label htmlFor="invite-email">Their email</label>
-          <input
-            id="invite-email" type="email" value={email} placeholder="rider@example.com"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+        {unsent ? (
+          <>
+            <p className="sub">
+              {unsent.email} is on the list and this link works. The email did not
+              go, so pass it on however you normally would.
+            </p>
+            <p className="join-link">{unsent.link}</p>
+          </>
+        ) : (
+          <div className="field">
+            <label htmlFor="invite-email">Their email</label>
+            <input
+              id="invite-email" type="email" value={email} placeholder="rider@example.com"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+        )}
       </Modal>
 
       <Modal
@@ -266,7 +335,7 @@ export default function Riders({
             <button className="btn btn-quiet" type="button" onClick={rotate} disabled={busy}>
               New code
             </button>
-            <button className="btn" type="button" onClick={copy}>
+            <button className="btn" type="button" onClick={() => copy(joinLink, setCopied)}>
               {copied ? 'Copied' : 'Copy link'}
             </button>
           </div>

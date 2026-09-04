@@ -53,6 +53,7 @@ export default function Diary({
   const [to, setTo] = useState('19:00');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   const facility = facilities.find((f) => f.id === facilityId) ?? first;
   const byId = useMemo(
@@ -106,15 +107,42 @@ export default function Diary({
     router.refresh();
   }
 
+  /**
+   * Cancelling goes through the route rather than straight to the
+   * database, because the rider has to be told. Their email address is
+   * not readable from here and the sending key must never be, so the
+   * server does both halves and says whether the second one worked.
+   */
   async function cancel(entry: DiaryEntry) {
     setBusy(true);
-    const { error: writeError } = await supabase
-      .from('booking')
-      .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
-      .eq('id', entry.id);
-    setBusy(false);
-    if (writeError) setError(writeError.message);
-    else router.refresh();
+    setError(null);
+    setNotice(null);
+
+    try {
+      const res = await fetch('/admin/diary/cancel', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ bookingId: entry.id }),
+      });
+      const body = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setError(body.error ?? 'That did not work. Try again in a minute.');
+        return;
+      }
+
+      router.refresh();
+
+      if (body.notified === 'sent') {
+        setNotice(`Cancelled. ${body.who} has been told.`);
+      } else if (body.notified === 'failed') {
+        setError(`Cancelled, but the email to ${body.who} did not go. Tell them yourself.`);
+      }
+    } catch {
+      setError('That did not work. Try again in a minute.');
+    } finally {
+      setBusy(false);
+    }
   }
 
   if (facilities.length === 0) {
@@ -174,7 +202,8 @@ export default function Diary({
           </div>
         ))}
 
-        {/* Cancelling happens out here, so its errors do too. */}
+        {/* Cancelling happens out here, so what it has to say does too. */}
+        {!open && notice && <p className="field-ok" role="status">{notice}</p>}
         {!open && error && <p className="field-error" role="alert">{error}</p>}
       </section>
 
