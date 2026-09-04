@@ -94,7 +94,22 @@ async function call(
  */
 export async function claimYardDomain(host: string): Promise<DomainState> {
   const project = projectId();
-  if (!process.env.TLH_VERCEL_TOKEN || !project) return 'notConfigured';
+
+  if (!process.env.TLH_VERCEL_TOKEN || !project) {
+    // Says which half is missing. A token set and no project id means
+    // "Enable access to System Environment Variables" is off on the
+    // project, which looks identical from the screen to having set up
+    // nothing at all.
+    console.error(
+      'vercel not configured:',
+      !process.env.TLH_VERCEL_TOKEN ? 'TLH_VERCEL_TOKEN is not set' : 'token is set',
+      '/',
+      !project
+        ? 'no project id: turn on Enable access to System Environment Variables, or set TLH_VERCEL_PROJECT_ID'
+        : 'project id present',
+    );
+    return 'notConfigured';
+  }
 
   try {
     const added = await call('POST', `/v10/projects/${project}/domains`, { name: host });
