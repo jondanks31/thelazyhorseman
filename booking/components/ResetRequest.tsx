@@ -53,9 +53,10 @@ export default function ResetRequest({
     return (
       <section className="card">
         <h1 className="q">Check your email.</h1>
+        {/* Names the address rather than confirming it has an account,
+            which would make this a way of finding out who is on a yard. */}
         <p className="sub">
-          If <strong>{email.trim().toLowerCase()}</strong> has an account, there is a
-          link on its way. It works once, and it runs out after an hour.
+          A link is on its way to <strong>{email.trim().toLowerCase()}</strong>.
         </p>
         <p className="field-hint">
           Nothing there? Look in junk, then{' '}
@@ -71,7 +72,6 @@ export default function ResetRequest({
   return (
     <form className="card" onSubmit={submit}>
       <h1 className="q">Forgotten it?</h1>
-      <p className="sub">Happens. Put your email in and we will send you a way back.</p>
 
       <div className="field">
         <label htmlFor="reset-email">Your email</label>

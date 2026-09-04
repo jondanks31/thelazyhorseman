@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import Wordmark from '@/components/Wordmark';
+import SignInForm from '@/components/SignInForm';
 import { supabaseServer } from '@/lib/supabase-server';
-import SignIn from './SignIn';
 
 export const metadata: Metadata = {
   title: 'Sign in · Facility Booking',
@@ -20,7 +21,15 @@ export default async function SignInPage() {
       {/* useSearchParams needs a boundary, or the whole route opts out
           of static rendering. */}
       <Suspense>
-        <SignIn />
+        <SignInForm
+          heading="Sign in."
+          fallback="/account"
+          footer={
+            <p className="field-hint">
+              Not on a yard yet? <Link href="/start">Set one up</Link>.
+            </p>
+          }
+        />
       </Suspense>
     </main>
   );

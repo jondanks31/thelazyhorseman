@@ -583,9 +583,56 @@ body:has(dialog[open]) { overflow: hidden; }
   .bar-menu { display: none; }
 }
 
-/* Reads as a control rather than a word sitting in the header, since on
-   a phone it is the only one. */
-.bar-menu .menu-trigger { border-color: var(--paper-rule); }
+/* ── the burger ──────────────────────────────────────────── */
+/* One of the yard's own objects, so it gets what everything else on
+   paper gets: three ink strokes, a chunky border, corners that are not
+   quite square and a shadow that does not blur. */
+.menu-trigger.is-burger {
+  width: 46px; height: 46px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--paper-input);
+  border: 3px solid var(--ink);
+  border-radius: 15px 6px 17px 6px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.menu-trigger.is-burger:hover { background: var(--paper-input); border-color: var(--ink); }
+/* Pressed in and green while the panel is down, the same way the bar
+   marks the page you are on. */
+.menu-trigger.is-burger[aria-expanded="true"] {
+  background: var(--accent);
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.burger {
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 4px; width: 21px; height: 17px;
+}
+.burger > span {
+  display: block; height: 3px; width: 100%;
+  background: var(--ink); border-radius: 2px;
+  transform-origin: center;
+}
+/* Not one angle repeated three times, which reads as a mistake rather
+   than a hand. */
+.burger > span:nth-child(1) { transform: rotate(-2deg); }
+.burger > span:nth-child(2) { transform: rotate(1.5deg); width: 86%; }
+.burger > span:nth-child(3) { transform: rotate(-1deg); }
+
+.menu-trigger.is-burger[aria-expanded="true"] .burger > span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.menu-trigger.is-burger[aria-expanded="true"] .burger > span:nth-child(2) {
+  transform: scaleX(0); opacity: 0;
+}
+.menu-trigger.is-burger[aria-expanded="true"] .burger > span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .menu-trigger.is-burger { transition: transform .12s, box-shadow .12s, background .12s; }
+  .burger > span { transition: transform .18s ease, opacity .12s ease, width .18s ease; }
+}
 
 /* ── shared bits ─────────────────────────────────────────── */
 /* These started in the admin stylesheet, which only the admin layout

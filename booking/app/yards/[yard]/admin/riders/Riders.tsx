@@ -309,8 +309,7 @@ export default function Riders({
         {unsent ? (
           <>
             <p className="sub">
-              {unsent.email} is on the list and this link works. The email did not
-              go, so pass it on however you normally would.
+              The email did not go. Send {unsent.email} this link instead.
             </p>
             <p className="join-link">{unsent.link}</p>
           </>

@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { notFound, redirect } from 'next/navigation';
 import { getYard } from '@/lib/yard';
 import { supabaseServer } from '@/lib/supabase-server';
-import SignIn from './SignIn';
+import SignInForm from '@/components/SignInForm';
 
 type Props = { params: Promise<{ yard: string }> };
 
@@ -31,7 +31,10 @@ export default async function SignInPage({ params }: Props) {
         <p className="yard-sub">Arena booking</p>
       </header>
       <Suspense>
-        <SignIn yardName={found.name} />
+        {/* The yard's front door by default, which works out whether
+            this is a rider or somebody who runs the place. Guessing here
+            would mean two answers to the same question, drifting apart. */}
+        <SignInForm heading={`Sign in to ${found.name}.`} fallback="/" />
       </Suspense>
     </main>
   );

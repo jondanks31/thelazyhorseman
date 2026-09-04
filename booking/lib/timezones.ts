@@ -32,17 +32,3 @@ export function timezoneOptions(current: string): { value: string; label: string
   if (TIMEZONES.some((t) => t.value === current)) return TIMEZONES;
   return [...TIMEZONES, { value: current, label: current }];
 }
-
-/** The clock where the yard is, so a wrong choice is obvious. */
-export function clockAt(timeZone: string): string {
-  try {
-    return new Intl.DateTimeFormat('en-GB', {
-      timeZone,
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    }).format(new Date());
-  } catch {
-    return '';
-  }
-}

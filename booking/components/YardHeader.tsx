@@ -25,6 +25,7 @@ function Menu({
   items,
   footer,
   wide = false,
+  burger = false,
   openMenu,
   setOpenMenu,
 }: {
@@ -34,6 +35,9 @@ function Menu({
   items: Item[];
   footer?: React.ReactNode;
   wide?: boolean;
+  /** Draws three lines instead of the label, and keeps the label for
+   *  anybody who cannot see them. */
+  burger?: boolean;
   openMenu: string | null;
   setOpenMenu: (name: string | null) => void;
 }) {
@@ -69,13 +73,28 @@ function Menu({
       <button
         ref={button}
         type="button"
-        className="menu-trigger"
+        className={burger ? 'menu-trigger is-burger' : 'menu-trigger'}
         aria-expanded={open}
         aria-controls={id}
         onClick={() => setOpenMenu(open ? null : name)}
       >
-        <span className="menu-label">{label}</span>
-        <span className="menu-caret" aria-hidden="true" />
+        {burger ? (
+          <>
+            <span className="sr">{label}</span>
+            {/* Three strokes rather than an icon font, each sitting at
+                its own slight angle so it belongs with a wordmark whose
+                letters are drawn by hand. They fold into a cross when
+                the panel is open. */}
+            <span className="burger" aria-hidden="true">
+              <span /><span /><span />
+            </span>
+          </>
+        ) : (
+          <>
+            <span className="menu-label">{label}</span>
+            <span className="menu-caret" aria-hidden="true" />
+          </>
+        )}
       </button>
 
       {/* Kept in the tree while closed so the panel's ids stay stable. */}
@@ -173,6 +192,7 @@ export default function YardHeader({
           name="all"
           label="Menu"
           wide
+          burger
           openMenu={openMenu}
           setOpenMenu={setOpenMenu}
           items={[

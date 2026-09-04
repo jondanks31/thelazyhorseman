@@ -82,7 +82,6 @@ export default function ResetConfirm({
     return (
       <section className="card">
         <h1 className="q">One moment.</h1>
-        <p className="sub">Checking your link.</p>
       </section>
     );
   }
@@ -91,10 +90,6 @@ export default function ResetConfirm({
     return (
       <section className="card">
         <h1 className="q">That link has gone.</h1>
-        <p className="sub">
-          They only work once, and only for an hour. Ask for another and it will
-          be with you in a minute.
-        </p>
         <div className="actions">
           <Link className="btn" href="/reset">Send another</Link>
         </div>
@@ -105,8 +100,6 @@ export default function ResetConfirm({
   return (
     <form className="card" onSubmit={submit}>
       <h1 className="q">Pick a new password.</h1>
-      <p className="sub">Then you are straight back in.</p>
-
       <div className="field">
         <label htmlFor="new-password">New password</label>
         <div className="pw-row">
@@ -143,7 +136,7 @@ export default function ResetConfirm({
       </div>
 
       <p className="field-hint">
-        Changed your mind? <Link href={signInHref}>Sign in</Link> with the old one.
+        <Link href={signInHref}>Sign in</Link> with the old one instead.
       </p>
     </form>
   );

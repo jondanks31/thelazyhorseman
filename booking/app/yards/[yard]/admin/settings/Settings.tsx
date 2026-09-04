@@ -1,12 +1,9 @@
 'use client';
 
-import { useMemo, useState, useSyncExternalStore } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
-import { clockAt, timezoneOptions } from '@/lib/timezones';
-
-/** Nothing pushes the time at us, so there is nothing to subscribe to. */
-const neverChanges = () => () => {};
+import { timezoneOptions } from '@/lib/timezones';
 
 type Props = {
   yardId: string;
@@ -31,22 +28,6 @@ export default function Settings({
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
-
-  /**
-   * The clock where the yard is, so a wrong zone shows up here rather
-   * than later as a clinic filed an hour out.
-   *
-   * Blank on the server and read in the browser, because the two would
-   * otherwise disagree about the time and React would call it a
-   * hydration mismatch. useSyncExternalStore is how you say "this value
-   * only exists on the client" without an effect that writes state on
-   * every render.
-   */
-  const clock = useSyncExternalStore(
-    neverChanges,
-    () => clockAt(timezone),
-    () => '',
-  );
 
   const options = useMemo(() => timezoneOptions(initialTimezone), [initialTimezone]);
 
@@ -92,7 +73,6 @@ export default function Settings({
             id="yname" value={name}
             onChange={(e) => { setName(e.target.value); setSaved(false); }}
           />
-          <p className="field-hint">What riders see at the top of every screen.</p>
         </div>
 
         <div className="field">
@@ -105,11 +85,6 @@ export default function Settings({
               <option key={t.value} value={t.value}>{t.label}</option>
             ))}
           </select>
-          <p className="field-hint">
-            Every booking is kept against this, so six o&rsquo;clock means six at the
-            yard however far from it you happen to be.
-            {clock && ` It is ${clock} there now.`}
-          </p>
         </div>
 
         {error && <p className="field-error" role="alert">{error}</p>}
@@ -130,11 +105,6 @@ export default function Settings({
           paste it into a group chat. */}
       <section className="card">
         <h2 className="q" style={{ fontSize: 24 }}>Your address</h2>
-        <p className="sub">
-          This is where riders book. Put it in the group chat and on the
-          noticeboard.
-        </p>
-
         <p className="join-link">{joinLink}</p>
 
         <div className="actions">

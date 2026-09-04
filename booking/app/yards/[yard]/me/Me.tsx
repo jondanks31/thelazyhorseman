@@ -157,7 +157,6 @@ export default function Me({
           the yard's own screens. */}
       <div>
         <h1 className="page-h">Your details</h1>
-        <p className="page-lead">Your name, your password and your horses.</p>
       </div>
 
       <section className="card">
@@ -212,10 +211,6 @@ export default function Me({
               {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
-          <p className="field-hint">
-            Leave it alone unless you want to change it. Nothing sends you an
-            email about this.
-          </p>
         </div>
 
         {passwordError && <p className="field-error" role="alert">{passwordError}</p>}
