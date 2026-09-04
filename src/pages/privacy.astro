@@ -34,15 +34,23 @@ import { LEGAL, controllerLine, updatedLong } from '../data/legal';
         <h2>Who is responsible</h2>
         <p>
           {controllerLine} is the data controller for this website, the
-          newsletter and accounts on the booking tool. Write to{' '}
-          <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a> or:
+          newsletter and accounts on the booking tool. Everything below is my
+          doing, and{' '}
+          <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a> reaches me.
         </p>
-        <p class="legal-address">
-          {LEGAL.address.map((line) => <span>{line}</span>)}
-        </p>
-        {LEGAL.icoNumber
-          ? <p>Registered with the Information Commissioner's Office, number {LEGAL.icoNumber}.</p>
-          : null}
+        {LEGAL.address ? (
+          <p class="legal-address">
+            {LEGAL.address.map((line) => <span>{line}</span>)}
+          </p>
+        ) : (
+          <p>A postal address is available on request, by email.</p>
+        )}
+        {LEGAL.icoNumber ? (
+          <p>
+            Registered with the Information Commissioner's Office, number{' '}
+            {LEGAL.icoNumber}.
+          </p>
+        ) : null}
 
         <h2>What is collected, and why</h2>
 
@@ -93,6 +101,11 @@ import { LEGAL, controllerLine, updatedLong } from '../data/legal';
           Running any of this means other companies process some of it on my
           instructions. These are the only ones.
         </p>
+        {/* TODO when the newsletter is wired to Buttondown: add a row for
+            them, "The newsletter list", and check where they host it. The
+            signup forms on this site do nothing at the moment, so naming
+            a processor that is not yet processing would be worse than
+            leaving them out. */}
         <div class="legal-table-wrap">
           <table class="legal-table">
             <thead>
