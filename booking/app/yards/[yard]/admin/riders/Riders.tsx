@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
 import Modal from '@/components/Modal';
+import CopyButton from '@/components/CopyButton';
 
 export type Rider = {
   membership_id: string;
@@ -52,8 +53,6 @@ export default function Riders({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
-  const [copiedInvite, setCopiedInvite] = useState(false);
 
   /** Set only when the invite exists but the email did not go. */
   const [unsent, setUnsent] = useState<{ email: string; link: string } | null>(null);
@@ -96,7 +95,6 @@ export default function Riders({
       // The row is there and the link works, so the yard is shown it
       // rather than told that nothing happened.
       setUnsent({ email: body.email, link: body.link });
-      setCopiedInvite(false);
       setInviting(true);
     } catch {
       setError('That did not work. Try again in a minute.');
@@ -151,16 +149,6 @@ export default function Riders({
     else {
       setShowCode(false);
       router.refresh();
-    }
-  }
-
-  async function copy(link: string, mark: (done: boolean) => void) {
-    try {
-      await navigator.clipboard.writeText(link);
-      mark(true);
-      setTimeout(() => mark(false), 2000);
-    } catch {
-      setError('Could not copy. Select the link and copy it by hand.');
     }
   }
 
@@ -284,12 +272,7 @@ export default function Riders({
               <button className="btn btn-quiet" type="button" onClick={closeInvite}>
                 Done
               </button>
-              <button
-                className="btn" type="button"
-                onClick={() => copy(unsent.link, setCopiedInvite)}
-              >
-                {copiedInvite ? 'Copied' : 'Copy link'}
-              </button>
+              <CopyButton value={unsent.link} />
             </div>
           ) : (
             <div className="actions">
@@ -334,9 +317,7 @@ export default function Riders({
             <button className="btn btn-quiet" type="button" onClick={rotate} disabled={busy}>
               New code
             </button>
-            <button className="btn" type="button" onClick={() => copy(joinLink, setCopied)}>
-              {copied ? 'Copied' : 'Copy link'}
-            </button>
+            <CopyButton value={joinLink} />
           </div>
         }
       >

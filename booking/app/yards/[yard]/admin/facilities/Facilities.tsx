@@ -29,7 +29,8 @@ export type Facility = {
 type Draft = Omit<Facility, 'id'>;
 
 const BLANK: Draft = {
-  name: '',
+  // Named after what it is until somebody says otherwise.
+  name: kindLabel('arena'),
   kind: 'arena',
   slot_minutes: 60,
   max_days_ahead: 14,
@@ -59,6 +60,8 @@ export default function Facilities({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [blocked, setBlocked] = useState(false);
+  /** Stops the kind buttons renaming a facility somebody has named. */
+  const [nameTouched, setNameTouched] = useState(false);
 
   const allowance = planById(plan).facilities;
   const used = initial.filter((f) => f.is_active).length;
@@ -72,12 +75,16 @@ export default function Facilities({
       return;
     }
     setDraft(BLANK);
+    setNameTouched(false);
     setEditing('new');
     setError(null);
   }
 
   function startEdit(f: Facility) {
     setDraft({ ...f, opens_at: hhmm(f.opens_at), closes_at: hhmm(f.closes_at) });
+    // An existing facility has a name somebody chose, so changing its
+    // kind must never overwrite it.
+    setNameTouched(true);
     setEditing(f.id);
     setError(null);
   }
@@ -204,7 +211,10 @@ export default function Facilities({
           <label htmlFor="fname">What is it called?</label>
           <input
             id="fname" value={draft.name} placeholder="Indoor school"
-            onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
+            onChange={(e) => {
+              setNameTouched(true);
+              setDraft((d) => ({ ...d, name: e.target.value }));
+            }}
           />
         </div>
 
@@ -215,7 +225,14 @@ export default function Facilities({
               <button
                 key={k.value} type="button" className="choice"
                 aria-pressed={draft.kind === k.value}
-                onClick={() => setDraft((d) => ({ ...d, kind: k.value }))}
+                onClick={() =>
+                  setDraft((d) => ({
+                    ...d,
+                    kind: k.value,
+                    // "Something else" is not a name.
+                    name: nameTouched || k.value === 'other' ? d.name : k.label,
+                  }))
+                }
               >
                 {k.label}
               </button>

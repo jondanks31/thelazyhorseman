@@ -44,12 +44,19 @@
 .actions { margin-top: 6px; }
 
 .done-url {
+  display: block;
   font: 700 clamp(15px, 2.6vw, 22px) var(--mono);
   color: var(--ink); background: var(--accent);
   border: 3px solid var(--ink); border-radius: 20px 7px 22px 8px;
   padding: 18px 20px; word-break: break-all;
   box-shadow: 4px 4px 0 var(--ink);
+  text-decoration: none;
 }
+/* It is a link once the address resolves, and presses like the buttons
+   around it rather than underlining like body text. */
+a.done-url { transition: transform .12s, box-shadow .12s; }
+a.done-url:hover { color: var(--ink); transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
+a.done-url:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
 
 .start-foot {
   font-family: var(--hand); font-size: clamp(17px, 2vw, 20px);

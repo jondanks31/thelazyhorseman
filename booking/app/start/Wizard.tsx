@@ -4,20 +4,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { supabaseBrowser } from '@/lib/supabase';
 import { REJECTION_MESSAGE, suggestSubdomain, validateSubdomain } from '@/lib/subdomain';
 import type { DomainState } from '@/lib/vercel';
+// One list, shared with the yard's own Facilities screen. The wizard
+// had its own copy and was two kinds behind it.
+import { FACILITY_KINDS, kindLabel } from '@/lib/kinds';
+import CopyButton from '@/components/CopyButton';
 
 /* One question per screen. The whole point is that a yard owner on a
    phone in a tack room never sees a wall of boxes. */
 const STEPS = ['Account', 'Yard', 'Address', 'Arena'] as const;
 type StepName = (typeof STEPS)[number];
-
-const FACILITY_KINDS = [
-  { value: 'arena', label: 'Outdoor arena' },
-  { value: 'school', label: 'Indoor school' },
-  { value: 'horsewalker', label: 'Horsewalker' },
-  { value: 'lunge_pen', label: 'Lunge pen' },
-  { value: 'gallops', label: 'Gallops' },
-  { value: 'other', label: 'Something else' },
-] as const;
 
 type Availability = 'idle' | 'checking' | 'free' | 'taken' | 'invalid';
 
@@ -51,8 +46,15 @@ export default function Wizard() {
   const [availability, setAvailability] = useState<Availability>('idle');
   const [availabilityNote, setAvailabilityNote] = useState('');
 
-  const [facilityName, setFacilityName] = useState('');
   const [facilityKind, setFacilityKind] = useState<string>('arena');
+  /**
+   * Named after what it is until somebody says otherwise, which for
+   * most yards is the whole answer: an outdoor arena is called the
+   * outdoor arena. Set from the chosen kind rather than watched by an
+   * effect, so there is no render where the two disagree.
+   */
+  const [facilityName, setFacilityName] = useState(kindLabel('arena'));
+  const [facilityNameTouched, setFacilityNameTouched] = useState(false);
 
   const [done, setDone] = useState<{ subdomain: string; domain: DomainState } | null>(null);
 
@@ -289,11 +291,27 @@ export default function Wizard() {
     // did not happen at all has to be visible rather than silent.
     const live = done.domain === 'live' || done.domain === 'notConfigured';
 
+    const address = `${done.subdomain}.thelazyhorseman.com`;
+    const url = `https://${address}`;
+
     return (
       <section className="card">
         <h1 ref={headingRef} tabIndex={-1} className="q">That is the yard set up.</h1>
         <p className="sub">Your riders go here.</p>
-        <p className="done-url">{done.subdomain}.thelazyhorseman.com</p>
+
+        {/* A link only once the address actually resolves. Sending
+            somebody to a certificate that is still being issued is
+            worse than making them wait a minute. */}
+        {live ? (
+          <a className="done-url" href={url}>{address}</a>
+        ) : (
+          <p className="done-url">{address}</p>
+        )}
+
+        <div className="actions">
+          <CopyButton value={url} label="Copy address" />
+          {live && <a className="btn btn-quiet" href={url}>Open the yard</a>}
+        </div>
 
         {live ? (
           <p className="sub">
@@ -423,7 +441,10 @@ export default function Wizard() {
             <label htmlFor="fac">What is it called?</label>
             <input
               id="fac" type="text" value={facilityName} placeholder="Indoor school"
-              onChange={(e) => setFacilityName(e.target.value)}
+              onChange={(e) => {
+                setFacilityNameTouched(true);
+                setFacilityName(e.target.value);
+              }}
             />
           </div>
           <div className="field">
@@ -433,7 +454,14 @@ export default function Wizard() {
                 <button
                   key={k.value} type="button" className="choice"
                   aria-pressed={facilityKind === k.value}
-                  onClick={() => setFacilityKind(k.value)}
+                  onClick={() => {
+                    setFacilityKind(k.value);
+                    // "Something else" is not a name, so picking it
+                    // clears the box rather than filling it with that.
+                    if (!facilityNameTouched) {
+                      setFacilityName(k.value === 'other' ? '' : k.label);
+                    }
+                  }}
                 >
                   {k.label}
                 </button>

@@ -109,13 +109,13 @@ a:hover { color: var(--cream); }
    but disappears against the card, which is what "Set one up" and the
    overview tiles were doing. Underlined as well as coloured, because
    colour alone is not an affordance. */
-.card a:not(.btn):not(.door):not(.menu-item),
+.card a:not(.btn):not(.door):not(.menu-item):not(.done-url),
 .modal a:not(.btn) {
   color: var(--accent-deep); font-weight: 600;
   text-decoration: underline; text-underline-offset: 3px;
   text-decoration-thickness: 2px;
 }
-.card a:not(.btn):not(.door):not(.menu-item):hover,
+.card a:not(.btn):not(.door):not(.menu-item):not(.done-url):hover,
 .modal a:not(.btn):hover { color: var(--ink); }
 
 /* A link that has to be a button, because it changes what is on screen

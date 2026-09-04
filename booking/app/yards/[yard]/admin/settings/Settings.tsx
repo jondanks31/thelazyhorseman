@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
+import CopyButton from '@/components/CopyButton';
 import { timezoneOptions } from '@/lib/timezones';
 
 type Props = {
@@ -27,7 +28,6 @@ export default function Settings({
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
   const options = useMemo(() => timezoneOptions(initialTimezone), [initialTimezone]);
 
@@ -52,16 +52,6 @@ export default function Settings({
     }
     setSaved(true);
     router.refresh();
-  }
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(joinLink);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setError('Could not copy. Select the address and copy it by hand.');
-    }
   }
 
   return (
@@ -108,9 +98,7 @@ export default function Settings({
         <p className="join-link">{joinLink}</p>
 
         <div className="actions">
-          <button className="btn" type="button" onClick={copy}>
-            {copied ? 'Copied' : 'Copy address'}
-          </button>
+          <CopyButton value={joinLink} label="Copy address" />
         </div>
       </section>
     </>
