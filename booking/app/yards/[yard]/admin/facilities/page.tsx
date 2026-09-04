@@ -6,6 +6,12 @@ import type { PlanId } from '@/lib/plans';
 
 type Props = { params: Promise<{ yard: string }> };
 
+export async function generateMetadata({ params }: Props) {
+  const { yard } = await params;
+  const found = await getYard(yard);
+  return { title: found ? `Facilities · ${found.name}` : 'Facilities' };
+}
+
 export default async function FacilitiesPage({ params }: Props) {
   const { yard } = await params;
   const found = await getYard(yard);
@@ -26,8 +32,8 @@ export default async function FacilitiesPage({ params }: Props) {
   return (
     <>
       <div>
-        <h1 className="admin-h">Facilities</h1>
-        <p className="admin-lead">Everything a rider can take a slot on.</p>
+        <h1 className="page-h">Facilities</h1>
+        <p className="page-lead">Everything a rider can take a slot on.</p>
       </div>
       <Facilities
         yardId={found.id}

@@ -9,6 +9,12 @@ import Riders, { type Invite, type Rider } from './Riders';
 
 type Props = { params: Promise<{ yard: string }> };
 
+export async function generateMetadata({ params }: Props) {
+  const { yard } = await params;
+  const found = await getYard(yard);
+  return { title: found ? `Riders · ${found.name}` : 'Riders' };
+}
+
 export default async function RidersPage({ params }: Props) {
   const { yard } = await params;
   const found = await getYard(yard);
@@ -62,8 +68,8 @@ export default async function RidersPage({ params }: Props) {
   return (
     <>
       <div>
-        <h1 className="admin-h">Riders</h1>
-        <p className="admin-lead">Invite them, or put the code up in the tack room.</p>
+        <h1 className="page-h">Riders</h1>
+        <p className="page-lead">Invite them, or put the code up in the tack room.</p>
       </div>
       <Riders
         yardId={found.id}

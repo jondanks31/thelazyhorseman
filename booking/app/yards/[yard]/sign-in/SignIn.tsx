@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
 
@@ -67,6 +68,13 @@ export default function SignIn({ yardName }: { yardName: string }) {
           {busy ? 'One moment…' : 'Sign in'}
         </button>
       </div>
+
+      {/* Resetting happens on this yard's own address, so they come back
+          signed in here rather than on the front door, which is no use
+          to a rider. */}
+      <p className="field-hint">
+        <Link href="/reset">Forgotten your password?</Link>
+      </p>
     </form>
   );
 }

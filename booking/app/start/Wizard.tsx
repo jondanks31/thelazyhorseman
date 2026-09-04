@@ -32,6 +32,18 @@ export default function Wizard() {
   const [password, setPassword] = useState('');
   const [needsConfirm, setNeedsConfirm] = useState(false);
 
+  /**
+   * The account behind this browser, if there is one: 'checking' until
+   * Supabase answers, then their email, or null for a stranger.
+   *
+   * Without this the wizard asked for an email and a password that had
+   * just been given. Confirm your address, follow the link back, and
+   * the first thing you met was "First, an account." again. It happens
+   * to every single owner who signs up, and to anybody setting up a
+   * second yard.
+   */
+  const [account, setAccount] = useState<'checking' | string | null>('checking');
+
   const [yardName, setYardName] = useState('');
   const [subdomain, setSubdomain] = useState('');
   const [subdomainTouched, setSubdomainTouched] = useState(false);
@@ -50,6 +62,16 @@ export default function Wizard() {
   useEffect(() => {
     headingRef.current?.focus();
   }, [step, done]);
+
+  // Somebody already signed in has done the account step, whether they
+  // have just confirmed their address or are back for a second yard.
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      const who = data.user?.email ?? null;
+      setAccount(who);
+      if (who) setStep((s) => Math.max(s, 1));
+    });
+  }, [supabase]);
 
   // Suggest the address from the yard name until the owner edits it.
   useEffect(() => {
@@ -111,7 +133,15 @@ export default function Wizard() {
     const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { name: fullName.trim() } },
+      options: {
+        data: { name: fullName.trim() },
+        // Back to the wizard, not to whatever SITE_URL happens to be.
+        // Landing on the front door sent a brand new owner to "You are
+        // not on a yard", and the way out of that started the whole
+        // thing again. Arriving here, the session check picks them up
+        // at the yard step.
+        emailRedirectTo: `${window.location.origin}/start`,
+      },
     });
     if (data?.session) return;
 
@@ -155,6 +185,28 @@ export default function Wizard() {
     setDone(subdomain);
   }, [facilityKind, facilityName, subdomain, supabase, yardName]);
 
+  /**
+   * They say they have opened the link. Signing in is the only way to
+   * find out, and it leaves them signed in when it works, which is
+   * exactly what the next step needs.
+   */
+  async function carryOn() {
+    setBusy(true);
+    setError(null);
+
+    const { data } = await supabase.auth.signInWithPassword({ email, password });
+    setBusy(false);
+
+    if (!data?.session) {
+      setError('Not confirmed yet. Open the link in that email, then try again.');
+      return;
+    }
+
+    setAccount(data.session.user.email ?? email);
+    setNeedsConfirm(false);
+    setStep(1);
+  }
+
   async function next() {
     setError(null);
     setBusy(true);
@@ -173,14 +225,41 @@ export default function Wizard() {
     }
   }
 
+  // Held back rather than flashing "First, an account." at somebody who
+  // is signed in and about to skip straight past it.
+  if (account === 'checking') {
+    return (
+      <section className="card">
+        <h1 ref={headingRef} tabIndex={-1} className="q">One moment.</h1>
+      </section>
+    );
+  }
+
   if (needsConfirm) {
     return (
       <section className="card">
         <h1 ref={headingRef} tabIndex={-1} className="q">Check your email</h1>
         <p className="sub">
-          We have sent a link to <strong>{email}</strong>. Open it, come back here, and
-          you can finish setting the yard up.
+          We have sent a link to <strong>{email}</strong>. Open it, come back to this
+          page, and carry on where you left off.
         </p>
+
+        {error && <p className="field-error" role="alert">{error}</p>}
+
+        {/* This used to be the end of the road. Confirming happened in
+            another tab, nothing here noticed, and the way back through
+            the front door started the whole wizard again. */}
+        <div className="actions">
+          <button
+            type="button" className="btn btn-quiet" disabled={busy}
+            onClick={() => { setNeedsConfirm(false); setError(null); }}
+          >
+            Wrong address
+          </button>
+          <button type="button" className="btn" disabled={busy} onClick={carryOn}>
+            {busy ? 'Checking…' : 'Done that, carry on'}
+          </button>
+        </div>
       </section>
     );
   }
@@ -214,6 +293,15 @@ export default function Wizard() {
           </li>
         ))}
       </ol>
+
+      {/* Says whose yard this is about to be, and answers the question
+          somebody arriving back from a confirmation email would
+          otherwise have to guess at. */}
+      {account && (
+        <p className="field-hint">
+          Signed in as <strong>{account}</strong>.
+        </p>
+      )}
 
       {current === 'Account' && (
         <>
@@ -323,7 +411,9 @@ export default function Wizard() {
       {error && <p className="field-error" role="alert">{error}</p>}
 
       <div className="actions">
-        {step > 0 && (
+        {/* Back never reaches the account step once there is an account.
+            There is nothing to do there and no way to undo it. */}
+        {step > (account ? 1 : 0) && (
           <button type="button" className="btn btn-quiet" onClick={() => { setError(null); setStep((s) => s - 1); }} disabled={busy}>
             Back
           </button>

@@ -244,6 +244,17 @@ export default function Book({
           ))}
         </div>
 
+        {/* A day whose slots have all been and gone. The strip above is
+            the way out, so this says what happened and nothing else. */}
+        {slots.length === 0 && (
+          <div className="empty">
+            {/* Any other day is only ever empty because the facility's
+                hours are shorter than one slot, which is not the rider's
+                doing, so it does not claim the day is full. */}
+            {day === days[0] ? 'Nothing left today.' : 'Nothing to book that day.'}
+          </div>
+        )}
+
         <div className="slots">
           {slots.map((s) => {
             const open = s.state === 'free';

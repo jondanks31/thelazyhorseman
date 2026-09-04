@@ -5,6 +5,12 @@ import { supabaseServer } from '@/lib/supabase-server';
 
 type Props = { params: Promise<{ yard: string }> };
 
+export async function generateMetadata({ params }: Props) {
+  const { yard } = await params;
+  const found = await getYard(yard);
+  return { title: found ? `Overview · ${found.name}` : 'Overview' };
+}
+
 export default async function AdminOverview({ params }: Props) {
   const { yard } = await params;
   const found = await getYard(yard);
@@ -29,8 +35,8 @@ export default async function AdminOverview({ params }: Props) {
       <div>
         {/* The yard's name is in the header now, so this says where you
             are instead of saying it twice. */}
-        <h1 className="admin-h">Overview</h1>
-        <p className="admin-lead">
+        <h1 className="page-h">Overview</h1>
+        <p className="page-lead">
           Riders book at <strong>{yard}.thelazyhorseman.com</strong>.
         </p>
       </div>

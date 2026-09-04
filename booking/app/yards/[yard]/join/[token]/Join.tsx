@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
 
@@ -66,7 +67,13 @@ export default function Join({ yardName, token }: { yardName: string; token: str
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { name: fullName.trim(), horse_name: horse.trim() } },
+      options: {
+        data: { name: fullName.trim(), horse_name: horse.trim() },
+        // Back to this invite, so confirming finishes the join instead
+        // of dropping them on the platform's front door holding a token
+        // they can no longer reach.
+        emailRedirectTo: window.location.href,
+      },
     });
 
     // signUp returns a user with no session both when confirmation is
@@ -185,6 +192,14 @@ export default function Join({ yardName, token }: { yardName: string; token: str
           {busy ? 'One moment…' : 'Join'}
         </button>
       </div>
+
+      {/* Somebody coming back to a second yard is the likeliest person
+          in the whole product to have forgotten their password. */}
+      {mode === 'existing' && (
+        <p className="field-hint">
+          <Link href="/reset">Forgotten your password?</Link>
+        </p>
+      )}
     </form>
   );
 }

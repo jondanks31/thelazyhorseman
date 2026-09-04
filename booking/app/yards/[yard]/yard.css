@@ -20,6 +20,17 @@
 }
 .yard.is-wide .card { max-width: none; }
 
+/* A screen with a title above a stack of cards, like /me. Left aligned
+   and from the top, matching the admin screens: a page title centred
+   over a single column reads as a front door rather than a settings
+   page. The width is the card's own, plus the gutter it sits in. */
+.yard.is-page {
+  max-width: calc(620px + var(--gutter) * 2);
+  margin-inline: auto;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
 .yard-head { text-align: center; }
 .yard-name {
   font-weight: 800; font-size: clamp(30px, 5vw, 46px);

@@ -105,6 +105,29 @@ a:hover { color: var(--cream); }
 }
 .card :focus-visible { outline-color: var(--accent-deep); }
 
+/* Links on paper. The bright accent is a cream-on-brown colour and all
+   but disappears against the card, which is what "Set one up" and the
+   overview tiles were doing. Underlined as well as coloured, because
+   colour alone is not an affordance. */
+.card a:not(.btn):not(.door):not(.menu-item),
+.modal a:not(.btn) {
+  color: var(--accent-deep); font-weight: 600;
+  text-decoration: underline; text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+}
+.card a:not(.btn):not(.door):not(.menu-item):hover,
+.modal a:not(.btn):hover { color: var(--ink); }
+
+/* A link that has to be a button, because it changes what is on screen
+   rather than going anywhere. */
+.link-button {
+  font: inherit; color: var(--accent-deep); font-weight: 600;
+  background: none; border: none; padding: 0; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+}
+.link-button:hover { color: var(--ink); }
+
 .q {
   font-weight: 800;
   font-size: clamp(28px, 4.4vw, 40px);
@@ -172,6 +195,35 @@ a:hover { color: var(--cream); }
 .field input::placeholder { color: var(--on-paper-soft); opacity: .65; }
 .field input:focus { outline: none; border-color: var(--accent-deep); box-shadow: 0 0 0 3px rgba(63, 122, 33, .2); }
 .field input[aria-invalid="true"] { border-color: var(--danger-deep); }
+
+/* A field nobody can type in has to look like one. Your email on /me is
+   shown so you know which account you are on, not so you can change it,
+   and rendered like the box above it people tapped at it. */
+.field input:disabled {
+  border-color: var(--paper-rule); background: transparent;
+  color: var(--on-paper-soft); cursor: not-allowed;
+}
+
+/* Password plus a reveal, in one bordered row like the address field.
+   Typing something you cannot see, on a phone, in a barn, is worth more
+   than the shoulder surfing it costs. */
+.pw-row {
+  display: flex; align-items: stretch;
+  border: 3px solid var(--ink); border-radius: 20px 7px 22px 8px;
+  background: var(--paper-input); overflow: hidden;
+}
+.pw-row:focus-within { border-color: var(--accent-deep); box-shadow: 0 0 0 3px rgba(63, 122, 33, .2); }
+.pw-row input {
+  border: none; border-radius: 0; flex: 1 1 auto; min-width: 0; box-shadow: none;
+}
+.pw-row input:focus { outline: none; box-shadow: none; }
+.pw-reveal {
+  flex: none; padding: 0 16px; cursor: pointer;
+  background: rgba(60, 46, 34, .07); color: var(--on-paper-soft);
+  border: none; border-left: 3px solid var(--ink);
+  font: 700 12px var(--mono); letter-spacing: .1em; text-transform: uppercase;
+}
+.pw-reveal:hover { color: var(--ink); background: rgba(60, 46, 34, .12); }
 
 /* Matches the inputs above rather than the browser's own control, and
    keeps the native arrow, which is the bit people recognise. */
@@ -343,6 +395,13 @@ body:has(dialog[open]) { overflow: hidden; }
   justify-content: safe center;
 }
 
+/* A page's own title, above its cards and on the brown ground rather
+   than inside the paper. Every screen that has one uses this, admin or
+   not, so a rider's settings do not look like a different product from
+   the yard's. */
+.page-h { font-weight: 800; font-size: clamp(26px, 3.6vw, 34px); letter-spacing: -.04em; color: var(--cream); }
+.page-lead { font-size: 17px; line-height: 1.6; color: var(--cream-dim); max-width: 60ch; }
+
 .gate-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
 .gate-tag {
   font: 700 10px var(--mono); letter-spacing: .18em;
@@ -492,11 +551,41 @@ body:has(dialog[open]) { overflow: hidden; }
 .menu-out:hover { border-color: transparent; border-top-color: var(--paper-rule); }
 .menu-out .menu-item-name { color: var(--danger-deep); }
 
-@media (max-width: 560px) {
-  .bar { gap: 10px; }
-  .bar-nav { width: 100%; justify-content: flex-start; }
-  .menu-panel { right: auto; left: 0; }
+/* Whose menu it is, above their own two items. A label rather than a
+   link: tapping your own name should not be a third way to reach the
+   same page. */
+.menu-who {
+  margin-top: 5px; padding: 11px 11px 5px;
+  border-top: 2px solid var(--paper-rule);
+  font: 700 10.5px var(--mono);
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--on-paper-soft);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
+
+/* ── the header on a phone ───────────────────────────────── */
+/* Five links and a name wrapped onto a second row here, so the header
+   stood about a third of the screen tall on top of the booking grid.
+   One button holds the lot instead. Both navs are in the markup and
+   only one is ever shown. */
+@media (max-width: 720px) {
+  .bar-nav { display: none; }
+  .bar { gap: 10px; }
+  /* Never wider than the screen it drops onto. */
+  .bar-menu .menu-panel {
+    min-width: 0;
+    width: max-content;
+    max-width: min(300px, calc(100vw - var(--gutter) * 2 - 24px));
+  }
+}
+
+@media (min-width: 721px) {
+  .bar-menu { display: none; }
+}
+
+/* Reads as a control rather than a word sitting in the header, since on
+   a phone it is the only one. */
+.bar-menu .menu-trigger { border-color: var(--paper-rule); }
 
 /* ── shared bits ─────────────────────────────────────────── */
 /* These started in the admin stylesheet, which only the admin layout

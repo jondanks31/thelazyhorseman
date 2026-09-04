@@ -6,6 +6,12 @@ import Plan from './Plan';
 
 type Props = { params: Promise<{ yard: string }> };
 
+export async function generateMetadata({ params }: Props) {
+  const { yard } = await params;
+  const found = await getYard(yard);
+  return { title: found ? `Plan · ${found.name}` : 'Plan' };
+}
+
 export default async function PlanPage({ params }: Props) {
   const { yard } = await params;
   const found = await getYard(yard);
@@ -24,8 +30,8 @@ export default async function PlanPage({ params }: Props) {
   return (
     <>
       <div>
-        <h1 className="admin-h">Plan</h1>
-        <p className="admin-lead">Riders are never counted, on any plan.</p>
+        <h1 className="page-h">Plan</h1>
+        <p className="page-lead">Riders are never counted, on any plan.</p>
       </div>
       <Plan
         current={business.data?.plan ?? 'free'}

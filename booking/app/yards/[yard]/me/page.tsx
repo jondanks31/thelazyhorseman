@@ -5,7 +5,11 @@ import Me, { type MyHorse } from './Me';
 
 type Props = { params: Promise<{ yard: string }> };
 
-export const metadata = { title: 'Your details' };
+export async function generateMetadata({ params }: Props) {
+  const { yard } = await params;
+  const found = await getYard(yard);
+  return { title: found ? `Your details · ${found.name}` : 'Your details' };
+}
 
 export default async function MePage({ params }: Props) {
   const { yard: subdomain } = await params;
@@ -26,7 +30,7 @@ export default async function MePage({ params }: Props) {
   ]);
 
   return (
-    <main className="yard">
+    <main className="yard is-page">
       <Me
         userId={user.id}
         email={user.email ?? ''}

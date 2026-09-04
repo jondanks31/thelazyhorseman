@@ -6,6 +6,12 @@ import Diary, { type DiaryEntry, type DiaryFacility } from './Diary';
 
 type Props = { params: Promise<{ yard: string }> };
 
+export async function generateMetadata({ params }: Props) {
+  const { yard } = await params;
+  const found = await getYard(yard);
+  return { title: found ? `Diary · ${found.name}` : 'Diary' };
+}
+
 export default async function DiaryPage({ params }: Props) {
   const { yard } = await params;
   const found = await getYard(yard);
@@ -49,8 +55,8 @@ export default async function DiaryPage({ params }: Props) {
   return (
     <>
       <div>
-        <h1 className="admin-h">Diary</h1>
-        <p className="admin-lead">What is booked, and what you have blocked out.</p>
+        <h1 className="page-h">Diary</h1>
+        <p className="page-lead">What is booked, and what you have blocked out.</p>
       </div>
       <Diary
         yardId={found.id}

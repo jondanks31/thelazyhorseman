@@ -75,6 +75,8 @@ export default function SignIn() {
       </div>
 
       <p className="field-hint">
+        <Link href="/reset">Forgotten your password?</Link>
+        <br />
         Not on a yard yet? <Link href="/start">Set one up</Link>.
       </p>
     </form>

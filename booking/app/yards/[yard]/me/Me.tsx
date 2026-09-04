@@ -30,6 +30,11 @@ export default function Me({
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordSaved, setPasswordSaved] = useState(false);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+
   /** Null when adding, the horse itself when renaming. */
   const [editing, setEditing] = useState<MyHorse | null | undefined>(undefined);
   const [horseName, setHorseName] = useState('');
@@ -58,6 +63,32 @@ export default function Me({
     setSaved(true);
     // The header shows the name, so it has to be re-read.
     router.refresh();
+  }
+
+  /**
+   * Changing it here asks for no old password, because Supabase already
+   * knows this session is theirs. What it does need is a session that
+   * has not gone stale, so a refusal says to sign in again rather than
+   * blaming the password they have just typed.
+   */
+  async function savePassword() {
+    setBusy(true);
+    setPasswordError(null);
+    setPasswordSaved(false);
+
+    const { error: writeError } = await supabase.auth.updateUser({ password });
+
+    setBusy(false);
+    if (writeError) {
+      setPasswordError(
+        writeError.status === 401 || writeError.status === 403
+          ? 'Sign out and back in, then try again.'
+          : writeError.message,
+      );
+      return;
+    }
+    setPassword('');
+    setPasswordSaved(true);
   }
 
   function startAdd() {
@@ -120,9 +151,16 @@ export default function Me({
 
   return (
     <>
-      <section className="card">
-        <h1 className="q">Your details</h1>
+      {/* Above the cards on the brown ground, the same shape every other
+          screen with a title uses. It used to be a heading inside the
+          first card, which made this look like a different product from
+          the yard's own screens. */}
+      <div>
+        <h1 className="page-h">Your details</h1>
+        <p className="page-lead">Your name, your password and your horses.</p>
+      </div>
 
+      <section className="card">
         <div className="field">
           <label htmlFor="me-name">Your name</label>
           <input
@@ -149,6 +187,47 @@ export default function Me({
             onClick={saveName}
           >
             {busy ? 'Saving…' : 'Save'}
+          </button>
+        </div>
+      </section>
+
+      <section className="card">
+        <h2 className="q" style={{ fontSize: 24 }}>Your password</h2>
+
+        <div className="field">
+          <label htmlFor="me-password">New password</label>
+          <div className="pw-row">
+            <input
+              id="me-password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="new-password"
+              value={password}
+              placeholder="At least eight characters"
+              onChange={(e) => { setPassword(e.target.value); setPasswordSaved(false); }}
+            />
+            <button
+              type="button" className="pw-reveal" aria-pressed={showPassword}
+              onClick={() => setShowPassword((was) => !was)}
+            >
+              {showPassword ? 'Hide' : 'Show'}
+            </button>
+          </div>
+          <p className="field-hint">
+            Leave it alone unless you want to change it. Nothing sends you an
+            email about this.
+          </p>
+        </div>
+
+        {passwordError && <p className="field-error" role="alert">{passwordError}</p>}
+        {passwordSaved && <p className="field-ok" role="status">Changed.</p>}
+
+        <div className="actions">
+          <button
+            className="btn" type="button"
+            disabled={busy || password.length < 8}
+            onClick={savePassword}
+          >
+            {busy ? 'Saving…' : 'Change it'}
           </button>
         </div>
       </section>

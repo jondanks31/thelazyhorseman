@@ -163,6 +163,53 @@ export default function YardHeader({
         <span className="bar-yard-tag">Arena booking</span>
       </Link>
 
+      {/* Everything behind one button on a phone. The bar below wrapped
+          onto a second row there and stood a third of the screen tall,
+          above the grid people had come for. Both are always rendered
+          and CSS picks: measuring the width would mean a first paint
+          that disagrees with the second. */}
+      <nav className="bar-menu" aria-label={yardName}>
+        <Menu
+          name="all"
+          label="Menu"
+          wide
+          openMenu={openMenu}
+          setOpenMenu={setOpenMenu}
+          items={[
+            { href: '/book', label: 'Book' },
+            ...(runsIt
+              ? [
+                  { href: '/admin/diary', label: 'Diary' },
+                  { href: '/admin/riders', label: 'Riders' },
+                  // Noted, which both explains them and sets the
+                  // set-up-once group apart from the daily three
+                  // without needing a rule between them.
+                  { href: '/admin', label: 'Overview', note: 'How the yard is doing' },
+                  { href: '/admin/facilities', label: 'Facilities', note: 'What can be booked' },
+                  { href: '/admin/settings', label: 'Settings', note: 'Name, address, timezone' },
+                  { href: '/admin/plan', label: 'Plan', note: 'Billing and allowances' },
+                ]
+              : []),
+          ]}
+          footer={
+            <>
+              <p className="menu-who">{personName}</p>
+              <Link
+                href="/me"
+                className="menu-item"
+                aria-current={pathname === '/me' ? 'page' : undefined}
+                onClick={() => setOpenMenu(null)}
+              >
+                <span className="menu-item-name">Your details</span>
+              </Link>
+              <SignOutButton className="menu-item menu-out">
+                <span className="menu-item-name">Sign out</span>
+              </SignOutButton>
+            </>
+          }
+        />
+      </nav>
+
       <nav className="bar-nav" aria-label={yardName}>
         {link('/book', 'Book')}
 

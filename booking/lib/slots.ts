@@ -98,6 +98,17 @@ export function buildDay(
     // Elapsed minutes, not wall clock, matching what the trigger checks.
     const endsAt = new Date(startsAt.getTime() + step * 60_000);
 
+    // A slot that has already begun is left out rather than drawn
+    // greyed. Nobody can take it and nobody can give it up, so on a
+    // yard open from half six it put sixteen dead chips above the
+    // first one a rider could tap at half two in the afternoon.
+    //
+    // The start time, deliberately, and not the notice window: a slot
+    // being held back because the yard wants warning has not happened
+    // yet. Hiding those would make the day look emptier than it is and
+    // the rule behind it invisible.
+    if (startsAt.getTime() <= now.getTime()) continue;
+
     const clash = here.find(
       (h) => startsAt < new Date(h.ends_at) && endsAt > new Date(h.starts_at),
     );
