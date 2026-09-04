@@ -1,0 +1,207 @@
+---
+import Highlight from '../components/Highlight.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { LEGAL, controllerLine, updatedLong } from '../data/legal';
+---
+
+<SiteLayout
+  title="Privacy · The Lazy Horseman"
+  description="What The Lazy Horseman collects, why, who else can see it, and how to get it back or get rid of it."
+>
+  <section class="band cream-band page-head">
+    <div class="wrap">
+      <p class="kicker">The boring but important bit</p>
+      <h1>What we do with your <Highlight>details</Highlight></h1>
+      <p class="lede">
+        Written to be read, not to be survived. If anything here is unclear, ask
+        and I will fix the wording.
+      </p>
+      <p class="legal-date">Last updated {updatedLong}</p>
+    </div>
+  </section>
+
+  <section class="band cream-band">
+    <div class="wrap">
+      <div class="prose legal">
+        <h2>The short version</h2>
+        <p>
+          The newsletter needs your email address and nothing else. The booking
+          tool needs an email address, a password and your name, so a yard knows
+          who has the arena at six. Nothing is sold, nothing is shared for
+          advertising, and there are no tracking cookies on this site at all.
+        </p>
+
+        <h2>Who is responsible</h2>
+        <p>
+          {controllerLine} is the data controller for this website, the
+          newsletter and accounts on the booking tool. Write to{' '}
+          <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a> or:
+        </p>
+        <p class="legal-address">
+          {LEGAL.address.map((line) => <span>{line}</span>)}
+        </p>
+        {LEGAL.icoNumber
+          ? <p>Registered with the Information Commissioner's Office, number {LEGAL.icoNumber}.</p>
+          : null}
+
+        <h2>What is collected, and why</h2>
+
+        <h3>If you read the newsletter</h3>
+        <p>
+          Your email address, the date you subscribed and the exact wording you
+          agreed to. That last one exists so that if you ever ask why you are
+          getting this, there is an honest answer rather than a shrug. The
+          lawful basis is your consent, and every issue has an unsubscribe link
+          that works immediately.
+        </p>
+
+        <h3>If you run a yard on the booking tool</h3>
+        <p>
+          Your name, email address and a password, which is stored hashed and is
+          not readable by anybody including me. Your yard's name, its address on
+          this domain, its timezone, its facilities and its opening hours. When
+          paid plans start, a customer reference from the payment provider, but
+          never your card details, which go straight to them and never touch
+          this service. The lawful basis is performing the contract you have
+          with me.
+        </p>
+
+        <h3>If you book at a yard</h3>
+        <p>
+          Your name, email address and password, your horses' names, and the
+          slots you book, including which horse each one was for. Your yard can
+          see all of that. Other riders cannot: the booking grid shows them that
+          a slot is taken, never by whom.
+        </p>
+        <p>
+          If your yard invites you by email, they type your address in before
+          you have any account here, and it sits in their invite list until you
+          accept or it runs out after thirty days. They are responsible for
+          having a reason to contact you. See <a href="#yards">yards and their
+          own responsibilities</a> below.
+        </p>
+
+        <h3>Whoever you are</h3>
+        <p>
+          Signing in records the time, your IP address and your browser's user
+          agent. That is how anybody spots a compromised account, and it is kept
+          because not keeping it would be worse.
+        </p>
+
+        <h2>Who else it touches</h2>
+        <p>
+          Running any of this means other companies process some of it on my
+          instructions. These are the only ones.
+        </p>
+        <div class="legal-table-wrap">
+          <table class="legal-table">
+            <thead>
+              <tr><th>Who</th><th>What for</th><th>Where</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Supabase</td>
+                <td>The database, and sign in</td>
+                <td>London</td>
+              </tr>
+              <tr>
+                <td>Resend</td>
+                <td>Sending email, including invites and confirmations</td>
+                <td>Ireland</td>
+              </tr>
+              <tr>
+                <td>Vercel</td>
+                <td>Hosting and serving the pages</td>
+                <td>UK and elsewhere</td>
+              </tr>
+              <tr>
+                <td>Hostinger</td>
+                <td>The domain, and the mailbox you reach me on</td>
+                <td>EU</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Vercel serves requests from wherever is nearest, which can be outside
+          the UK. That transfer is covered by their standard contractual clauses
+          and the UK addendum to them.
+        </p>
+
+        <h2 id="yards">Yards, and what they are responsible for</h2>
+        <p>
+          A yard decides who is on its list, who gets invited and who is taken
+          off. For that list and for the bookings on it, the yard is the
+          controller and I am only the processor: I hold it and show it to the
+          people the yard has allowed, and I do nothing else with it.
+        </p>
+        <p>
+          So if you want to be taken off a yard's list, ask the yard. If you
+          want your whole account gone, ask me and it goes, from every yard at
+          once.
+        </p>
+
+        <h2>How long it is kept</h2>
+        <p>
+          Your account and its bookings stay while the account exists. Ask for
+          it to be deleted and it goes within thirty days, along with your
+          horses and your place on every yard.
+        </p>
+        <p>
+          A booking you cancel is marked cancelled rather than erased, so the
+          yard's own diary still adds up. Cancelled bookings go when the account
+          does. Newsletter unsubscribes keep the email address on a suppression
+          list, because the alternative is emailing you again by accident.
+        </p>
+
+        <h2>Cookies</h2>
+        <p>
+          This site sets none. No analytics, no advertising, no pixels, nothing
+          that follows you anywhere, which is why there is no cookie banner
+          getting in your way.
+        </p>
+        <p>
+          The booking tool sets one cookie, which is what keeps you signed in.
+          It is strictly necessary and there is no version of signing in that
+          works without it.
+        </p>
+
+        <h2>Children</h2>
+        <p>
+          Plenty of riders are under sixteen. Accounts are meant for people aged
+          thirteen and over. If a younger rider needs to book, the yard should
+          book on their behalf rather than setting them up with an account. If
+          you believe a child under thirteen has an account, tell me and I will
+          remove it.
+        </p>
+
+        <h2>What you can ask for</h2>
+        <p>
+          You can ask for a copy of everything held about you, ask for it to be
+          corrected, ask for it to be deleted, ask me to stop using it, or
+          object to how it is being used. You can withdraw consent to the
+          newsletter at any time, with one click, at the bottom of every issue.
+        </p>
+        <p>
+          Email <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a> and you will
+          get an answer within a month, usually within a couple of days, because
+          this is not a big company.
+        </p>
+        <p>
+          If you are not happy with the answer you can complain to the
+          Information Commissioner's Office at{' '}
+          <a href="https://ico.org.uk/make-a-complaint/" rel="noopener">ico.org.uk</a>,
+          or on 0303 123 1113. I would rather you told me first so I can put it
+          right.
+        </p>
+
+        <h2>Changes</h2>
+        <p>
+          If this changes in a way that matters, the date at the top changes and
+          anyone with an account gets an email about it. Small corrections to
+          wording just get made.
+        </p>
+      </div>
+    </div>
+  </section>
+</SiteLayout>

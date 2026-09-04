@@ -1,0 +1,180 @@
+---
+import Highlight from '../components/Highlight.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { LEGAL, controllerLine, updatedLong } from '../data/legal';
+---
+
+<SiteLayout
+  title="Terms · The Lazy Horseman"
+  description="The terms for using The Lazy Horseman's newsletter and its facility booking tool."
+>
+  <section class="band cream-band page-head">
+    <div class="wrap">
+      <p class="kicker">The rules of the thing</p>
+      <h1>Terms of <Highlight>use</Highlight></h1>
+      <p class="lede">
+        What you can expect from me, what I need from you, and who is
+        responsible when something goes wrong.
+      </p>
+      <p class="legal-date">Last updated {updatedLong}</p>
+    </div>
+  </section>
+
+  <section class="band cream-band">
+    <div class="wrap">
+      <div class="prose legal">
+        <h2>Who this agreement is with</h2>
+        <p>
+          {controllerLine}, at{' '}
+          <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>. Using the
+          newsletter or the booking tool means you accept these terms. If you do
+          not, do not use them.
+        </p>
+
+        <h2>What the booking tool is</h2>
+        <p>
+          A shared diary for a yard's arena, school, horsewalker or whatever
+          else it lets people book. A yard sets up its facilities, invites its
+          riders, and riders take slots. That is the whole of it.
+        </p>
+        <p>
+          <strong>It is a booking board, not a safety system.</strong> It does
+          not know how many horses an arena can safely hold, whether the surface
+          is fit to ride on, or whether anybody has actually left. The yard
+          remains responsible for the safety of its facilities and for the
+          people on them, exactly as it was before.
+        </p>
+
+        <h2>Your account</h2>
+        <p>
+          One account per person. Yards should not share a single login between
+          riders, which defeats the point and makes the diary useless. Keep your
+          password to yourself, and tell me if you think somebody else has it.
+        </p>
+        <p>
+          You need to be thirteen or over to have an account. Younger riders
+          should be booked in by the yard.
+        </p>
+
+        <h2>Yards and riders</h2>
+        <p>
+          A yard decides who is on its list. It can invite people, take them off
+          and block them, and it does not need my agreement to do any of it. If
+          you are removed from a yard, that is between you and the yard, and I
+          will not overturn it.
+        </p>
+        <p>
+          Equally, disagreements about who had the arena, whose fault a clash
+          was, or what the yard's own rules are, are for the yard to sort out. I
+          keep the diary. I do not referee it.
+        </p>
+
+        <h2>Behaving reasonably</h2>
+        <p>
+          Do not use this to harass anybody, to book slots you have no intention
+          of using in order to keep others out, to break into accounts that are
+          not yours, or to hammer the service in a way that spoils it for
+          everyone else. Any of those and the account goes.
+        </p>
+
+        <h2>Plans and paying</h2>
+        <p>
+          One facility is free, with as many riders as you like, and there is no
+          card involved. Paid plans for more facilities are coming, and nothing
+          about the free tier changes retrospectively when they arrive.
+        </p>
+        <p>
+          When paid plans start, prices will be shown before you agree to
+          anything, billing will be monthly or yearly in advance, and cancelling
+          stops the next payment rather than refunding the current period. If
+          you drop to a smaller plan, facilities beyond the new allowance are
+          not switched off automatically, so nothing disappears from under your
+          riders without you deciding it should.
+        </p>
+
+        <h2>What I can promise about it working</h2>
+        <p>
+          I will keep it up and working as well as I reasonably can, but this is
+          a small operation and there is no uptime guarantee. It may be
+          unavailable for maintenance, and things outside my control will
+          occasionally break it.
+        </p>
+        <p>
+          Keep running your yard in a way that survives the diary being down for
+          an afternoon.
+        </p>
+
+        <h2>Your data</h2>
+        <p>
+          Your yard's bookings and rider list belong to the yard, not to me. Ask
+          and you can have a copy. For anything to do with personal information,
+          the <a href="/privacy">privacy policy</a> is the detail, and it is
+          part of these terms.
+        </p>
+        <p>
+          For a yard's rider list and its bookings, the yard is the data
+          controller and I am the processor. That means I hold that data and
+          process it only as the yard directs and as needed to run the service,
+          I keep it secure, I use only the companies named in the privacy policy
+          to help, and on request I will return or delete it. If your yard needs
+          a fuller data processing agreement on paper, ask and you will get one.
+        </p>
+
+        <h2>When something goes wrong</h2>
+        <p>
+          Nothing here limits liability for death or personal injury caused by
+          negligence, for fraud, or for anything else the law does not allow to
+          be limited.
+        </p>
+        <p>
+          Beyond that, and because much of this is free: I am not liable for
+          lost profit, lost business, or losses arising from a booking that did
+          not save, a notification that did not arrive, or the service being
+          unavailable. Where liability cannot be excluded, it is capped at what
+          you have paid in the twelve months before the problem, or one hundred
+          pounds, whichever is greater.
+        </p>
+        <p>
+          The booking tool does not replace insurance, supervision, or a yard's
+          own rules about who rides when.
+        </p>
+
+        <h2>Ending it</h2>
+        <p>
+          You can stop at any time. Delete your account and it goes, within
+          thirty days, from every yard.
+        </p>
+        <p>
+          A yard closing its account frees its address on this domain after a
+          period, and somebody else may then claim it. Export anything you want
+          to keep before you close it.
+        </p>
+        <p>
+          I can suspend or close an account that breaks these terms. Except in
+          serious cases you will hear why first, and get a chance to put it
+          right.
+        </p>
+
+        <h2>Changes to these terms</h2>
+        <p>
+          These will change as the tool grows. The date at the top changes with
+          them, and anything that materially affects a yard gets an email before
+          it takes effect. Carrying on using the service after that is
+          acceptance.
+        </p>
+
+        <h2>The legal footing</h2>
+        <p>
+          These terms are governed by the law of England and Wales, and the
+          courts of England and Wales deal with any dispute. If you are a
+          consumer, this does not take away rights you have under the law of
+          where you live.
+        </p>
+        <p>
+          Nothing in the newsletter is veterinary advice. If your horse is
+          unwell, ring your vet.
+        </p>
+      </div>
+    </div>
+  </section>
+</SiteLayout>

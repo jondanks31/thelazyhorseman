@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import LegalLinks from '@/components/LegalLinks';
 import { redirect } from 'next/navigation';
 import Wordmark from '@/components/Wordmark';
 import { supabaseServer } from '@/lib/supabase-server';
@@ -50,6 +51,7 @@ export default async function Home() {
         </div>
       </div>
 
+      <LegalLinks className="gate-foot legal-links" />
     </main>
   );
 }

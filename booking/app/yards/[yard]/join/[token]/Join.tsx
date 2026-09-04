@@ -187,6 +187,16 @@ export default function Join({ yardName, token }: { yardName: string; token: str
 
       {error && <p className="field-error" role="alert">{error}</p>}
 
+      {/* Only for somebody making an account. A rider signing in already
+          agreed to this the first time. */}
+      {mode === 'new' && (
+        <p className="field-hint">
+          Joining means agreeing to the{' '}
+          <a href="https://www.thelazyhorseman.com/terms">terms</a> and the{' '}
+          <a href="https://www.thelazyhorseman.com/privacy">privacy policy</a>.
+        </p>
+      )}
+
       <div className="actions">
         <button className="btn" type="submit" disabled={busy}>
           {busy ? 'One moment…' : 'Join'}

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import LegalLinks from '@/components/LegalLinks';
 import Wizard from './Wizard';
 import './start.css';
 
@@ -38,6 +39,8 @@ export default function StartPage() {
         <br />
         Already on a yard? <Link href="/sign-in">Sign in</Link>.
       </p>
+
+      <LegalLinks className="gate-foot legal-links" />
     </main>
   );
 }

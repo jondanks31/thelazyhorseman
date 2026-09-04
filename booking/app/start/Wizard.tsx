@@ -385,6 +385,14 @@ export default function Wizard() {
             />
             <p className="field-hint">Eight characters or more. Nothing clever required.</p>
           </div>
+          {/* On the step that actually creates the account, not buried in
+              a footer. Not a tick box: an unticked one that blocks the
+              only button on the screen is a formality, not a choice. */}
+          <p className="field-hint">
+            Setting up a yard means agreeing to the{' '}
+            <a href="https://www.thelazyhorseman.com/terms">terms</a> and the{' '}
+            <a href="https://www.thelazyhorseman.com/privacy">privacy policy</a>.
+          </p>
         </>
       )}
 

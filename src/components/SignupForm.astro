@@ -20,11 +20,27 @@ const {
 const formClass =
   variant === 'green' ? 'signup-form' : variant === 'yard' ? 'yard-form' : 'strip-form';
 const buttonClass = variant === 'strip' ? 'btn' : 'btn btn-dark';
+
+/**
+ * What somebody is agreeing to by pressing the button, in the words they
+ * actually see. This form does one thing and asks for one thing, so
+ * submitting it is the consent and no separate tick box is needed. It
+ * rides on the form as data-consent so that whoever wires the endpoint
+ * up stores this exact sentence in subscriber.consent_text rather than
+ * inventing a description of it later.
+ */
+const consent =
+  list === 'yards'
+    ? 'Email me when yard booking opens up. One email, not a newsletter.'
+    : 'Send me the letter on Thursdays. Leave whenever you like.';
 ---
 
-<form class={formClass} data-subscribe data-list={list}>
+<form class={formClass} data-subscribe data-list={list} data-consent={consent}>
   <label class="sr" for={id}>Your email address</label>
   <input id={id} type="email" name="email" required autocomplete="email" placeholder={placeholder} />
   <button class={buttonClass} type="submit">{label}</button>
 </form>
+<p class="form-consent">
+  {consent} <a href="/privacy">What happens to your address.</a>
+</p>
 <p class="form-msg" role="status" data-msg></p>

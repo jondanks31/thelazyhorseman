@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { getYard } from '@/lib/yard';
 import { supabaseServer } from '@/lib/supabase-server';
 import YardHeader, { type Role } from '@/components/YardHeader';
+import LegalLinks from '@/components/LegalLinks';
 import './yard.css';
 
 type Props = { children: React.ReactNode; params: Promise<{ yard: string }> };
@@ -53,6 +54,7 @@ export default async function YardLayout({ children, params }: Props) {
         />
       )}
       {children}
+      <LegalLinks />
     </div>
   );
 }

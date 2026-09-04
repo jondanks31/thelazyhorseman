@@ -523,3 +523,46 @@ footer .blurb{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted);max-w
   .marquee-track{animation:none}
   *{transition-duration:.01ms !important}
 }
+
+/* ── the legal pages ─────────────────────────────────────────
+   Long documents nobody reads for pleasure, so they get a
+   narrower measure, real headings and a table that survives a
+   phone. Same paper as the rest of the site. */
+.legal-date{font:700 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--pencil);margin-top:18px}
+
+.legal h2{margin-top:44px}
+.legal h2:first-child{margin-top:0}
+.legal h3{
+  font-weight:700;font-size:19px;letter-spacing:-.02em;
+  color:var(--ink);margin:26px 0 10px;
+}
+.legal p{margin-bottom:16px}
+.legal a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px}
+.legal a:hover{color:var(--accent-deep,#3F7A21)}
+
+.legal-address{display:flex;flex-direction:column;gap:2px;font-style:normal}
+.legal-address span{font-size:17.5px;line-height:1.5;color:var(--body-on-cream)}
+
+/* Scrolls inside itself rather than pushing the page sideways. */
+.legal-table-wrap{overflow-x:auto;margin:0 0 20px}
+.legal-table{border-collapse:collapse;width:100%;min-width:460px}
+.legal-table th,.legal-table td{
+  text-align:left;padding:11px 14px 11px 0;
+  border-bottom:2px solid var(--cream-dim);
+  font-size:16px;line-height:1.5;color:var(--body-on-cream);
+  vertical-align:top;
+}
+.legal-table th{
+  font:700 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--pencil);border-bottom-color:var(--ink);
+}
+
+/* The line under a signup form saying what the button signs you up to.
+   Sits on both the brown and cream grounds, so it inherits rather than
+   picking a colour, and dims itself instead. */
+.form-consent{
+  margin:10px 0 0;font-size:13.5px;line-height:1.5;
+  opacity:.72;max-width:52ch;
+}
+.form-consent a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.form-consent a:hover{opacity:1}
