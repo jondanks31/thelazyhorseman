@@ -8,16 +8,34 @@
  * conversion against the yard's own timezone instead.
  */
 
+/**
+ * Building an Intl.DateTimeFormat is the expensive part, and offsetMs
+ * runs twice for every slot of every day. The booking grid now works
+ * out the whole horizon at once to say how full each day is, which for
+ * a yard looking a year ahead is thousands of slots, so the formatter
+ * is made once per zone and kept.
+ */
+const offsetFormatters = new Map<string, Intl.DateTimeFormat>();
+
+function offsetFormatter(timeZone: string): Intl.DateTimeFormat {
+  let f = offsetFormatters.get(timeZone);
+  if (!f) {
+    f = new Intl.DateTimeFormat('en-GB', {
+      timeZone,
+      hour12: false,
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+    });
+    offsetFormatters.set(timeZone, f);
+  }
+  return f;
+}
+
 /** How far ahead of UTC the zone is at that instant, in milliseconds. */
 function offsetMs(at: Date, timeZone: string): number {
   // Formatting an instant in the target zone and reading it back as if
   // it were UTC gives the offset, DST included, with no table to keep.
-  const parts = new Intl.DateTimeFormat('en-GB', {
-    timeZone,
-    hour12: false,
-    year: 'numeric', month: '2-digit', day: '2-digit',
-    hour: '2-digit', minute: '2-digit', second: '2-digit',
-  }).formatToParts(at);
+  const parts = offsetFormatter(timeZone).formatToParts(at);
 
   const get = (t: string) => Number(parts.find((p) => p.type === t)!.value);
   // en-GB gives hour 24 for midnight; Date.UTC is happy to normalise it.
@@ -57,13 +75,24 @@ export function instantToZoned(
   }).format(new Date(iso));
 }
 
-/** Today at the yard, as YYYY-MM-DD, for a date input's minimum. */
-export function todayAt(timeZone: string): string {
+/**
+ * Which calendar day an instant falls on at the yard.
+ *
+ * A booking stored as 23:00Z in January is the same evening at a yard
+ * in London and the next morning at one in Sydney, so the square it
+ * belongs in on a calendar is a question about the yard, not about UTC.
+ */
+export function dayAt(at: Date, timeZone: string): string {
   const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone, year: 'numeric', month: '2-digit', day: '2-digit',
-  }).formatToParts(new Date());
+  }).formatToParts(at);
   const get = (t: string) => parts.find((p) => p.type === t)!.value;
   return `${get('year')}-${get('month')}-${get('day')}`;
+}
+
+/** Today at the yard, as YYYY-MM-DD, for a date input's minimum. */
+export function todayAt(timeZone: string): string {
+  return dayAt(new Date(), timeZone);
 }
 
 /** "18:00" plus 45 minutes is "18:45", staying inside the day. */
@@ -82,18 +111,4 @@ export function addMinutes(time: string, minutes: number): string {
 export function addDays(date: string, days: number): string {
   const [y, m, d] = date.split('-').map(Number);
   return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10);
-}
-
-/** "Today", "Tomorrow", or "Sat 5 Sep". */
-export function dayLabel(date: string, timeZone: string): string {
-  const today = todayAt(timeZone);
-  if (date === today) return 'Today';
-  if (date === addDays(today, 1)) return 'Tomorrow';
-
-  // Read back as UTC, because the value is a calendar date rather than
-  // an instant and formatting it in any other zone can shift the day.
-  const [y, m, d] = date.split('-').map(Number);
-  return new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short',
-  }).format(new Date(Date.UTC(y, m - 1, d)));
 }

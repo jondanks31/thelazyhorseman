@@ -62,7 +62,7 @@
   --gutter-in: clamp(24px, 4.5vw, 44px);
   --fade: 30px;
 
-  display: flex; gap: 8px;
+  display: flex; gap: 6px;
   overflow-x: auto;
   scroll-snap-type: x proximity;
   /* Snapped chips land clear of the fade rather than under it. */
@@ -94,17 +94,56 @@
   );
 }
 
+/* Narrow enough that a week is on screen at once, which is what makes
+   the bar underneath worth having: three days of it told you nothing
+   you could not get by tapping. The chips used to read "Sat 5 Sept" and
+   about three fitted. */
 .day {
   flex: none; scroll-snap-align: start;
-  font-family: var(--sans); font-weight: 700; font-size: 14.5px;
+  width: 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  font-family: var(--sans);
   color: var(--on-paper-soft); background: var(--paper-input);
   border: 2px solid var(--paper-rule); border-radius: 14px 5px 16px 6px;
-  padding: 9px 14px; cursor: pointer; white-space: nowrap;
+  padding: 8px 3px 7px; cursor: pointer;
 }
-.day:hover { border-color: var(--on-paper-soft); color: var(--ink); }
+.day:hover { border-color: var(--on-paper-soft); }
+.day:hover .day-num { color: var(--ink); }
+
+.day-name {
+  font: 700 9.5px var(--mono);
+  letter-spacing: .06em; text-transform: uppercase;
+}
+.day-num {
+  font-weight: 800; font-size: 17px; line-height: 1;
+  letter-spacing: -.03em; color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* How much of the day is still going. Full bar is a day nobody has
+   touched; empty is a day that has gone. */
+.day-left {
+  display: block; width: 22px; height: 3px;
+  background: var(--paper-rule); border-radius: 2px; overflow: hidden;
+}
+.day-left > span {
+  display: block; height: 100%;
+  background: var(--accent-deep); border-radius: 2px;
+}
+
+/* The strip always starts today, so the first chip needs no word. */
+.day.is-today .day-name { color: var(--accent-deep); }
+
+.day.is-spent:not([aria-pressed="true"]) { opacity: .5; }
+
 .day[aria-pressed="true"] {
-  background: var(--ink); border-color: var(--ink); color: var(--cream);
+  background: var(--ink); border-color: var(--ink);
 }
+.day[aria-pressed="true"] .day-name { color: var(--cream-dim); }
+.day[aria-pressed="true"].is-today .day-name { color: var(--accent); }
+.day[aria-pressed="true"] .day-num { color: var(--cream); }
+.day[aria-pressed="true"] .day-left { background: rgba(242, 239, 232, .25); }
+.day[aria-pressed="true"] .day-left > span { background: var(--accent); }
 
 /* ── the slots ───────────────────────────────────────────── */
 .slots {

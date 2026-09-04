@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
 import { addMinutes, instantToZoned, todayAt, zonedToInstant } from '@/lib/time';
 import Modal from '@/components/Modal';
+import Month, { type DayBusy } from './Month';
 
 export type DiaryFacility = {
   id: string;
@@ -35,11 +36,21 @@ export default function Diary({
   timezone,
   facilities,
   entries,
+  month,
+  monthDays,
+  monthBusy,
+  today,
 }: {
   yardId: string;
   timezone: string;
   facilities: DiaryFacility[];
   entries: DiaryEntry[];
+  /** "2026-09", whichever month the calendar is showing. */
+  month: string;
+  monthDays: string[];
+  /** Entries rather than a Map, so it crosses from the server as data. */
+  monthBusy: [string, DayBusy][];
+  today: string;
 }) {
   const supabase = useMemo(() => supabaseBrowser(), []);
   const router = useRouter();
@@ -65,9 +76,9 @@ export default function Diary({
     !!facility && (from < hhmm(facility.opens_at) || to > hhmm(facility.closes_at));
   const valid = !!facilityId && title.trim().length > 0 && to > from;
 
-  function startNew() {
+  function startNew(on = todayAt(timezone)) {
     setTitle('');
-    setDate(todayAt(timezone));
+    setDate(on);
     setFrom('18:00');
     setTo(addMinutes('18:00', first?.slot_minutes ?? 60));
     setError(null);
@@ -156,13 +167,23 @@ export default function Diary({
 
   return (
     <>
+      <Month
+        month={month}
+        days={monthDays}
+        busy={new Map(monthBusy)}
+        today={today}
+        onPick={startNew}
+      />
+
       <section className="card">
         <div className="row" style={{ paddingTop: 0, borderBottom: 'none' }}>
           <div className="row-main">
             <h2 className="row-name" style={{ fontSize: 21 }}>Coming up</h2>
             <p className="row-meta">{entries.length} IN THE DIARY</p>
           </div>
-          <button className="btn btn-small" type="button" onClick={startNew}>
+          {/* Wrapped, not passed straight in: startNew takes a date now,
+              and React would hand it the click event. */}
+          <button className="btn btn-small" type="button" onClick={() => startNew()}>
             Block out time
           </button>
         </div>

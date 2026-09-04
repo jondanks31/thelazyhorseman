@@ -14,6 +14,79 @@
    loaded by the admin layout alone, so a rider's screen had to invent
    its own heading inside the card instead. */
 
+/* ── the month ───────────────────────────────────────────── */
+/* Orientation only. The list underneath is where a booking gets
+   cancelled; this answers what a fortnight looks like before you commit
+   a clinic to it, which a list is bad at. */
+.cal {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.cal-head {
+  text-align: center; padding-bottom: 2px;
+  font: 700 10px var(--mono); letter-spacing: .1em;
+  color: var(--on-paper-soft);
+}
+
+.cal-cell {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
+  min-height: 54px; padding: 6px 5px;
+  font-family: var(--sans); text-align: left;
+  background: var(--paper-input); color: var(--on-paper);
+  border: 2px solid var(--paper-rule); border-radius: 12px 4px 14px 5px;
+  cursor: pointer;
+}
+.cal-cell:hover:not(:disabled) { border-color: var(--ink); }
+.cal-cell:disabled { cursor: default; }
+
+/* Days borrowed from the months either side, there to square the rows
+   off rather than to be read. */
+.cal-cell.is-away { background: transparent; border-color: transparent; }
+.cal-cell.is-away .cal-num { color: var(--muted); }
+.cal-cell.is-past:not(.is-away) { opacity: .55; }
+
+.cal-cell.is-today { border-color: var(--ink); }
+.cal-cell.is-today .cal-num { color: var(--ink); }
+
+.cal-num {
+  font-weight: 800; font-size: 14px; line-height: 1;
+  color: var(--on-paper-soft); font-variant-numeric: tabular-nums;
+}
+
+/* A dot for anything the yard has blocked out, then how many riders. */
+.cal-mini {
+  display: flex; align-items: center; gap: 4px;
+  font: 700 11px var(--mono); color: var(--on-paper-soft);
+}
+.cal-dot {
+  width: 7px; height: 7px; flex: none;
+  background: var(--accent-deep); border-radius: 50%;
+}
+
+.cal-full { display: none; }
+.cal-ev, .cal-slots, .cal-more {
+  display: block; max-width: 100%;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 11.5px; line-height: 1.35;
+}
+.cal-ev {
+  font-weight: 700; color: var(--ink);
+  background: var(--accent); border-radius: 6px 2px 7px 3px;
+  padding: 1px 5px;
+}
+.cal-slots, .cal-more { color: var(--on-paper-soft); }
+
+/* A square is about 40px across on a phone, so the titles only appear
+   once there is room to read them. */
+@media (min-width: 720px) {
+  .cal { gap: 7px; }
+  .cal-cell { min-height: 84px; padding: 8px; }
+  .cal-num { font-size: 15px; }
+  .cal-mini { display: none; }
+  .cal-full { display: flex; flex-direction: column; gap: 3px; width: 100%; min-width: 0; }
+}
+
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
 .tile {
   background: var(--paper); color: var(--on-paper);

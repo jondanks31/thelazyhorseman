@@ -4,7 +4,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
 import { bookableDays, buildDay, type Held, type Slot, type SlotFacility } from '@/lib/slots';
-import { dayLabel, instantToZoned } from '@/lib/time';
+import { instantToZoned } from '@/lib/time';
+import { dayOfMonth, longDate, weekdayShort } from '@/lib/month';
 import { kindLabel } from '@/lib/kinds';
 import Modal from '@/components/Modal';
 
@@ -69,6 +70,26 @@ export default function Book({
     () => (facility ? buildDay(facility, day, timezone, held, new Date(now)) : []),
     [facility, day, timezone, held, now],
   );
+
+  /**
+   * How much is left on each day of the strip, so a rider can see that
+   * Thursday has gone without tapping into Thursday.
+   *
+   * Every day of the horizon gets built, which is the same work the
+   * grid does for one day. The whole horizon is already in the browser,
+   * so this costs no request; offsetMs in time.ts caches its formatter
+   * because this is what made that worth doing.
+   */
+  const howFull = useMemo(() => {
+    const out = new Map<string, { free: number; of: number }>();
+    if (!facility) return out;
+    const at = new Date(now);
+    for (const d of days) {
+      const built = buildDay(facility, d, timezone, held, at);
+      out.set(d, { free: built.filter((s) => s.state === 'free').length, of: built.length });
+    }
+    return out;
+  }, [facility, days, timezone, held, now]);
 
   /**
    * Tells the day strip which of its ends still has days behind it, so
@@ -233,15 +254,38 @@ export default function Book({
         </div>
 
         <div className="days" role="group" aria-label="Which day" ref={strip}>
-          {days.map((d) => (
-            <button
-              key={d} type="button" className="day"
-              aria-pressed={d === day}
-              onClick={() => { setWanted(d); setError(null); }}
-            >
-              {dayLabel(d, timezone)}
-            </button>
-          ))}
+          {days.map((d, i) => {
+            const left = howFull.get(d);
+            const spent = left ? left.free === 0 : false;
+            // The strip always begins today, so the first chip needs no
+            // word saying so.
+            const isToday = i === 0;
+
+            return (
+              <button
+                key={d}
+                type="button"
+                className={`day${spent ? ' is-spent' : ''}${isToday ? ' is-today' : ''}`}
+                aria-pressed={d === day}
+                // The bar is a picture of this, and a picture is no use
+                // read aloud.
+                aria-label={`${isToday ? 'Today, ' : ''}${longDate(d)}, ${
+                  left ? `${left.free} of ${left.of} free` : 'nothing to book'
+                }`}
+                onClick={() => { setWanted(d); setError(null); }}
+              >
+                <span className="day-name">{weekdayShort(d)}</span>
+                <span className="day-num">{dayOfMonth(d)}</span>
+                <span className="day-left" aria-hidden="true">
+                  <span
+                    style={{
+                      width: left && left.of > 0 ? `${(left.free / left.of) * 100}%` : '0%',
+                    }}
+                  />
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         {/* A day whose slots have all been and gone. The strip above is
