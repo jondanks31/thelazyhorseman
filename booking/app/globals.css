@@ -668,3 +668,9 @@ body:has(dialog[open]) { overflow: hidden; }
   border: 3px dashed var(--paper-rule); border-radius: 20px 7px 22px 8px;
   padding: 26px; text-align: center; color: var(--on-paper-soft);
 }
+
+/* The address that has not been switched on yet, on Your yards. */
+.yard-row-fix {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 7px;
+  text-align: right; max-width: 24ch;
+}

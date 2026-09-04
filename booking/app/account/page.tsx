@@ -6,6 +6,7 @@ import Wordmark from '@/components/Wordmark';
 import { supabaseServer } from '@/lib/supabase-server';
 import { yardUrl } from '@/lib/tenant';
 import SignOut from './SignOut';
+import SetUpAddress from './SetUpAddress';
 
 export const metadata: Metadata = {
   title: 'Your yards · Facility Booking',
@@ -37,6 +38,22 @@ export default async function AccountPage() {
   const asRider = all.filter((y) => y.role === 'rider' && y.status !== 'blocked');
 
   const host = (await headers()).get('host');
+
+  // Whether each yard's address is actually registered with Vercel.
+  // Read here rather than through my_yards() because it is only ever
+  // wanted for a yard somebody runs, and they can read their own
+  // business row under row level security anyway.
+  const { data: registered } = yards.length
+    ? await supabase
+        .from('business')
+        .select('id, domain_ready')
+        .in('id', yards.map((y) => y.business_id))
+    : { data: [] };
+
+  const ready = new Map(
+    ((registered ?? []) as { id: string; domain_ready: boolean }[])
+      .map((b) => [b.id, b.domain_ready]),
+  );
 
   return (
     <main className="gate">
@@ -84,6 +101,9 @@ export default async function AccountPage() {
           // is a rider or somebody who runs the place, so the role is
           // decided in one spot rather than three.
           const href = base;
+          // An address nobody has registered resolves in DNS and then
+          // serves nothing, so linking to it would be the worst of both.
+          const live = ready.get(y.business_id) !== false;
 
           return (
             <div className="yard-row" key={y.business_id}>
@@ -93,13 +113,16 @@ export default async function AccountPage() {
                   {admin && <span className="pill">{y.role === 'owner' ? 'Owner' : 'Admin'}</span>}
                   {y.status === 'pending' && <span className="pill off">Waiting</span>}
                   {y.status === 'blocked' && <span className="pill off">No access</span>}
+                  {y.subdomain && !live && <span className="pill off">Address off</span>}
                 </span>
                 <span className="yard-row-addr">
                   {base ? base.replace(/^https?:\/\//, '') : 'No address'}
                 </span>
               </span>
 
-              {href && y.status !== 'blocked' ? (
+              {y.subdomain && !live ? (
+                <SetUpAddress subdomain={y.subdomain} />
+              ) : href && y.status !== 'blocked' ? (
                 <a className="btn btn-small" href={href}>
                   {admin ? 'Yard controls' : 'Book a slot'}
                 </a>
