@@ -11,9 +11,10 @@ import { validateSubdomain } from '@/lib/subdomain';
  * a route living there could never be called to fix it. This is reached
  * from the end of the signup wizard and from the account page.
  *
- * Set VERCEL_TOKEN, VERCEL_PROJECT_ID and, on a team account,
- * VERCEL_TEAM_ID. Without them this answers notConfigured and the yard
- * is still made, which is what local work wants.
+ * Set TLH_VERCEL_TOKEN, and TLH_VERCEL_TEAM_ID on a team account. The
+ * project id comes from Vercel's own VERCEL_PROJECT_ID in production.
+ * Without a token this answers notConfigured and the yard is still
+ * made, which is what local work wants.
  */
 
 type Yard = { business_id: string; subdomain: string | null; role: string; status: string };

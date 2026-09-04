@@ -34,8 +34,21 @@ export type DomainState =
 
 type Domain = { name: string; verified: boolean };
 
+/**
+ * Which project to hang the domains on.
+ *
+ * Vercel sets VERCEL_PROJECT_ID itself on every deployment, so in
+ * production this needs nothing. It only appears when "Enable access to
+ * System Environment Variables" is on, which is why there is a name we
+ * control to fall back to. Locally neither is set unless you put one in
+ * .env.local.
+ */
+function projectId(): string | undefined {
+  return process.env.VERCEL_PROJECT_ID || process.env.TLH_VERCEL_PROJECT_ID;
+}
+
 export function vercelIsConfigured(): boolean {
-  return !!(process.env.VERCEL_TOKEN && process.env.VERCEL_PROJECT_ID);
+  return !!(process.env.TLH_VERCEL_TOKEN && projectId());
 }
 
 async function call(
@@ -43,13 +56,13 @@ async function call(
   path: string,
   body?: unknown,
 ): Promise<{ ok: boolean; status: number; body: Domain | null }> {
-  const team = process.env.VERCEL_TEAM_ID;
+  const team = process.env.TLH_VERCEL_TEAM_ID;
   const url = `${API}${path}${team ? `${path.includes('?') ? '&' : '?'}teamId=${team}` : ''}`;
 
   const response = await fetch(url, {
     method,
     headers: {
-      authorization: `Bearer ${process.env.VERCEL_TOKEN}`,
+      authorization: `Bearer ${process.env.TLH_VERCEL_TOKEN}`,
       'content-type': 'application/json',
     },
     signal: AbortSignal.timeout(TIMEOUT_MS),
@@ -80,8 +93,8 @@ async function call(
  * the function carries on to find out whether it is verified.
  */
 export async function claimYardDomain(host: string): Promise<DomainState> {
-  const project = process.env.VERCEL_PROJECT_ID;
-  if (!process.env.VERCEL_TOKEN || !project) return 'notConfigured';
+  const project = projectId();
+  if (!process.env.TLH_VERCEL_TOKEN || !project) return 'notConfigured';
 
   try {
     const added = await call('POST', `/v10/projects/${project}/domains`, { name: host });
