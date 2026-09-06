@@ -688,3 +688,32 @@ body:has(dialog[open]) { overflow: hidden; }
 /* On the front door and signup it doubles as the existing footer line,
    which already sets its own colour and measure. */
 .gate-foot.legal-links { padding: 0; color: var(--muted); }
+
+/* ── the staff screen ────────────────────────────────────────
+   A list of every yard, so it needs more width than the forms the
+   gate layout is built around. */
+.staff .card { max-width: 900px; }
+
+.staff-change {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  margin-top: 12px; padding-top: 12px;
+  border-top: 2px solid var(--paper-rule);
+}
+.staff-change select {
+  font-family: var(--sans); font-size: 15px; font-weight: 600;
+  color: var(--on-paper); background: var(--paper-input);
+  border: 2px solid var(--ink); border-radius: 12px 4px 14px 5px;
+  padding: 9px 12px; cursor: pointer;
+}
+.staff-change input {
+  flex: 1 1 200px; min-width: 0;
+  font-family: var(--sans); font-size: 15px;
+  color: var(--ink); background: var(--paper-input);
+  border: 2px solid var(--ink); border-radius: 12px 4px 14px 5px;
+  padding: 9px 12px;
+}
+.staff-change select:focus, .staff-change input:focus {
+  outline: none; border-color: var(--accent-deep);
+  box-shadow: 0 0 0 3px rgba(63, 122, 33, .2);
+}
+.staff-change .row-actions { margin-left: auto; }
